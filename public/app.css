@@ -475,6 +475,9 @@
   .bg-\[\#1d1c1a\] {
     background-color: #1d1c1a;
   }
+  .bg-\[\#000000\] {
+    background-color: #000000;
+  }
   .bg-\[\#FCAF17\] {
     background-color: #FCAF17;
   }
@@ -555,6 +558,9 @@
   }
   .bg-\[length\:80\%\] {
     background-size: 80%;
+  }
+  .bg-\[length\:100\%\] {
+    background-size: 100%;
   }
   .bg-fixed {
     background-attachment: fixed;
