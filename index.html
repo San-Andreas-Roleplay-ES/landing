@@ -34,6 +34,33 @@
       scrollbar-width: none;
       /* Firefox */
     }
+
+    .justify-text {
+      text-align: justify;
+      text-justify: inter-word;
+    }
+
+    @keyframes appear {
+      from {
+        opacity: 0;
+        scale: 0.5;
+      }
+
+      to {
+        opacity: 1;
+        scale: 1;
+      }
+    }
+
+    .transition1 {
+      animation: appear 0.7s linear;
+    }
+
+    .transition2 {
+      animation: appear linear;
+      animation-timeline: view();
+      animation-range: entry 0% cover 40%;
+    }
   </style>
 </head>
 
@@ -131,19 +158,25 @@
       <section class="hidden lg:block relative">
         <img src="public/images/background.png" style="mask-image: linear-gradient(black 50%, transparent)"
           class="w-full h-screen object-cover block" />
-        <div class="absolute inset-0 flex flex-col items-center justify-center text-center gap-y-2">
+        <div class="transition1 absolute inset-0 flex flex-col items-center justify-center text-center gap-y-2">
           <h1
-            class="font-pricedown text-7xl font-bold bg-gradient-to-r from-[#fcaf17] to-[#b41919] bg-clip-text text-transparent pb-1 leading-tight">
+            class="font-pricedown text-8xl font-bold bg-gradient-to-r from-[#fcaf17] to-[#b41919] bg-clip-text text-transparent pb-1 leading-tight">
             San Andreas
           </h1>
           <h1
-            class="font-pricedown text-7xl font-bold bg-gradient-to-r from-[#fcaf17] to-[#b41919] bg-clip-text text-transparent pb-1 leading-tight">
+            class="font-pricedown text-8xl font-bold bg-gradient-to-r from-[#fcaf17] to-[#b41919] bg-clip-text text-transparent pb-1 leading-tight">
             Roleplay
           </h1>
-          <p class="text-lg text-white mb-8 max-w-3xl px-4 text-white">
-            Somos una comunidad de rol basado en texto sobre GTA San Andreas
-            Multiplayer, que proporciona a los jugadores un espacio creativo
-            para jugar desde 2023.
+          <!-- OLD CODE HERE -->
+        </div>
+      </section>
+
+      <section class="hidden lg:block relative w-full h-screen object-cover block">
+        <div class="transition2 absolute inset-0 flex flex-col items-center justify-center text-center gap-y-2">
+          <p class="text-5xl text-white mb-8 max-w-5xl px-4 text-white justify-text">
+            <b>Somos una comunidad de rol basado en texto sobre GTA San Andreas
+              Multiplayer, que proporciona a los jugadores un espacio creativo
+              para jugar desde 2023.</b>
           </p>
           <a class="px-8 py-4 text-xl font-bold rounded-lg transition-all duration-300 hover:scale-105 border-2 border-[#FCAF17] text-[#FCAF17] hover:bg-[#FCAF17] hover:text-black"
             href="samp://play.sarp.es:7777" target="_blank">
