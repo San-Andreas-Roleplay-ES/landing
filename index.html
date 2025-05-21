@@ -52,15 +52,35 @@
       }
     }
 
-    .transition1 {
-      animation: appear 0.7s linear;
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
     }
+
+    .transition1 {
+      animation: fadeIn 1.5s ease-out forwards;
+      animation-delay: 0.5s;
+      animation-fill-mode: both;
+    }
+
+    
 
     .transition2 {
       animation: appear linear;
       animation-timeline: view();
       animation-range: entry 0% cover 40%;
     }
+
+    .transition3 {
+      animation: appear 1s linear;
+      animation-delay: 1.15s;
+      animation-fill-mode: both;
+    }
+
   </style>
 </head>
 
@@ -156,7 +176,7 @@
     style="background-image: url('public/images/gangtags.png')">
     <div class="relative w-full">
       <section class="hidden lg:block relative">
-        <img src="public/images/background.png" style="mask-image: linear-gradient(black 50%, transparent)"
+        <img src="public/images/background.png" style="mask-image: linear-gradient(black 25%, transparent)"
           class="w-full h-screen object-cover block" />
         <div class="transition1 absolute inset-0 flex flex-col items-center justify-center text-center gap-y-2">
           <h1
@@ -167,6 +187,10 @@
             class="font-pricedown text-8xl font-bold bg-gradient-to-r from-[#fcaf17] to-[#b41919] bg-clip-text text-transparent pb-1 leading-tight">
             Roleplay
           </h1>
+          <a class="px-8 py-4 text-xl font-bold rounded-lg transition-all duration-300 hover:scale-105 border-2 border-[#FCAF17] text-[#FCAF17] hover:bg-[#FCAF17] hover:text-black transition3"
+            href="samp://play.sarp.es:7777" target="_blank" style="margin-top:4rem;">
+            JUGAR AHORA
+          </a>
         </div>
       </section>
 
@@ -180,12 +204,9 @@
               Multiplayer, que proporciona a los jugadores un espacio creativo
               para jugar desde 2023.
           </p>
-          <a class="px-8 py-4 text-xl font-bold rounded-lg transition-all duration-300 hover:scale-105 border-2 border-[#FCAF17] text-[#FCAF17] hover:bg-[#FCAF17] hover:text-black"
-            href="samp://play.sarp.es:7777" target="_blank">
-            JUGAR AHORA
-          </a>
         </div>
       </section>
+      
 
       <div class="lg:top-full block relative max-w-[1200px] mx-auto">
         <section class="grid grid-cols-12 gap-4 grid-nogutter p-2 lg:p-8">
