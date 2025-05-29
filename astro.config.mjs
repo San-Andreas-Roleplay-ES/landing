@@ -7,6 +7,9 @@ import icon from 'astro-icon';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://san-andreas-roleplay-es.github.io/',
+  base: 'landing',
+
   vite: {
     plugins: [tailwindcss()]
   },
