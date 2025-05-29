@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1.0" />
+    <title>San Andreas Roleplay - Multiplayer SAMP</title>
+    <link
+      rel="apple-touch-icon"
+      sizes="180x180"
+      href="public/apple-touch-icon.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="32x32"
+      href="public/favicon-32x32.png"
+    />
+    <link
+      rel="icon"
+      type="image/png"
+      sizes="16x16"
+      href="public/favicon-16x16.png"
+    />
+    <link rel="manifest" href="public/site.webmanifest" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700;900&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="https://unpkg.com/primeicons/primeicons.css" />
+    <link rel="stylesheet" href="public/app.css" />
+    <style>
+      .overflow-y-auto::-webkit-scrollbar {
+        display: none;
+      }
+
+      .overflow-y-auto {
+        -ms-overflow-style: none;
+        /* IE y Edge */
+        scrollbar-width: none;
+        /* Firefox */
+      }
+
+      ::-webkit-scrollbar {
+        display: none;
+      }
+
+      * {
+        -ms-overflow-style: none;
+        /* IE y Edge */
+        scrollbar-width: none;
+        /* Firefox */
+      }
+
+      .justify-text {
+        text-align: justify;
+        text-justify: inter-word;
+      }
+
+      @keyframes appear {
+        from {
+          opacity: 0;
+          scale: 0.5;
+        }
+
+        to {
+          opacity: 1;
+          scale: 1;
+        }
+      }
+
+      @keyframes fadeIn {
+        from {
+          opacity: 0;
+        }
+        to {
+          opacity: 1;
+        }
+      }
+
+      .transition1 {
+        animation: fadeIn 1.5s ease-out forwards;
+        animation-delay: 0.5s;
+        animation-fill-mode: both;
+      }
+
+      .transition2 {
+        animation: appear linear;
+        animation-timeline: view();
+        animation-range: entry 0% cover 40%;
+      }
+
+      .transition3 {
+        animation: appear 1s linear;
+        animation-delay: 1.15s;
+        animation-fill-mode: both;
+      }
+
+      .logo-efecto {
+        filter: drop-shadow(0 0 40px rgba(252, 175, 23, 0.5))
+          drop-shadow(0 0 10px rgba(180, 25, 25, 0.4));
+        opacity: 0;
+        transform: scale(0.8);
+        transition: transform 0.4s cubic-bezier(0.4, 2, 0.6, 1), filter 0.4s,
+          opacity 0.8s;
+        animation: logo-appear 1.2s cubic-bezier(0.4, 2, 0.6, 1) forwards;
+      }
+      .logo-efecto:hover {
+        transform: scale(1.08) rotate(-2deg);
+        filter: drop-shadow(0 0 60px rgba(252, 175, 23, 0.7))
+          drop-shadow(0 0 20px rgba(180, 25, 25, 0.5));
+      }
+      @keyframes logo-appear {
+        from {
+          opacity: 0;
+          transform: scale(0.8);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <header
+      class="flex justify-between items-center z-50 px-8 lg:px-32 bg-black/40 top-0 w-full fixed h-16 backdrop-blur-sm"
+    >
+      <!-- LOGO -->
+      <div class="w-1/4">
+        <img
+          src="public/images/sa_logo.png"
+          alt=""
+          class="p-1 h-16 w-auto object-contain hover:scale-105 transition-all duration-300 select-none"
+        />
+      </div>
+
+      <!-- DESKTOP MENU -->
+      <nav class="hidden lg:flex w-2/4 justify-center">
+        <ul
+          class="list-none text-md p-4 lg:p-0 m-0 flex lg:items-center select-none flex-col lg:flex-row cursor-pointer text-white [&>li>a]:flex [&>li>a]:m-0 [&>li>a]:md:ml-8 [&>li>a]:px-0 [&>li>a]:py-4 [&>li>a]:leading-normal [&>li>a]:relative [&>li>a]:group [&>li>a]:text-white [&>li>a]:hover:text-[#FCAF17] [&>li>a]:transition-colors [&>li>a]:duration-300 [&>li>a>span]:relative [&>li>a>span>span]:absolute [&>li>a>span>span]:-bottom-1 [&>li>a>span>span]:left-0 [&>li>a>span>span]:w-0 [&>li>a>span>span]:h-0.5 [&>li>a>span>span]:bg-[#FCAF17] [&>li>a>span>span]:transition-all [&>li>a>span>span]:duration-300 [&>li>a:hover>span>span]:w-full"
+        >
+          <li>
+            <a href="https://forum.sarp.es" target="_blank">
+              <span class="relative">
+                Foro
+                <span></span>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href="https://discord.gg/sarp" target="_blank">
+              <span class="relative">
+                Discord
+                <span></span>
+              </span>
+            </a>
+          </li>
+          <li>
+            <a href="https://ucp.sarp.es" target="_blank">
+              <span class="relative">
+                PCU
+                <span></span>
+              </span>
+            </a>
+          </li>
+        </ul>
+      </nav>
+
+      <!-- DESKTOP BUTTON -->
+      <div class="hidden lg:flex w-1/4 justify-end">
+        <a
+          class="px-6 py-2 text-md font-bold rounded-lg transition-all duration-300 hover:scale-105 border-2 border-[#FCAF17] text-[#FCAF17] hover:bg-[#FCAF17] hover:text-black uppercase"
+          href="https://ucp.sarp.es/auth/signup"
+          target="_blank"
+        >
+          Regístrate
+        </a>
+      </div>
+
+      <!-- MOBILE MENU -->
+      <div class="lg:hidden flex items-center">
+        <a
+          id="mobile-menu-button"
+          class="text-white p-2 flex items-center justify-center"
+        >
+          <i class="pi pi-bars !text-3xl"></i>
+        </a>
+      </div>
+
+      <!-- MOBILE DROPDOWN MENU -->
+      <div
+        id="mobile-menu"
+        class="lg:hidden fixed top-16 left-0 w-full bg-black/95 transform -translate-x-full transition-transform duration-300 ease-in-out z-50"
+      >
+        <ul class="flex flex-col items-center py-4">
+          <li class="w-full text-center">
+            <a
+              href="https://forum.sarp.es"
+              target="_blank"
+              class="block py-4 text-white hover:text-[#FCAF17] transition-colors duration-300"
+            >
+              Foro
+            </a>
+          </li>
+          <li class="w-full text-center">
+            <a
+              href="https://discord.gg/sarp"
+              target="_blank"
+              class="block py-4 text-white hover:text-[#FCAF17] transition-colors duration-300"
+            >
+              Discord
+            </a>
+          </li>
+          <li class="w-full text-center">
+            <a
+              href="https://ucp.sarp.es"
+              target="_blank"
+              class="block py-4 text-white hover:text-[#FCAF17] transition-colors duration-300"
+            >
+              PCU
+            </a>
+          </li>
+          <li class="w-full text-center mt-4">
+            <a
+              href="samp://play.sarp.es:7777"
+              target="_blank"
+              class="inline-block px-6 py-2 text-md font-bold rounded-lg border-2 border-[#FCAF17] text-[#FCAF17] hover:bg-[#FCAF17] hover:text-black transition-all duration-300"
+            >
+              JUGAR AHORA
+            </a>
+          </li>
+        </ul>
+      </div>
+    </header>
+
+    <!-- CONTENT -->
+    <main
+      class="min-h-screen bg-fixed bg-center bg-repeat-x bg-[length:80%]"
+      style="
+        background-image: url('public/images/gangtags.png');
+        background-color: #1a1800;
+      "
+    >
+      <div class="relative w-full">
+        <section class="hidden lg:block relative">
+          <img
+            src="public/images/background.png"
+            style="mask-image: linear-gradient(black 25%, transparent)"
+            class="w-full h-screen object-cover block"
+          />
+          <div
+            class="transition1 absolute inset-0 flex flex-col items-center justify-center text-center gap-y-2"
+          >
+            <img
+              src="public/images/logo.png"
+              alt="San Andreas Roleplay Logo"
+              class="logo-efecto transition1 select-none anim-on-scroll"
+              style="height: 12rem; margin: 0 auto"
+            />
+            <a
+              class="px-8 py-4 text-xl font-bold rounded-lg transition-all duration-300 hover:scale-105 border-2 border-[#FCAF17] text-[#FCAF17] hover:bg-[#FCAF17] hover:text-black transition3"
+              href="samp://play.sarp.es:7777"
+              target="_blank"
+              style="margin-top: 4rem"
+            >
+              JUGAR AHORA
+            </a>
+          </div>
+        </section>
+
+        <section
+          class="hidden lg:block relative w-full h-screen object-cover block"
+        >
+          <div
+            class="transition2 absolute inset-0 flex flex-col items-center justify-center text-center gap-y-2 px-2"
+          >
+            <h1
+              class="text-3xl font-bold bg-gradient-to-r from-[#fcaf17] to-[#b41919] bg-clip-text text-transparent pb-1 leading-tight anim-on-scroll"
+            >
+              ÚNICO SERVIDOR DE ROLEPLAY EN ESPAÑOL
+            </h1>
+            <p
+              class="text-md text-white mb-8 max-w-5xl px-4 text-white justify-text"
+            >
+              Somos una comunidad de rol basada en texto dentro del universo de
+              GTA San Andreas Multiplayer, donde los jugadores pueden
+              desarrollar personajes complejos, vivir historias profundas y
+              formar parte de un entorno narrativo realista. Desde 2023,
+              ofrecemos un espacio creativo, serio y comprometido con el
+              roleplay, diseñado para quienes buscan una experiencia inmersiva,
+              colaborativa y auténtica.
+            </p>
+          </div>
+        </section>
+
+        <div class="lg:top-full block relative max-w-[1200px] mx-auto">
+          <section class="grid grid-cols-12 gap-4 grid-nogutter p-2 lg:p-8">
+            <a
+              class="col-span-6 lg:col-span-4 flex items-center justify-center gap-4"
+              href="https://store.steampowered.com/agecheck/app/12120/"
+              target="_blank"
+            >
+              <img
+                class="h-24 w-auto hover:scale-110 transition-all duration-300 select-none"
+                src="public/images/gta_sa.png"
+                alt="Grand Theft Auto: San Andreas"
+              />
+            </a>
+            <a
+              class="col-span-6 lg:col-span-4 flex items-center justify-center gap-4"
+              href="https://www.sa-mp.mp/"
+              target="_blank"
+            >
+              <img
+                class="h-24 w-auto hover:scale-110 transition-all duration-300 select-none"
+                src="public/images/samp.png"
+                alt="San Andreas Multiplayer"
+              />
+            </a>
+            <a
+              class="col-span-6 lg:col-span-4 flex items-center justify-center gap-4"
+              href="https://open.mp/"
+              target="_blank"
+            >
+              <img
+                class="h-24 w-auto hover:scale-110 transition-all duration-300 select-none"
+                src="public/images/open_mp.png"
+                alt="Open Multiplayer"
+              />
+            </a>
+          </section>
+          <div class="pt-6">
+            <div class="flex flex-col gap-y-32 gap-x-12 items-center">
+              <article class="grid grid-cols-12 gap-4 p-12">
+                <!-- LSPD -->
+                <section class="col-span-6 lg:col-span-4">
+                  <a
+                    class="flex flex-col border border-surface-50 dark:border-surface-800 rounded-2xl"
+                    href="http://police.sarp.es/"
+                    target="_blank"
+                  >
+                    <img
+                      src="public/images/features/lspd.png"
+                      alt="Los Santos Police Department"
+                      style="height: 24rem; width: auto"
+                      class="select-none"
+                    />
+                    <div class="p-6">
+                      <span class="font-semibold text-white text-lg">LSPD</span>
+                      <p class="text-white mt-2">
+                        Protege las calles de Los Santos, enfrentando el crimen
+                        y sirviendo con orgullo a la ciudad.
+                      </p>
+                    </div>
+                  </a>
+                </section>
+
+                <!-- LSSD -->
+                <section class="col-span-6 lg:col-span-4">
+                  <a
+                    class="flex flex-col border border-surface-50 dark:border-surface-800 rounded-2xl"
+                    href="http://sheriff.sarp.es/"
+                    target="_blank"
+                  >
+                    <img
+                      src="public/images/features/lssd.png"
+                      alt="Los Santos County Sheriff's Department"
+                      style="height: 24rem; width: auto"
+                      class="select-none"
+                    />
+                    <div class="p-6">
+                      <span class="font-semibold text-white text-lg">LSSD</span>
+                      <p class="text-white mt-2">
+                        Patrulla las zonas más peligrosas de Los Santos, combate
+                        a las pandillas y mantén el condado seguro.
+                      </p>
+                    </div>
+                  </a>
+                </section>
+
+                <!-- LSFD -->
+                <section class="col-span-6 lg:col-span-4">
+                  <a
+                    class="flex flex-col border border-surface-50 dark:border-surface-800 rounded-2xl"
+                    href="https://discord.com/invite/RE3k8YvAmH"
+                    target="_blank"
+                  >
+                    <img
+                      src="public/images/features/lsfd.png"
+                      alt="Los Santos Fire Department"
+                      style="height: 24rem; width: auto"
+                      class="select-none"
+                    />
+                    <div class="p-6">
+                      <span class="font-semibold text-white text-lg">LSFD</span>
+                      <p class="text-white mt-2">
+                        Combate incendios estructurales, rescata a los civiles,
+                        salva vidas y protege a la ciudad de Los Santos.
+                      </p>
+                    </div>
+                  </a>
+                </section>
+              </article>
+
+              <article
+                class="flex flex-col lg:flex-row gap-20 mt-6 py-6 px-6 w-full"
+              >
+                <section class="flex flex-col items-end justify-center">
+                  <h1
+                    class="m-0 text-6xl font-bold bg-gradient-to-r from-[#fcaf17] to-[#b41919] bg-clip-text text-transparent text-right"
+                  >
+                    Facciones
+                  </h1>
+                  <p class="text-white text-right mt-4">
+                    Únete a una facción existente o crea tu propia organización
+                    para fomentar el roleplay junto a la comunidad. Cada semana,
+                    nuestro equipo administrativo evalúa continuamente el
+                    desempeño de las facciones y promueve su crecimiento
+                    mediante incentivos.
+                  </p>
+                </section>
+                <section class="flex flex-col items-end justify-center">
+                  <a
+                    href="https://forum.sarp.es/index.php?/forum/20-facciones-ilegales/"
+                    target="_blank"
+                  >
+                    <img
+                      class="h-[32rem] w-[64rem] object-contain transition-all duration-300 hover:scale-105 select-none"
+                      src="public/images/factions.png"
+                      alt="Facciones"
+                    />
+                  </a>
+                </section>
+              </article>
+              <article
+                class="flex flex-col lg:flex-row gap-20 mt-6 py-6 px-6 w-full"
+              >
+                <img
+                  class="h-[32rem] w-[32rem] object-contain transition-all duration-300 hover:scale-105 opacity-70 hover:opacity-100 select-none"
+                  src="public/images/players.png"
+                  alt="Facciones"
+                />
+                <section class="flex flex-col items-start justify-center">
+                  <div>
+                    <h1
+                      class="m-0 text-6xl font-bold bg-gradient-to-r from-[#fcaf17] to-[#b41919] bg-clip-text text-transparent"
+                    >
+                      +<span id="playerCounter">250</span> conectados
+                    </h1>
+                    <p class="text-white mt-2">
+                      Imagina ser parte de una comunidad de heavy roleplay, en
+                      pleno 2025, con más de 250 jugadores online en un solo
+                      servidor. Las oportunidades son infinitas, únete a
+                      nosotros y descubre todo lo que te ofrecemos.
+                    </p>
+                  </div>
+                </section>
+              </article>
+              <article
+                class="flex flex-col lg:flex-row gap-20 mt-6 py-6 px-6 w-full"
+              >
+                <section class="flex flex-col items-end justify-center">
+                  <div>
+                    <h1
+                      class="m-0 text-6xl font-bold bg-gradient-to-r from-[#fcaf17] to-[#b41919] bg-clip-text text-transparent text-right"
+                    >
+                      Únete a nosotros
+                    </h1>
+                    <p class="text-white text-right mt-4 w-[45rem]">
+                      ¿Eres bueno en lo que haces? Únete al equipo que lidera el
+                      futuro del roleplay en San Andreas. Buscamos
+                      programadores, diseñadores, modders y mentes creativas con
+                      ambición. Basta de perder talento en proyectos sin rumbo.
+                      Aquí tendrás financiamiento para tus ideas, una comunidad
+                      activa y un servidor con proyección sólida. Es momento de
+                      dejar huella. Súmate y construyamos algo grande.
+                    </p>
+                    <div
+                      class="flex flex-wrap gap-2 justify-end mt-4 [&>span]:px-4 [&>span]:py-1 [&>span]:rounded-full [&>span]:text-xs [&>span]:font-medium [&>span]:flex [&>span]:items-center [&>span]:gap-2"
+                    >
+                      <span
+                        class="bg-gradient-to-r from-[#FCAF17] to-[#FF8C00] text-white"
+                      >
+                        <i class="pi pi-sparkles"></i>
+                        SA-MP
+                      </span>
+                      <span
+                        class="bg-gradient-to-r from-[#B41919] to-[#8B0000] text-white"
+                      >
+                        <i class="pi pi-code"></i>
+                        Pawn
+                      </span>
+                      <span
+                        class="bg-gradient-to-r from-[#00599C] to-[#003366] text-white"
+                      >
+                        <i class="pi pi-cog"></i>
+                        C++
+                      </span>
+                      <span
+                        class="bg-gradient-to-r from-[#339933] to-[#2E7D32] text-white"
+                      >
+                        <i class="pi pi-server"></i>
+                        Node.JS
+                      </span>
+                      <span
+                        class="bg-gradient-to-r from-[#41B883] to-[#34495E] text-white"
+                      >
+                        <i class="pi pi-box"></i>
+                        Vue.JS
+                      </span>
+                      <span
+                        class="bg-gradient-to-r from-[#00A2FF] to-[#0077CC] text-white"
+                      >
+                        <i class="pi pi-palette"></i>
+                        3DS Max
+                      </span>
+                    </div>
+                  </div>
+                </section>
+                <section class="flex flex-col items-end justify-center">
+                  <a href="https://forum.sarp.es/" target="_blank">
+                    <img
+                      class="h-[32rem] w-[32rem] object-contain transition-all duration-300 hover:scale-105 select-none"
+                      src="public/images/i_want_you_for_san_rol.png"
+                      alt="Facciones"
+                    />
+                  </a>
+                </section>
+              </article>
+              <article class="flex gap-6 mt-6 py-6 flex-col items-center">
+                <h1
+                  class="m-0 text-6xl font-bold bg-gradient-to-r from-[#fcaf17] to-[#b41919] bg-clip-text text-transparent"
+                >
+                  Videos destacados
+                </h1>
+                <section class="flex flex-row gap-x-4">
+                  <iframe
+                    class="border-0 rounded-sm z-10 aspect-video w-[36rem]"
+                    src="https://www.youtube.com/embed/lXEH5fmfL3k"
+                  >
+                  </iframe>
+                  <iframe
+                    class="border-0 rounded-sm z-10 aspect-video w-[36rem]"
+                    src="https://www.youtube.com/embed/38Ce0f5JCMA"
+                  >
+                  </iframe>
+                </section>
+              </article>
+
+              <article class="py-6 px-6 mt-6 flex justify-center">
+                <div
+                  class="p-8 flex flex-col gap-4 items-start justify-between lg:flex-row lg:items-center rounded-2xl w-full bg-gradient-to-r from-[#fcaf17] to-[#b41919]"
+                >
+                  <div class="flex flex-col gap-2">
+                    <p class="m-0 text-white">
+                      Regístrate ahora para recibir las últimas noticias y
+                      actualizaciones de nuestra comunidad. Somos más de 8000
+                      usuarios registrados, faltas solamente tú.
+                    </p>
+                  </div>
+                </div>
+              </article>
+            </div>
+          </div>
+        </div>
+      </div>
+    </main>
+    <div
+      id="globalMetricsDiv"
+      style="
+        background: #222;
+        color: #fcaf17;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 8px;
+        font-family: monospace;
+        white-space: pre-wrap;
+      "
+    ></div>
+    <div
+      id="eventsDiv"
+      style="
+        background: #222;
+        color: #fcaf17;
+        padding: 1rem;
+        margin: 1rem 0;
+        border-radius: 8px;
+        font-family: monospace;
+        white-space: pre-wrap;
+      "
+    ></div>
+    <footer class="w-full p-12 bg-black">
+      <div class="grid grid-cols-12 gap-4 pb-12 m-0">
+        <div
+          class="col-span-12 lg:col-span-3 flex justify-center lg:justify-start"
+        >
+          <div
+            class="w-full text-white flex flex-col gap-4 items-center lg:items-start"
+          >
+            <h1
+              class="m-0 font-medium text-sm text-surface-500 dark:text-surface-300"
+            >
+              CONTACTO
+            </h1>
+            <div class="flex gap-8">
+              <a href="#"><i class="pi pi-github text-white !text-2xl"></i></a>
+              <a href="#"><i class="pi pi-twitter text-white !text-2xl"></i></a>
+              <a href="#"
+                ><i class="pi pi-linkedin text-white !text-2xl"></i
+              ></a>
+            </div>
+            <p class="m-0 text-base lg:text-sm text-center lg:text-left">
+              (415) 931-1624 794 Mcallister <br />
+              St San Francisco, 94102
+            </p>
+            <span class="text-base lg:text-sm">©Copyright 202X</span>
+          </div>
+        </div>
+        <div
+          class="col-span-12 lg:col-span-3 flex justify-center lg:justify-start"
+        >
+          <div
+            class="w-full text-white flex flex-col gap-4 items-center lg:items-start"
+          >
+            <h1
+              class="m-0 font-medium text-sm text-surface-500 dark:text-surface-300"
+            >
+              ABOUT US
+            </h1>
+            <a href="#"
+              ><span class="text-base lg:text-sm block text-white"
+                >Our Values</span
+              ></a
+            >
+            <a href="#"
+              ><span class="text-base lg:text-sm block text-white"
+                >Our Team</span
+              ></a
+            >
+            <a href="#"
+              ><span class="text-base lg:text-sm block text-white"
+                >Our History</span
+              ></a
+            >
+            <a href="#"
+              ><span class="text-base lg:text-sm block text-white"
+                >Career & Join Us</span
+              ></a
+            >
+          </div>
+        </div>
+        <div
+          class="col-span-12 lg:col-span-3 flex justify-center lg:justify-start"
+        >
+          <div
+            class="w-full text-white flex flex-col gap-4 items-center lg:items-start"
+          >
+            <h1
+              class="m-0 font-medium text-sm text-surface-500 dark:text-surface-300"
+            >
+              SITE MAP
+            </h1>
+            <a href="#"
+              ><span class="text-base lg:text-sm block text-white"
+                >Dashboard</span
+              ></a
+            >
+            <a href="#"
+              ><span class="text-base lg:text-sm block text-white"
+                >CRUD</span
+              ></a
+            >
+            <a href="#"
+              ><span class="text-base lg:text-sm block text-white"
+                >Invoice</span
+              ></a
+            >
+            <a href="#"
+              ><span class="text-base lg:text-sm block text-white"
+                >Help
+              </span></a
+            >
+          </div>
+        </div>
+        <div
+          class="col-span-12 lg:col-span-3 flex justify-center lg:justify-start"
+        >
+          <div
+            class="w-full text-white flex flex-col gap-4 items-center lg:items-start"
+          >
+            <h1
+              class="m-0 font-medium text-sm text-surface-500 dark:text-surface-300"
+            >
+              CALENDAR
+            </h1>
+            <a href="#"
+              ><span class="text-base lg:text-sm block text-white"
+                >Widgets</span
+              ></a
+            >
+            <a href="#"
+              ><span class="text-base lg:text-sm block text-white"
+                >Documentation</span
+              ></a
+            >
+            <a href="#"
+              ><span class="text-base lg:text-sm block text-white"
+                >Buy Now</span
+              ></a
+            >
+          </div>
+        </div>
+      </div>
+    </footer>
+    <script>
+      console.log(
+        "%cBuscamos desarrolladores como tú, demuestra tu talento en el repositorio de GitHub :)",
+        "background: #fcaf17; color: white; padding-left: 5px; padding-right: 5px; font-size: 20px;"
+      );
+    </script>
+    <script>
+      const mobileMenuButton = document.getElementById("mobile-menu-button");
+      const mobileMenu = document.getElementById("mobile-menu");
+      let isMenuOpen = false;
+
+      mobileMenuButton.addEventListener("click", () => {
+        isMenuOpen = !isMenuOpen;
+        if (isMenuOpen) {
+          mobileMenu.classList.remove("-translate-x-full");
+        } else {
+          mobileMenu.classList.add("-translate-x-full");
+        }
+      });
+
+      function animateCounter(counter) {
+        const target = 250;
+        const duration = 2000; // 2 segundos
+        const step = target / (duration / 16); // 60fps
+        let current = 0;
+
+        const updateCounter = () => {
+          current += step;
+          if (current >= target) {
+            counter.textContent = target;
+          } else {
+            counter.textContent = Math.floor(current);
+            requestAnimationFrame(updateCounter);
+          }
+        };
+
+        updateCounter();
+      }
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              const counter = document.getElementById("playerCounter");
+              animateCounter(counter);
+            }
+          });
+        },
+        {
+          threshold: 0.1,
+        }
+      );
+
+      document.addEventListener("DOMContentLoaded", () => {
+        const counter = document.getElementById("playerCounter");
+        observer.observe(counter);
+      });
+    </script>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const animatedElements = document.querySelectorAll(".anim-on-scroll");
+
+        const observer = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("animate-logo-appear");
+              } else {
+                entry.target.classList.remove("animate-logo-appear");
+              }
+            });
+          },
+          { threshold: 0.2 }
+        );
+
+        animatedElements.forEach((el) => {
+          observer.observe(el);
+        });
+      });
+    </script>
+    <script src="api.js"></script>
+  </body>
+</html>
