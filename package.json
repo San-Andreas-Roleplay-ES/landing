@@ -1,20 +1,21 @@
 {
   "name": "landing",
-  "version": "1.0.0",
-  "main": "index.js",
+  "type": "module",
+  "version": "0.0.1",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "description": "",
-  "devDependencies": {
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.3",
-    "tailwindcss": "^4.1.6"
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview",
+    "astro": "astro"
   },
   "dependencies": {
-    "@tailwindcss/cli": "^4.1.6"
+    "@tailwindcss/vite": "^4.1.8",
+    "astro": "^5.8.0",
+    "astro-icon": "^1.1.5",
+    "prettier-plugin-astro": "^0.14.1",
+    "tailwindcss": "^4.1.8"
+  },
+  "devDependencies": {
+    "@iconify-json/mdi": "^1.2.3"
   }
 }

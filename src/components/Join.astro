@@ -1,0 +1,62 @@
+---
+import { Icon } from "astro-icon/components";
+import { Image } from "astro:assets";
+import i_want_you_for_san_rol from "./public/images/i_want_you_for_san_rol.png";
+---
+
+<section class="w-full object-cover items-center justify-center pt-32">
+  <div class="flex items-center justify-center">
+    <div class="max-w-5xl w-full flex items-center gap-12">
+      <div class="w-full">
+        <h2
+          class="text-5xl font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent pb-2"
+        >
+          Únete a nosotros
+        </h2>
+        <p class="text-md mt-2 mb-8 text-white">
+          ¿Eres bueno en lo que haces? Únete al equipo que lidera el futuro del
+          roleplay en San Andreas. Buscamos programadores, diseñadores, modders
+          y mentes creativas con ambición. Basta de perder talento en proyectos
+          sin rumbo. Aquí tendrás financiamiento para tus ideas, una comunidad
+          activa y un servidor con proyección sólida. Es momento de dejar
+          huella. Súmate y construyamos algo grande.
+        </p>
+        <div
+          class="flex flex-wrap gap-2 justify-end mt-4 [&>span]:px-4 [&>span]:py-1 [&>span]:rounded-full [&>span]:text-xs [&>span]:font-medium [&>span]:flex [&>span]:items-center [&>span]:gap-2"
+        >
+          <span class="bg-gradient-to-r from-primary to-[#FF8C00] text-white">
+            <Icon class="w-5 h-5" name="mdi:gamepad-classic" />
+            SA-MP
+          </span>
+          <span class="bg-gradient-to-r from-[#B41919] to-[#8B0000] text-white">
+            <Icon class="w-5 h-5" name="mdi:chess-pawn" />
+            Pawn
+          </span>
+          <span class="bg-gradient-to-r from-[#00599C] to-[#003366] text-white">
+            <Icon class="w-5 h-5" name="mdi:language-cpp" />
+            C++
+          </span>
+          <span class="bg-gradient-to-r from-[#339933] to-[#2E7D32] text-white">
+            <Icon class="w-5 h-5" name="mdi:nodejs" />
+            Node.JS
+          </span>
+          <span class="bg-gradient-to-r from-[#41B883] to-[#34495E] text-white">
+            <Icon class="w-5 h-5" name="mdi:vuejs" />
+            Vue.JS
+          </span>
+          <span class="bg-gradient-to-r from-[#00A2FF] to-[#0077CC] text-white">
+            <Icon class="w-5 h-5" name="mdi:palette" />
+            3DS Max
+          </span>
+        </div>
+      </div>
+      <div class="w-1/2 flex justify-center">
+        <Image
+          src={i_want_you_for_san_rol}
+          alt="Jugadores online"
+          class="max-h-96 w-auto select-none transition-transform duration-300 hover:scale-110 rounded-lg shadow-lg"
+        />
+      </div>
+    </div>
+  </div>
+</section>

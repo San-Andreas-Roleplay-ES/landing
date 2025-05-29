@@ -1,0 +1,134 @@
+---
+import { Image } from "astro:assets";
+
+import fire from "./public/images/features/fire.png";
+import idlewood from "./public/images/features/idlewood.png";
+import jewelry from "./public/images/features/jewelry.png";
+import pershing from "./public/images/features/pershing.png";
+import races from "./public/images/features/races.png";
+import truckers from "./public/images/features/truckers.png";
+---
+
+<section class="w-full object-cover items-center justify-center pt-32">
+  <div class="flex items-center justify-center">
+    <div class="max-w-5xl w-full">
+      <h3
+        class="text-2xl font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent pb-2"
+      >
+        Características
+      </h3>
+      <h2
+        class="text-3xl text-white font-bold pb-1 leading-tight anim-on-scroll"
+      >
+        <strong class="font-extrabold">Nuevos modelos 3D</strong> que conservan,
+        embellecen y expanden el arte original de Grand Theft Auto San Andreas.
+      </h2>
+      <article class="grid grid-cols-3 gap-16 mt-8">
+        <div class="flex flex-col gap-4">
+          <h4
+            class="text-lg font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent pb-2"
+          >
+            Plazas públicas
+          </h4>
+          <div
+            class="h-74 w-74 border border-primary rounded-lg overflow-hidden group cursor-pointer"
+          >
+            <Image
+              src={pershing}
+              alt="Civic Centers"
+              class="w-full h-full object-cover select-none transition-transform duration-300 group-hover:scale-110"
+            />
+          </div>
+        </div>
+        <div class="flex flex-col gap-4">
+          <h4
+            class="text-lg font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent pb-2"
+          >
+            Circuitos de carreras
+          </h4>
+          <div
+            class="h-74 w-74 border border-primary rounded-lg overflow-hidden group cursor-pointer"
+          >
+            <Image
+              src={races}
+              alt="Racing Routes"
+              class="w-full h-full object-cover select-none transition-transform duration-300 group-hover:scale-110"
+            />
+          </div>
+        </div>
+        <div class="flex flex-col gap-4">
+          <h4
+            class="text-lg font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent pb-2"
+          >
+            Simulador de camiones
+          </h4>
+          <div
+            class="h-74 w-74 border border-primary rounded-lg overflow-hidden group cursor-pointer"
+          >
+            <Image
+              src={truckers}
+              alt="Trucking Simulator"
+              class="w-full h-full object-cover select-none transition-transform duration-300 group-hover:scale-110"
+            />
+          </div>
+        </div>
+        <div class="flex flex-col gap-4">
+          <h4
+            class="text-lg font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent pb-2"
+          >
+            Joyerías
+          </h4>
+          <div
+            class="h-74 w-74 border border-primary rounded-lg overflow-hidden group cursor-pointer"
+          >
+            <Image
+              src={jewelry}
+              alt="Jewelry"
+              class="w-full h-full object-cover select-none transition-transform duration-300 group-hover:scale-110"
+            />
+          </div>
+        </div>
+        <div class="flex flex-col gap-4">
+          <h4
+            class="text-lg font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent pb-2"
+          >
+            Mangueras de incendios
+          </h4>
+          <div
+            class="h-74 w-74 border border-primary rounded-lg overflow-hidden group cursor-pointer"
+          >
+            <Image
+              src={fire}
+              alt="Fire Hoses"
+              class="w-full h-full object-cover select-none transition-transform duration-300 group-hover:scale-110"
+            />
+          </div>
+        </div>
+        <div class="flex flex-col gap-4">
+          <h4
+            class="text-lg font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent pb-2"
+          >
+            Barrios de pandillas
+          </h4>
+          <div
+            class="h-74 w-74 border border-primary rounded-lg overflow-hidden group cursor-pointer"
+          >
+            <Image
+              src={idlewood}
+              alt="Gangzones"
+              class="w-full h-full object-cover select-none transition-transform duration-300 group-hover:scale-110"
+            />
+          </div>
+        </div>
+        <div class="col-span-3 flex flex-col gap-4">
+          <h3
+            class="text-lg font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent pb-2 text-center"
+          >
+            ¡Descubre muchísimo más dentro del servidor! ¡Sistemas que no se han
+            visto nunca en un servidor de SAMP!
+          </h3>
+        </div>
+      </article>
+    </div>
+  </div>
+</section>

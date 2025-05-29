@@ -1,0 +1,69 @@
+---
+import Footer from "../components/layout/Footer.astro";
+import Header from "../components/layout/Header.astro";
+import "../styles/global.css";
+
+const { title } = Astro.props;
+---
+
+<html lang="es">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="author"
+      content="San Andreas Roleplay | Comunidad de Roleplay Pesado"
+    />
+    <meta
+      name="keywords"
+      content="San Andreas Roleplay, GTA San Andreas, roleplay, SA-MP, multiplayer, juego en línea, servidor RP, GTA V, GTA 5, FiveM, GTMP, MTA, rol basado en texto, comunidad de rol, videojuegos, servidor de GTA, RP, eventos de rol, juego creativo"
+    />
+    <meta
+      name="description"
+      content="San Andreas Roleplay es una comunidad de rol basado en texto sobre GTA San Andreas, que proporciona a los jugadores un espacio creativo para jugar desde 2023 con +8000 personajes registrados."
+    />
+    <meta name="copyright" content="San Andreas Roleplay" />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png" />
+    <link rel="manifest" href="site.webmanifest" />
+
+    <meta name="generator" content={Astro.generator} />
+    <title>{title}</title>
+    <style is:global>
+      ::-webkit-scrollbar {
+        width: 12px;
+      }
+
+      ::-webkit-scrollbar-track {
+        background: #1a1800;
+        border-radius: 6px;
+      }
+
+      ::-webkit-scrollbar-thumb {
+        background: linear-gradient(to bottom, #fcaf17, #b41919);
+        border-radius: 6px;
+        border: 2px solid #1a1800;
+      }
+
+      ::-webkit-scrollbar-thumb:hover {
+        background: linear-gradient(to bottom, #ffc107, #d32f2f);
+      }
+
+      * {
+        scrollbar-width: thin;
+        scrollbar-color: #fcaf17 #1a1800;
+      }
+    </style>
+  </head>
+  <body
+    class="bg-fixed bg-center bg-repeat-x bg-[url('/images/gangtags.png')] bg-[#1a1800]"
+  >
+    <Header />
+    <main class="w-full">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
