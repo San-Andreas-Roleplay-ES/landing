@@ -5,24 +5,25 @@ import players from "../assets/images/players.png";
 
 <section class="w-full object-cover items-center justify-center pt-32">
   <div class="flex items-center justify-center">
-    <div class="max-w-5xl w-full flex items-center gap-12">
-      <div class="w-1/2 flex justify-center">
+    <div class="w-full flex flex-col md:flex-row items-center gap-12">
+      <div class="w-full md:w-1/2 flex justify-center">
         <Image
           src={players}
           alt="Jugadores online"
-          class="max-h-96 w-auto select-none transition-transform duration-300 hover:scale-110 rounded-lg shadow-lg"
+          class="max-h-screen md:max-h-96 w-auto select-none transition-transform duration-300 hover:scale-110 rounded-lg shadow-lg"
         />
       </div>
-      <div class="w-1/2">
+      <div class="w-full md:w-1/2">
         <h2
-          class="text-5xl font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent pb-2"
+          class="text-2xl md:text-5xl font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent pb-2"
         >
-          +250 usuarios online
+          +250 conectados
         </h2>
         <p class="text-md mt-2 mb-8 text-white">
           Imagina ser parte de una comunidad de heavy roleplay, en pleno 2025,
-          con más de 250 jugadores online en un solo servidor. Las oportunidades
-          son infinitas, únete a nosotros y descubre todo lo que te ofrecemos.
+          con récords de más de 250 jugadores online simultáneamente. Las
+          oportunidades son infinitas, únete a nosotros y descubre todo lo que
+          te ofrecemos.
         </p>
       </div>
     </div>

@@ -3,54 +3,56 @@ import { Image } from "astro:assets";
 import sa_logo from "../../assets/images/sa_logo.png";
 ---
 
-<nav class="bg-black/40 fixed top-0 left-0 w-full z-50">
-  <div class="max-w-screen-xl mx-auto grid grid-cols-3 items-center p-2">
-    <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
-      <Image
-        src={sa_logo}
-        class="h-14 w-auto md:h-10 object-contain hover:scale-105 transition-all duration-300 select-none"
-        alt="San Andreas Roleplay Logo"
-      />
-      <span
-        class="hidden md:block self-center text-lg font-semibold whitespace-nowrap dark:text-white"
-        >San Andreas Roleplay</span
-      >
-    </a>
-    <ul class="hidden md:flex flex-row gap-x-6 justify-center">
-      <li>
-        <a
-          href="https://forum.sarp.es"
-          target="_blank"
-          class="block py-4 text-white hover:text-primary transition-colors duration-300"
+<nav class="fixed top-0 left-0 w-full z-50">
+  <div class="bg-black/40 w-full">
+    <div class="max-w-5xl mx-auto grid grid-cols-3 items-center px-8 py-2">
+      <a href="#" class="flex items-center space-x-3 rtl:space-x-reverse">
+        <Image
+          src={sa_logo}
+          class="h-14 w-auto md:h-10 object-contain hover:scale-105 transition-all duration-300 select-none"
+          alt="San Andreas Roleplay Logo"
+        />
+        <span
+          class="hidden md:block self-center text-lg font-semibold whitespace-nowrap dark:text-white"
+          >San Andreas Roleplay</span
         >
-          Foro
-        </a>
-      </li>
-      <li>
+      </a>
+      <ul class="hidden md:flex flex-row gap-x-6 justify-center">
+        <li>
+          <a
+            href="https://forum.sarp.es"
+            target="_blank"
+            class="block py-4 text-white hover:text-primary transition-colors duration-300"
+          >
+            Foro
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://discord.gg/sarp"
+            target="_blank"
+            class="block py-4 text-white hover:text-primary transition-colors duration-300"
+          >
+            Discord
+          </a>
+        </li>
+        <li>
+          <a
+            href="https://ucp.sarp.es"
+            target="_blank"
+            class="block py-4 text-white hover:text-primary transition-colors duration-300"
+          >
+            PCU
+          </a>
+        </li>
+      </ul>
+      <div class="flex justify-end col-start-3">
         <a
-          href="https://discord.gg/sarp"
-          target="_blank"
-          class="block py-4 text-white hover:text-primary transition-colors duration-300"
+          class="px-4 py-2 text-md font-bold rounded-lg transition-all duration-300 hover:scale-105 border-2 border-primary text-primary hover:bg-primary hover:text-black uppercase"
+          href="https://ucp.sarp.es/auth/signup"
+          target="_blank">Regístrate</a
         >
-          Discord
-        </a>
-      </li>
-      <li>
-        <a
-          href="https://ucp.sarp.es"
-          target="_blank"
-          class="block py-4 text-white hover:text-primary transition-colors duration-300"
-        >
-          PCU
-        </a>
-      </li>
-    </ul>
-    <div class="flex justify-end col-start-3">
-      <a
-        class="px-4 py-2 text-md font-bold rounded-lg transition-all duration-300 hover:scale-105 border-2 border-primary text-primary hover:bg-primary hover:text-black uppercase"
-        href="https://ucp.sarp.es/auth/signup"
-        target="_blank">Regístrate</a
-      >
+      </div>
     </div>
   </div>
 </nav>
