@@ -6,10 +6,10 @@ import i_want_you_for_san_rol from "../assets/images/i_want_you_for_san_rol.png"
 
 <section class="w-full object-cover items-center justify-center pt-32">
   <div class="flex items-center justify-center">
-    <div class="max-w-5xl w-full flex items-center gap-12">
+    <div class="w-full flex flex-col md:flex-row items-center gap-12">
       <div class="w-full">
         <h2
-          class="text-5xl font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent pb-2"
+          class="text-2xl md:text-5xl font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent pb-2"
         >
           Únete a nosotros
         </h2>
@@ -22,7 +22,7 @@ import i_want_you_for_san_rol from "../assets/images/i_want_you_for_san_rol.png"
           huella. Súmate y construyamos algo grande.
         </p>
         <div
-          class="flex flex-wrap gap-2 justify-end mt-4 [&>span]:px-4 [&>span]:py-1 [&>span]:rounded-full [&>span]:text-xs [&>span]:font-medium [&>span]:flex [&>span]:items-center [&>span]:gap-2"
+          class="flex flex-wrap gap-2 justify-left md:justify-end mt-4 [&>span]:px-4 [&>span]:py-1 [&>span]:rounded-full [&>span]:text-xs [&>span]:font-medium [&>span]:flex [&>span]:items-center [&>span]:gap-2"
         >
           <span class="bg-gradient-to-r from-primary to-[#FF8C00] text-white">
             <Icon class="w-5 h-5" name="mdi:gamepad-classic" />
@@ -50,11 +50,11 @@ import i_want_you_for_san_rol from "../assets/images/i_want_you_for_san_rol.png"
           </span>
         </div>
       </div>
-      <div class="w-1/2 flex justify-center">
+      <div class="w-full md:w-1/2 flex justify-center">
         <Image
           src={i_want_you_for_san_rol}
           alt="Jugadores online"
-          class="max-h-96 w-auto select-none transition-transform duration-300 hover:scale-110 rounded-lg shadow-lg"
+          class="md:max-h-96 w-auto select-none transition-transform duration-300 hover:scale-110 rounded-lg shadow-lg"
         />
       </div>
     </div>

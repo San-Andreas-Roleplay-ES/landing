@@ -3,53 +3,55 @@ import { Image } from "astro:assets";
 import logo from "../assets/images/logo.png";
 ---
 
-<section class="w-full h-screen overflow-hidden">
+<section class="w-full h-200 md:h-screen overflow-hidden relative">
   <img
     src="images/background.png"
     style="mask-image: linear-gradient(black 25%, transparent)"
-    class="w-full h-screen object-cover block"
+    class="hidden md:block w-full h-screen object-cover"
   />
-  <div
-    class="absolute inset-0 flex flex-col items-center justify-center text-center gap-y-2 p-4"
-  >
-    <Image
-      src={logo}
-      alt="San Andreas Roleplay Logo"
-      class="h-64 w-auto m-0 select-none scale-90 hover:scale-108 hover:-rotate-2 transition-all duration-300 filter [filter:drop-shadow(0_0_40px_rgba(252,175,23,0.5))_drop-shadow(0_0_10px_rgba(180,25,25,0.4))] hover:[filter:drop-shadow(0_0_60px_rgba(252,175,23,0.7))_drop-shadow(0_0_20px_rgba(180,25,25,0.5))]"
-    />
-    <h1
-      class="max-w-xl md:max-w-2xl text-2xl md:text-4xl font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent pb-2"
+  <div class="absolute inset-0 flex justify-center">
+    <div
+      class="max-w-5xl w-full flex flex-col items-center justify-center text-center gap-y-2 p-4"
     >
-      El único roleplay basado en texto de Grand Theft Auto San Andreas.
-    </h1>
-    <p class="text-white text-lg">
-      <span class="text-primary text-2xl">❝</span>
-      La verdadera esencia de GTA SA, llevada al rol más inmersivo.
-      <span class="text-primary text-2xl">❞</span>
-    </p>
-    <a
-      class="mt-2 group flex items-center gap-2 px-4 py-2 text-sm font-mono bg-[#1a1a1a] border border-[#333] rounded-lg transition-all duration-300 hover:border-primary"
-      href="samp://play.sarp.es:7777"
-      target="_blank"
-    >
-      <span>🎮</span>
-      <span class="text-gray-300">play.sarp.es:7777</span>
-      <span class="text-gray-500 group-hover:text-primary transition-colors">
-        <svg
-          xmlns="http://www.w3.org/2000/svg"
-          width="16"
-          height="16"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-          stroke-linecap="round"
-          stroke-linejoin="round"
-          ><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path
-            d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
-          ></path></svg
-        >
-      </span>
-    </a>
+      <Image
+        src={logo}
+        alt="San Andreas Roleplay Logo"
+        class="h-48 md:h-64 w-auto m-0 select-none scale-90 md:hover:scale-108 md:hover:-rotate-2 transition-all duration-300 filter [filter:drop-shadow(0_0_40px_rgba(252,175,23,0.5))_drop-shadow(0_0_10px_rgba(180,25,25,0.4))] md:hover:[filter:drop-shadow(0_0_60px_rgba(252,175,23,0.7))_drop-shadow(0_0_20px_rgba(180,25,25,0.5))]"
+      />
+      <h1
+        class="max-w-xl md:max-w-2xl text-2xl md:text-4xl font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent pb-2"
+      >
+        El único roleplay basado en texto de Grand Theft Auto San Andreas.
+      </h1>
+      <p class="text-white text-lg">
+        <span class="text-primary text-2xl">❝</span>
+        La verdadera esencia de GTA SA, llevada al rol más inmersivo.
+        <span class="text-primary text-2xl">❞</span>
+      </p>
+      <a
+        class="mt-2 group flex items-center gap-2 px-4 py-2 text-sm font-mono bg-[#1a1a1a] border border-[#333] rounded-lg transition-all duration-300 hover:border-primary"
+        href="samp://play.sarp.es:7777"
+        target="_blank"
+      >
+        <span>🎮</span>
+        <span class="text-gray-300">play.sarp.es:7777</span>
+        <span class="text-gray-500 group-hover:text-primary transition-colors">
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            ><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path
+              d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+            ></path></svg
+          >
+        </span>
+      </a>
+    </div>
   </div>
 </section>

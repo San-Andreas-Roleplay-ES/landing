@@ -6,15 +6,18 @@ import Join from "../components/Join.astro";
 import Record from "../components/Record.astro";
 import Welcome from "../components/Welcome.astro";
 import YouTube from "../components/YouTube.astro";
+import Container from "../components/layout/Container.astro";
 import Layout from "../layouts/Layout.astro";
 ---
 
 <Layout title="San Andreas Roleplay - Multiplayer SAMP">
   <Welcome />
-  <DownloadLinks />
-  <Features />
-  <Record />
-  <Description />
-  <Join />
-  <YouTube />
+  <Container>
+    <DownloadLinks />
+    <Features />
+    <Record />
+    <Description />
+    <Join />
+    <YouTube />
+  </Container>
 </Layout>
