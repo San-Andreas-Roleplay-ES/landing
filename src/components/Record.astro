@@ -1,14 +1,13 @@
 ---
-import { Image } from "astro:assets";
-import players from "../assets/images/players.png";
+
 ---
 
 <section class="w-full object-cover items-center justify-center pt-32">
   <div class="flex items-center justify-center">
     <div class="w-full flex flex-col md:flex-row items-center gap-12">
       <div class="w-full md:w-1/2 flex justify-center">
-        <Image
-          src={players}
+        <img
+          src="/images/players.png"
           alt="Jugadores online"
           class="max-h-screen md:max-h-96 w-auto select-none transition-transform duration-300 hover:scale-110 rounded-lg shadow-lg"
         />

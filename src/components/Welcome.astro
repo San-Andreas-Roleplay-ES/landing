@@ -1,6 +1,5 @@
 ---
-import { Image } from "astro:assets";
-import logo from "../assets/images/logo.png";
+
 ---
 
 <section class="w-full h-200 md:h-screen overflow-hidden relative">
@@ -13,8 +12,8 @@ import logo from "../assets/images/logo.png";
     <div
       class="max-w-5xl w-full flex flex-col items-center justify-center text-center gap-y-2 p-4"
     >
-      <Image
-        src={logo}
+      <img
+        src="/images/logo.png"
         alt="San Andreas Roleplay Logo"
         class="h-48 md:h-64 w-auto m-0 select-none scale-90 md:hover:scale-108 md:hover:-rotate-2 transition-all duration-300 filter [filter:drop-shadow(0_0_40px_rgba(252,175,23,0.5))_drop-shadow(0_0_10px_rgba(180,25,25,0.4))] md:hover:[filter:drop-shadow(0_0_60px_rgba(252,175,23,0.7))_drop-shadow(0_0_20px_rgba(180,25,25,0.5))]"
       />

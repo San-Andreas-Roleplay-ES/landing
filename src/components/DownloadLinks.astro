@@ -1,11 +1,3 @@
----
-import { Image } from "astro:assets";
-
-import gta_sa from "../assets/images/gta_sa.png";
-import open_mp from "../assets/images/open_mp.png";
-import samp from "../assets/images/samp.png";
----
-
 <section class="grid grid-cols-5 gap-4 grid-nogutter">
   <h3 class="col-span-5 font-light text-center text-white pb-6">
     Descarga GTA:SA, instala SA-MP/open.mp y forma parte de la comunidad.
@@ -15,9 +7,9 @@ import samp from "../assets/images/samp.png";
     href="https://store.steampowered.com/agecheck/app/12120/"
     target="_blank"
   >
-    <Image
+    <img
       class="h-24 w-auto hover:scale-110 transition-all duration-300 select-none"
-      src={gta_sa}
+      src="/images/gta_sa.png"
       alt="Grand Theft Auto: San Andreas"
     />
   </a>
@@ -32,9 +24,9 @@ import samp from "../assets/images/samp.png";
     href="https://www.sa-mp.mp/downloads/"
     target="_blank"
   >
-    <Image
+    <img
       class="h-24 w-auto hover:scale-110 transition-all duration-300 select-none"
-      src={samp}
+      src="/images/samp.png"
       alt="San Andreas Multiplayer"
     />
   </a>
@@ -49,9 +41,9 @@ import samp from "../assets/images/samp.png";
     href="https://open.mp/"
     target="_blank"
   >
-    <Image
+    <img
       class="h-24 w-auto hover:scale-110 transition-all duration-300 select-none"
-      src={open_mp}
+      src="/images/open_mp.png"
       alt="Open Multiplayer"
     />
   </a>
