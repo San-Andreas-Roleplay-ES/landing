@@ -41,7 +41,7 @@
     const observer = new IntersectionObserver((entries) => {
       entries.forEach((entry) => {
         if (entry.isIntersecting) {
-          // Iniciar la animación cuando el elemento es visible
+          // Iniciar la animación cuando el elemento es visible, puede resolverse de otra manera.
           interval = setInterval(() => {
             count++;
             counter.textContent = count.toString();
