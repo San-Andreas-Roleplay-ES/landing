@@ -1,0 +1,117 @@
+<!-- TEMPLATE HEADER -->
+<header
+  class="flex justify-between items-center z-50 px-8 lg:px-32 bg-black/40 top-0 w-full fixed h-16 backdrop-blur-sm"
+>
+  <!-- LOGO -->
+  <div class="w-1/4">
+    <img
+      src="/landing/images/sa_logo.png"
+      alt=""
+      class="p-1 h-16 w-auto object-contain hover:scale-105 transition-all duration-300 select-none"
+    />
+  </div>
+
+  <!-- DESKTOP MENU -->
+  <nav class="hidden lg:flex w-2/4 justify-center">
+    <ul
+      class="list-none text-md p-4 lg:p-0 m-0 flex lg:items-center select-none flex-col lg:flex-row cursor-pointer text-white [&>li>a]:flex [&>li>a]:m-0 [&>li>a]:md:ml-8 [&>li>a]:px-0 [&>li>a]:py-4 [&>li>a]:leading-normal [&>li>a]:relative [&>li>a]:group [&>li>a]:text-white [&>li>a]:hover:text-[#FCAF17] [&>li>a]:transition-colors [&>li>a]:duration-300 [&>li>a>span]:relative [&>li>a>span>span]:absolute [&>li>a>span>span]:-bottom-1 [&>li>a>span>span]:left-0 [&>li>a>span>span]:w-0 [&>li>a>span>span]:h-0.5 [&>li>a>span>span]:bg-[#FCAF17] [&>li>a>span>span]:transition-all [&>li>a>span>span]:duration-300 [&>li>a:hover>span>span]:w-full"
+    >
+      <li>
+        <a href="https://forum.sarp.es" target="_blank" aria-label="Foro">
+          <span class="relative">
+            Foro
+            <span></span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a href="https://discord.gg/sa-rp" target="_blank" aria-label="Discord">
+          <span class="relative">
+            Discord
+            <span></span>
+          </span>
+        </a>
+      </li>
+      <li>
+        <a href="https://ucp.sarp.es" target="_blank" aria-label="PCU">
+          <span class="relative">
+            PCU
+            <span></span>
+          </span>
+        </a>
+      </li>
+    </ul>
+  </nav>
+
+  <!-- DESKTOP BUTTON -->
+  <div class="hidden lg:flex w-1/4 justify-end">
+    <a
+      class="px-6 py-2 text-md font-bold rounded-lg transition-all duration-300 hover:scale-105 border-2 border-[#FCAF17] text-[#FCAF17] hover:bg-[#FCAF17] hover:text-black uppercase"
+      href="https://ucp.sarp.es/auth/signup"
+      target="_blank"
+      aria-label="Regístrate en San Andreas Roleplay"
+    >
+      Regístrate
+    </a>
+  </div>
+
+  <!-- MOBILE MENU -->
+  <div class="lg:hidden flex items-center">
+    <a
+      id="mobile-menu-button"
+      class="text-white p-2 flex items-center justify-center"
+      aria-label=""
+    >
+      <i class="pi pi-bars !text-3xl"></i>
+    </a>
+  </div>
+
+  <!-- MOBILE DROPDOWN MENU -->
+  <div
+    id="mobile-menu"
+    class="lg:hidden fixed top-16 left-0 w-full bg-black/95 transform -translate-x-full transition-transform duration-300 ease-in-out z-50"
+  >
+    <ul class="flex flex-col items-center py-4">
+      <li class="w-full text-center">
+        <a
+          href="https://forum.sarp.es"
+          target="_blank"
+          class="block py-4 text-white hover:text-[#FCAF17] transition-colors duration-300"
+          aria-label="Foro de San Andreas Roleplay"
+        >
+          Foro
+        </a>
+      </li>
+      <li class="w-full text-center">
+        <a
+          href="https://discord.gg/sa-rp"
+          target="_blank"
+          class="block py-4 text-white hover:text-[#FCAF17] transition-colors duration-300"
+          aria-label="Unirse al Discord de San Andreas Roleplay"
+        >
+          Discord
+        </a>
+      </li>
+      <li class="w-full text-center">
+        <a
+          href="https://ucp.sarp.es"
+          target="_blank"
+          class="block py-4 text-white hover:text-[#FCAF17] transition-colors duration-300"
+          aria-label="Acceder a la PCU de San Andreas Roleplay"
+        >
+          PCU
+        </a>
+      </li>
+      <li class="w-full text-center mt-4">
+        <a
+          href="samp://play.sarp.es:7777"
+          target="_blank"
+          class="inline-block px-6 py-2 text-md font-bold rounded-lg border-2 border-[#FCAF17] text-[#FCAF17] hover:bg-[#FCAF17] hover:text-black transition-all duration-300"
+          aria-label="Jugar ahora a San Andreas Roleplay"
+        >
+          JUGAR AHORA
+        </a>
+      </li>
+    </ul>
+  </div>
+</header>

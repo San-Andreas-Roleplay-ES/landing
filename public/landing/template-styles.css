@@ -1,0 +1,96 @@
+/* Template-specific styles extracted from template.html */
+
+.overflow-y-auto::-webkit-scrollbar {
+  display: none;
+}
+
+.overflow-y-auto {
+  -ms-overflow-style: none;
+  /* IE y Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+::-webkit-scrollbar {
+  display: none;
+}
+
+* {
+  -ms-overflow-style: none;
+  /* IE y Edge */
+  scrollbar-width: none;
+  /* Firefox */
+}
+
+.justify-text {
+  text-align: justify;
+  text-justify: inter-word;
+}
+
+@keyframes appear {
+  from {
+    opacity: 0;
+    scale: 0.5;
+  }
+
+  to {
+    opacity: 1;
+    scale: 1;
+  }
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.transition1 {
+  animation: fadeIn 1.5s ease-out forwards;
+  animation-delay: 0.5s;
+  animation-fill-mode: both;
+}
+
+.transition2 {
+  animation: appear linear;
+  animation-timeline: view();
+  animation-range: entry 0% cover 40%;
+}
+
+.transition3 {
+  animation: appear 1s linear;
+  animation-delay: 1.15s;
+  animation-fill-mode: both;
+}
+
+.logo-efecto {
+  filter: drop-shadow(0 0 40px rgba(252, 175, 23, 0.5))
+    drop-shadow(0 0 10px rgba(180, 25, 25, 0.4));
+  opacity: 0;
+  transform: scale(0.8);
+  transition: transform 0.4s cubic-bezier(0.4, 2, 0.6, 1), filter 0.4s,
+    opacity 0.8s;
+  animation: logo-appear 1.2s cubic-bezier(0.4, 2, 0.6, 1) forwards;
+}
+.logo-efecto:hover {
+  transform: scale(1.08) rotate(-2deg);
+  filter: drop-shadow(0 0 60px rgba(252, 175, 23, 0.7))
+    drop-shadow(0 0 20px rgba(180, 25, 25, 0.5));
+}
+@keyframes logo-appear {
+  from {
+    opacity: 0;
+    transform: scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}
+
+.animate-logo-appear {
+  animation: logo-appear 1.2s cubic-bezier(0.4, 2, 0.6, 1) forwards;
+}
