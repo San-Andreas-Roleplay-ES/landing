@@ -54,6 +54,7 @@ Landing page para SARP (San Andreas Roleplay ES).
 - Un solo `<h1>` (hero); un `<h2>` por sección; `<h3>` solo para sub-ítems.
 - JSON-LD en `Layout.astro` (Organization + WebSite + VideoGame por `@id`) y en `Events.astro` (Event).
 - Contraste: oro para texto; **el rojo `#b41919` falla AA** → usar `#e23b3b` o como acento grande. `global.css` añade foco visible y respeta `prefers-reduced-motion` (el count-up de `Statistics` también early-return en JS).
+- **Scroll-reveal (SEO-safe):** las secciones aparecen con fade-up al entrar en viewport. El contenido es **visible por defecto**; el estado oculto (`.js-reveal [data-reveal]` en `global.css`) SOLO aplica cuando el script de `Layout.astro` añade `js-reveal` a `<html>` en runtime. Sin JS / con `prefers-reduced-motion` → todo visible sin animar. Para animar una sección nueva, añade `data-reveal` a su `<section>` raíz (los componentes con `FeatureCard` ya lo heredan). El hero (`Welcome.astro`) NO se marca (es el LCP).
 
 ## Dominio
 

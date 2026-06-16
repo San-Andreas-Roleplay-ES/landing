@@ -13,7 +13,7 @@ interface Props {
 }
 
 const {
-  title = "San Andreas Roleplay | Rol Pesado de GTA San Andreas en SA-MP",
+  title = "San Andreas Roleplay - GTA Roleplay - San Andreas Multiplayer en español",
   description = "Comunidad de roleplay en español sobre GTA San Andreas (SA-MP). Crea tu personaje, únete a facciones legales e ilegales, consigue skins gratis y vive eventos cada semana. +11.900 cuentas y +13.000 personajes. Entra a play.sarp.es.",
   image = "/images/logo-squared.png",
   type = "website",
@@ -114,14 +114,20 @@ const jsonLd = {
     <meta property="og:locale" content="es_ES" />
     <meta property="og:image" content={ogImage} />
     <meta property="og:image:secure_url" content={ogImage} />
-    <meta property="og:image:alt" content={`${siteName} — rol de GTA San Andreas en SA-MP`} />
+    <meta
+      property="og:image:alt"
+      content={`${siteName} — rol de GTA San Andreas en SA-MP`}
+    />
 
     <!-- Twitter -->
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
-    <meta name="twitter:image:alt" content={`${siteName} — rol de GTA San Andreas`} />
+    <meta
+      name="twitter:image:alt"
+      content={`${siteName} — rol de GTA San Andreas`}
+    />
 
     <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
     <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
@@ -169,5 +175,30 @@ const jsonLd = {
       <slot />
     </main>
     <Footer />
+
+    <script>
+      // Scroll-reveal (mejora progresiva, SEO-safe): solo ocultamos los
+      // elementos marcados cuando este script corre. Sin JS o con
+      // prefers-reduced-motion, todo queda visible sin animación.
+      const reduce = window.matchMedia(
+        "(prefers-reduced-motion: reduce)",
+      ).matches;
+      const els = document.querySelectorAll<HTMLElement>("[data-reveal]");
+      if (!reduce && "IntersectionObserver" in window && els.length) {
+        document.documentElement.classList.add("js-reveal");
+        const io = new IntersectionObserver(
+          (entries, obs) => {
+            for (const entry of entries) {
+              if (entry.isIntersecting) {
+                entry.target.classList.add("is-visible");
+                obs.unobserve(entry.target);
+              }
+            }
+          },
+          { threshold: 0.15, rootMargin: "0px 0px -10% 0px" },
+        );
+        els.forEach((el) => io.observe(el));
+      }
+    </script>
   </body>
 </html>
