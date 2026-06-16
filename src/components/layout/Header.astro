@@ -1,5 +1,5 @@
 ---
-
+const base = import.meta.env.BASE_URL;
 ---
 
 <nav class="fixed top-0 left-0 w-full z-50">
@@ -11,7 +11,7 @@
         aria-label="San Andreas Roleplay"
       >
         <img
-          src="/images/sa_logo.png"
+          src={`${base}/images/logo-squared.png`}
           class="h-14 w-auto md:h-10 object-contain hover:scale-105 transition-all duration-300 select-none"
           alt="San Andreas Roleplay Logo"
         />
