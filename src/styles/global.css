@@ -3,3 +3,28 @@
 @theme {
   --color-primary: #FCAF17;
 }
+
+html {
+  scroll-behavior: smooth;
+}
+
+/* Visible keyboard focus indicator (WCAG 2.4.7) — components only styled :hover. */
+a:focus-visible,
+button:focus-visible {
+  outline: 2px solid #fcaf17;
+  outline-offset: 2px;
+  border-radius: 0.25rem;
+}
+
+/* Respect users who prefer reduced motion: neutralize the many hover scales,
+   rotations and the stat count-up animations (the JS also early-returns). */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}

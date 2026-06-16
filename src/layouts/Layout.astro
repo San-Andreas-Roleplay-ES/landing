@@ -3,49 +3,137 @@ import Footer from "../components/layout/Footer.astro";
 import Header from "../components/layout/Header.astro";
 import "../styles/global.css";
 
-const { title } = Astro.props;
-const base = import.meta.env.BASE_URL;
+interface Props {
+  title?: string;
+  description?: string;
+  /** Absolute or root-relative OG image path. Resolved against the site origin. */
+  image?: string;
+  type?: "website" | "article";
+  noindex?: boolean;
+}
+
+const {
+  title = "San Andreas Roleplay | Rol Pesado de GTA San Andreas en SA-MP",
+  description = "Comunidad de roleplay en español sobre GTA San Andreas (SA-MP). Crea tu personaje, únete a facciones legales e ilegales, consigue skins gratis y vive eventos cada semana. +11.900 cuentas y +13.000 personajes. Entra a play.sarp.es.",
+  image = "/images/logo-squared.png",
+  type = "website",
+  noindex = false,
+} = Astro.props;
+
+// Canonical / OG URLs are built from the served origin (gta-rol.com, set as
+// `site` in astro.config.mjs). All in-page action links point to sarp.es.
+const canonical = new URL(Astro.url.pathname, Astro.site).href;
+const ogImage = new URL(image, Astro.site).href;
+const siteName = "San Andreas Roleplay";
+
+// One linked JSON-LD graph (Organization + WebSite + VideoGame) so search
+// engines treat gta-rol.com and sarp.es as a single brand entity.
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Organization",
+      "@id": "https://gta-rol.com/#organization",
+      name: siteName,
+      alternateName: ["SARP", "SARP.es"],
+      url: "https://gta-rol.com/",
+      logo: new URL("/images/logo-squared.png", Astro.site).href,
+      description:
+        "Comunidad de roleplay pesado basado en texto sobre GTA San Andreas en SA-MP / open.mp.",
+      sameAs: [
+        "https://sarp.es",
+        "https://forum.sarp.es",
+        "https://ucp.sarp.es",
+        "https://discord.gg/sa-rp",
+        "https://github.com/San-Andreas-Roleplay-ES",
+      ],
+    },
+    {
+      "@type": "WebSite",
+      "@id": "https://gta-rol.com/#website",
+      name: siteName,
+      url: "https://gta-rol.com/",
+      inLanguage: "es",
+      publisher: { "@id": "https://gta-rol.com/#organization" },
+    },
+    {
+      "@type": "VideoGame",
+      "@id": "https://gta-rol.com/#videogame",
+      name: siteName,
+      alternateName: "SARP",
+      url: "https://gta-rol.com/",
+      image: ogImage,
+      inLanguage: "es",
+      applicationCategory: "Game",
+      operatingSystem: "Windows",
+      gamePlatform: ["SA-MP", "open.mp", "PC"],
+      genre: ["Roleplay", "MMORPG", "Rol basado en texto"],
+      playMode: "MultiPlayer",
+      publisher: { "@id": "https://gta-rol.com/#organization" },
+      description:
+        "Servidor de rol pesado en español sobre GTA San Andreas: facciones legales e ilegales, economía, eventos y narrativa interpretativa.",
+    },
+  ],
+};
 ---
 
 <html lang="es">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta
-      name="author"
-      content="San Andreas Roleplay | Comunidad de Roleplay Pesado"
-    />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    {
+      noindex ? (
+        <meta name="robots" content="noindex, nofollow" />
+      ) : (
+        <meta
+          name="robots"
+          content="index, follow, max-image-preview:large, max-snippet:-1, max-video-preview:-1"
+        />
+      )
+    }
+    <link rel="alternate" hreflang="es" href={canonical} />
+    <link rel="alternate" hreflang="x-default" href={canonical} />
+
+    <meta name="author" content={siteName} />
+    <meta name="copyright" content={siteName} />
     <meta
       name="keywords"
-      content="San Andreas Roleplay, GTA San Andreas, roleplay, SA-MP, multiplayer, juego en línea, servidor RP, GTA V, GTA 5, FiveM, GTMP, MTA, rol basado en texto, comunidad de rol, videojuegos, servidor de GTA, RP, eventos de rol, juego creativo"
+      content="GTA San Andreas roleplay, SA-MP rol, rol pesado, roleplay en español, servidor SAMP rol, GTA SA RP, rol basado en texto, open.mp, comunidad de rol"
     />
-    <meta
-      name="description"
-      content="San Andreas Roleplay es una comunidad de rol basado en texto sobre GTA San Andreas, que proporciona a los jugadores un espacio creativo para jugar desde 2023 con +8000 personajes registrados."
-    />
-    <meta name="copyright" content="San Andreas Roleplay" />
+    <meta name="theme-color" content="#1a1800" />
 
-    <link
-      rel="apple-touch-icon"
-      sizes="180x180"
-      href={`${base}/apple-touch-icon.png`}
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="32x32"
-      href={`${base}/favicon-32x32.png`}
-    />
-    <link
-      rel="icon"
-      type="image/png"
-      sizes="16x16"
-      href={`${base}/favicon-16x16.png`}
-    />
-    <link rel="manifest" href={`${base}/site.webmanifest`} />
+    <!-- Open Graph -->
+    <meta property="og:type" content={type} />
+    <meta property="og:site_name" content={siteName} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:locale" content="es_ES" />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:image:secure_url" content={ogImage} />
+    <meta property="og:image:alt" content={`${siteName} — rol de GTA San Andreas en SA-MP`} />
+
+    <!-- Twitter -->
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content={`${siteName} — rol de GTA San Andreas`} />
+
+    <link rel="apple-touch-icon" sizes="180x180" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/png" sizes="32x32" href="/favicon-32x32.png" />
+    <link rel="icon" type="image/png" sizes="16x16" href="/favicon-16x16.png" />
+    <link rel="manifest" href="/site.webmanifest" />
 
     <meta name="generator" content={Astro.generator} />
-    <title>{title}</title>
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(jsonLd)}
+    />
     <style is:global>
       ::-webkit-scrollbar {
         width: 12px;
@@ -74,7 +162,7 @@ const base = import.meta.env.BASE_URL;
   </head>
   <body
     class="bg-fixed bg-center bg-repeat-x bg-[#1a1800]"
-    style={`background-image: url('${base}/images/gangtags.png')`}
+    style="background-image: url('/images/gangtags.png')"
   >
     <Header />
     <main>

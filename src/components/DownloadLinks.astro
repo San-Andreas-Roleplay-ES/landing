@@ -1,5 +1,4 @@
 ---
-const base = import.meta.env.BASE_URL;
 ---
 
 <section class="flex flex-col items-center justify-center w-full gap-4">
@@ -17,13 +16,16 @@ const base = import.meta.env.BASE_URL;
     >
       <img
         class="h-24 w-auto hover:scale-110 transition-all duration-300 select-none"
-        src={`${base}/images/gta_sa.png`}
+        src="/images/gta_sa.png"
+        width="2300"
+        height="2048"
+        loading="lazy"
         alt="Grand Theft Auto: San Andreas"
       />
     </a>
     <div class="col-span-5 md:col-span-1 flex items-center justify-center">
       <span
-        class="text-4xl font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent pb-2"
+        class="text-4xl font-bold bg-gradient-to-r from-primary via-primary to-[#e23b3b] bg-clip-text text-transparent pb-2"
         >+</span
       >
     </div>
@@ -35,13 +37,16 @@ const base = import.meta.env.BASE_URL;
     >
       <img
         class="h-24 w-auto hover:scale-110 transition-all duration-300 select-none object-cover"
-        src={`${base}/images/samp.png`}
+        src="/images/samp.png"
+        width="620"
+        height="260"
+        loading="lazy"
         alt="San Andreas Multiplayer"
       />
     </a>
     <div class="col-span-5 md:col-span-1 flex items-center justify-center">
       <span
-        class="text-4xl font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent pb-2"
+        class="text-4xl font-bold bg-gradient-to-r from-primary via-primary to-[#e23b3b] bg-clip-text text-transparent pb-2"
         >o</span
       >
     </div>
@@ -53,7 +58,10 @@ const base = import.meta.env.BASE_URL;
     >
       <img
         class="h-24 w-auto hover:scale-110 transition-all duration-300 select-none"
-        src={`${base}/images/open_mp.png`}
+        src="/images/open_mp.png"
+        width="600"
+        height="600"
+        loading="lazy"
         alt="Open Multiplayer"
       />
     </a>

@@ -1,67 +1,124 @@
 ---
-const base = import.meta.env.BASE_URL;
+const navLinks = [
+  { label: "Foro", href: "https://forum.sarp.es", aria: "Foro de San Andreas Roleplay" },
+  { label: "PCU", href: "https://ucp.sarp.es", aria: "Panel de control de usuario de San Andreas Roleplay" },
+];
 ---
 
-<nav class="fixed top-0 left-0 w-full z-50">
-  <div class="bg-black/40 w-full">
-    <div class="max-w-5xl mx-auto grid grid-cols-3 items-center px-8 py-2">
-      <a
-        href="#"
-        class="flex items-center space-x-3 rtl:space-x-reverse"
-        aria-label="San Andreas Roleplay"
+<nav
+  class="fixed top-0 left-0 w-full z-50 bg-black/50 backdrop-blur-sm border-b border-white/5"
+  aria-label="Navegación principal"
+>
+  <div
+    class="max-w-5xl mx-auto flex items-center justify-between gap-4 px-4 md:px-8 py-3"
+  >
+    <a
+      href="/"
+      class="flex items-center gap-3 shrink-0 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-lg"
+      aria-label="San Andreas Roleplay — inicio"
+    >
+      <img
+        src="/images/logo-squared.png"
+        width="512"
+        height="512"
+        class="h-10 w-auto object-contain hover:scale-105 transition-transform duration-300 select-none"
+        alt="San Andreas Roleplay"
+      />
+      <span
+        class="hidden md:block self-center text-lg font-semibold whitespace-nowrap text-white"
+        >San Andreas Roleplay</span
       >
-        <img
-          src={`${base}/images/logo-squared.png`}
-          class="h-14 w-auto md:h-10 object-contain hover:scale-105 transition-all duration-300 select-none"
-          alt="San Andreas Roleplay Logo"
-        />
-        <span
-          class="hidden md:block self-center text-lg font-semibold whitespace-nowrap dark:text-white"
-          >San Andreas Roleplay</span
-        >
-      </a>
-      <ul class="hidden md:flex flex-row gap-x-6 justify-center">
-        <li>
-          <a
-            href="https://forum.sarp.es"
-            target="_blank"
-            class="block py-4 text-white hover:text-primary transition-colors duration-300"
-            aria-label="Foro de San Andreas Roleplay"
-          >
-            Foro
-          </a>
-        </li>
-        <li>
-          <a
-            href="https://discord.gg/sa-rp"
-            target="_blank"
-            class="block py-4 text-white hover:text-primary transition-colors duration-300"
-            aria-label="Unirse al servidor de Discord de San Andreas Roleplay"
-          >
-            Discord
-          </a>
-        </li>
-        <li>
-          <a
-            href="https://ucp.sarp.es"
-            target="_blank"
-            class="block py-4 text-white hover:text-primary transition-colors duration-300"
-            aria-label="Panel de control de usuario de San Andreas Roleplay"
-          >
-            PCU
-          </a>
-        </li>
+    </a>
+
+    <div class="flex items-center gap-2 md:gap-6">
+      <ul class="hidden md:flex flex-row items-center gap-6">
+        {
+          navLinks.map((link) => (
+            <li>
+              <a
+                href={link.href}
+                target="_blank"
+                rel="noopener"
+                class="text-sm font-medium text-gray-200 hover:text-primary transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+                aria-label={link.aria}
+              >
+                {link.label}
+              </a>
+            </li>
+          ))
+        }
       </ul>
-      <div class="flex justify-end col-start-3">
-        <a
-          class="px-4 py-2 text-md font-bold rounded-lg transition-all duration-300 hover:scale-105 border-2 border-primary text-primary hover:bg-primary hover:text-black uppercase"
-          href="https://ucp.sarp.es/auth/signup"
-          target="_blank"
-          aria-label="Registrarse en San Andreas Roleplay"
+
+      <a
+        href="https://discord.gg/sa-rp"
+        target="_blank"
+        rel="noopener"
+        class="flex items-center gap-2 px-3 md:px-4 py-2 text-sm font-bold rounded-lg border border-[#5865f2] text-[#8b95f8] hover:bg-[#5865f2] hover:text-white transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5865f2] focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+        aria-label="Unirse al servidor de Discord de San Andreas Roleplay"
+      >
+        <img src="/images/discord.png" width="891" height="633" alt="" class="h-4 w-auto" />
+        <span class="hidden sm:inline">Discord</span>
+      </a>
+
+      <a
+        class="px-3 md:px-5 py-2 text-sm font-bold rounded-lg bg-primary text-black uppercase tracking-wide transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-black"
+        href="https://ucp.sarp.es/auth/signup"
+        target="_blank"
+        rel="noopener"
+        aria-label="Registrarse en San Andreas Roleplay"
+      >
+        Regístrate
+      </a>
+
+      <!-- Menú móvil -->
+      <details class="md:hidden relative group">
+        <summary
+          class="list-none flex items-center justify-center h-9 w-9 rounded-lg text-white cursor-pointer hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          aria-label="Abrir menú de navegación"
         >
-          Regístrate
-        </a>
-      </div>
+          <svg
+            class="h-6 w-6 group-open:hidden"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+            ><path stroke-linecap="round" stroke-linejoin="round" d="M4 6h16M4 12h16M4 18h16"
+            ></path></svg
+          >
+          <svg
+            class="h-6 w-6 hidden group-open:block"
+            xmlns="http://www.w3.org/2000/svg"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+            stroke-width="2"
+            aria-hidden="true"
+            ><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"
+            ></path></svg
+          >
+        </summary>
+        <ul
+          class="absolute right-0 mt-3 w-44 rounded-lg bg-[#0d0d0d] border border-white/10 shadow-lg py-2"
+        >
+          {
+            navLinks.map((link) => (
+              <li>
+                <a
+                  href={link.href}
+                  target="_blank"
+                  rel="noopener"
+                  class="block px-4 py-2 text-sm text-gray-200 hover:text-primary hover:bg-white/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
+                  aria-label={link.aria}
+                >
+                  {link.label}
+                </a>
+              </li>
+            ))
+          }
+        </ul>
+      </details>
     </div>
   </div>
 </nav>

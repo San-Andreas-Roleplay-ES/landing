@@ -1,0 +1,89 @@
+---
+import { getGlobalMetrics } from "../services/data";
+
+const { metrics } = await getGlobalMetrics();
+const nf = new Intl.NumberFormat("es-ES");
+
+// Numbers are baked into the HTML at build time (the CDN JSON has no CORS, so
+// they can't be fetched from the browser). The count-up is a progressive
+// enhancement toward the already-rendered value.
+const stats = [
+  { value: metrics.accountCounter, label: "Cuentas registradas" },
+  { value: metrics.characterCounter, label: "Personajes creados" },
+  { value: metrics.propertyCounter, label: "Propiedades" },
+  { value: metrics.vehicleCounter, label: "Vehículos" },
+  { value: metrics.factionCounter, label: "Facciones" },
+  { value: metrics.weeklyPeakPlayers, label: "Máximo semanal" },
+];
+---
+
+<section class="w-full object-cover items-center justify-center pt-32">
+  <div class="w-full text-center">
+    <h2
+      class="text-2xl md:text-4xl font-bold bg-gradient-to-r from-primary via-primary to-[#e23b3b] bg-clip-text text-transparent pb-2"
+    >
+      Una comunidad que no para de crecer
+    </h2>
+    <p class="text-md mt-2 text-gray-200 max-w-2xl mx-auto">
+      Los números de una San Andreas viva. Esto es lo que ya se ha construido
+      entre todos.
+    </p>
+
+    <dl class="grid grid-cols-2 md:grid-cols-3 gap-6 mt-10">
+      {
+        stats.map((stat) => (
+          <div class="rounded-xl border border-[#2a2a2a] bg-[#0d0d0d] py-8 px-4">
+            <dd
+              class="stat-value text-3xl md:text-5xl font-extrabold text-primary"
+              data-target={stat.value}
+            >
+              {nf.format(stat.value)}
+            </dd>
+            <dt class="mt-2 text-sm text-gray-300">{stat.label}</dt>
+          </div>
+        ))
+      }
+    </dl>
+  </div>
+</section>
+
+<script>
+  const fmt = new Intl.NumberFormat("es-ES");
+  const reduce = window.matchMedia(
+    "(prefers-reduced-motion: reduce)",
+  ).matches;
+
+  function animate(el: HTMLElement, target: number) {
+    if (reduce) {
+      el.textContent = fmt.format(target);
+      return;
+    }
+    const duration = 1200;
+    const start = performance.now();
+    function tick(now: number) {
+      const p = Math.min((now - start) / duration, 1);
+      // easeOutCubic
+      const eased = 1 - Math.pow(1 - p, 3);
+      el.textContent = fmt.format(Math.round(target * eased));
+      if (p < 1) requestAnimationFrame(tick);
+    }
+    requestAnimationFrame(tick);
+  }
+
+  const observer = new IntersectionObserver(
+    (entries) => {
+      for (const entry of entries) {
+        if (!entry.isIntersecting) continue;
+        const el = entry.target as HTMLElement;
+        const target = Number(el.dataset.target || "0");
+        animate(el, target);
+        observer.unobserve(el);
+      }
+    },
+    { threshold: 0.4 },
+  );
+
+  document
+    .querySelectorAll<HTMLElement>(".stat-value")
+    .forEach((el) => observer.observe(el));
+</script>

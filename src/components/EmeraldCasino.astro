@@ -1,0 +1,27 @@
+---
+import FeatureCard from "./FeatureCard.astro";
+---
+
+<FeatureCard
+  title="Emerald Casino: la casa siempre gana"
+  kicker="Economía"
+  image="/images/5.png"
+  width={1920}
+  height={1080}
+  alt="Interior del Emerald Casino con mesas de juego y luces de neón"
+>
+  <span class="text-white font-semibold">Póker, blackjack, ruleta y slots</span>
+  en un casino que nunca cierra. Y hay más: los grupos ilegales pueden tomar el
+  control de su gestión y <span class="text-white font-semibold"
+    >dominar el mundo empresarial</span
+  >. La casa siempre gana. La pregunta es quién manda en la casa.
+
+  <div slot="extras" class="mt-8">
+    <iframe
+      class="w-full aspect-video rounded-lg border-0"
+      src="https://www.youtube.com/embed/eD80Z6VWUJI"
+      title="Emerald Casino — San Andreas Roleplay"
+      loading="lazy"
+      allowfullscreen></iframe>
+  </div>
+</FeatureCard>

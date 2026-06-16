@@ -1,0 +1,32 @@
+---
+import FeatureCard from "./FeatureCard.astro";
+---
+
+<FeatureCard
+  title="Los Santos City Government"
+  kicker="Política y poder"
+  image="/images/16.png"
+  width={1916}
+  height={831}
+  alt="Sede del Gobierno de la Ciudad de Los Santos en San Andreas Roleplay"
+  href="https://forum.sarp.es/index.php?/forum/197-discord-los-santos-government/"
+  ctaLabel="Conoce el gobierno de la ciudad"
+>
+  El poder también se rolea. Hay <span class="text-white font-semibold"
+    >elecciones generales</span
+  > donde se votan <span class="text-white font-semibold"
+    >alcalde y concejales</span
+  >: preséntate, apoya a tu candidato o vota. Lo que decide el gobierno marca la
+  vida de toda la ciudad.
+
+  <img
+    slot="aside"
+    src="/images/10.png"
+    width={708}
+    height={594}
+    loading="lazy"
+    decoding="async"
+    alt="Funcionarios del Gobierno de la Ciudad de Los Santos en el ayuntamiento"
+    class="max-h-72 w-auto rounded-lg select-none transition-transform duration-300 hover:scale-105"
+  />
+</FeatureCard>

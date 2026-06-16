@@ -1,5 +1,7 @@
 ---
 import { Icon } from "astro-icon/components";
+
+const year = new Date().getFullYear();
 ---
 
 <footer class="bg-transparent text-gray-300 py-8 px-4">
@@ -13,9 +15,9 @@ import { Icon } from "astro-icon/components";
         jugadores y no del servidor.
       </p>
       <p class="text-sm mt-4">
-        Copyright © 2025 <a href="https://sarp.es" class="text-primary"
-          >SARP.es</a
-        >. Todos los derechos reservados.
+        Copyright © {year}
+        <a href="https://sarp.es" class="text-primary">SARP.es</a>. Todos los
+        derechos reservados.
       </p>
     </div>
 
@@ -23,14 +25,14 @@ import { Icon } from "astro-icon/components";
       <a
         href="https://github.com/San-Andreas-Roleplay-ES"
         class="hover:opacity-50 transition-opacity"
-        aria-label="GitHub Repository"
+        aria-label="Repositorio de San Andreas Roleplay en GitHub"
       >
         <Icon class="w-9 h-9" name="mdi:github" />
       </a>
       <a
         href="https://discord.gg/sa-rp"
         class="hover:opacity-50 transition-opacity"
-        aria-label="Join our Discord Server"
+        aria-label="Unirse al servidor de Discord de San Andreas Roleplay"
       >
         <Icon class="w-9 h-9" name="mdi:discord" />
       </a>

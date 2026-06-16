@@ -1,0 +1,90 @@
+---
+import FeatureCard from "./FeatureCard.astro";
+
+const gallery = [
+  {
+    img: "/images/3.png",
+    width: 901,
+    height: 720,
+    alt: "Pandilleros de una facción ilegal portando armas en su barrio",
+  },
+  {
+    img: "/images/4.png",
+    width: 785,
+    height: 676,
+    alt: "Reunión clandestina de una organización criminal en San Andreas Roleplay",
+  },
+  {
+    img: "/images/12.png",
+    width: 900,
+    height: 800,
+    alt: "Miembros de una facción ilegal en plena operación en Los Santos",
+  },
+  {
+    img: "/images/13.png",
+    width: 1280,
+    height: 1024,
+    alt: "Enfrentamiento entre bandas criminales en las calles de San Andreas",
+  },
+  {
+    img: "/images/14.png",
+    width: 1440,
+    height: 900,
+    alt: "Organización criminal controlando su territorio en San Andreas Roleplay",
+  },
+  {
+    img: "/images/17.png",
+    width: 1366,
+    height: 768,
+    alt: "Operación de una facción ilegal en San Andreas Roleplay",
+  },
+];
+
+// Fixed "shuffled" order so the grid feels less rigid but stays stable between
+// builds (Math.random would reshuffle every build and hurt caching/diffs).
+const SHUFFLE = [2, 5, 0, 3, 1, 4];
+const shuffled = SHUFFLE.map((i) => gallery[i]);
+---
+
+<FeatureCard
+  title="Facciones ilegales que dan miedo de verdad"
+  kicker="Mundo ilegal"
+  image="/images/2.png"
+  width={1506}
+  height={807}
+  alt="Miembros de las facciones ilegales reunidos en un callejón de Los Santos"
+  headingStyle="white"
+>
+  Esto es <span class="text-white font-semibold">rol serio</span>. Facciones
+  ilegales con <span class="text-white font-semibold"
+    >estructuras criminales realistas</span
+  >: jerarquías, territorios y consecuencias. Un civil puede acabar en mitad de
+  una guerra sin comerlo ni beberlo. Cada <span class="text-white font-semibold"
+    >alianza</span
+  > cuenta y cada <span class="text-white font-semibold">traición</span> se paga.
+
+  <div slot="extras" class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8">
+    {
+      shuffled.map((shot) => (
+        <a
+          href="https://forum.sarp.es/index.php?/forum/20-facciones-ilegales/"
+          target="_blank"
+          rel="noopener"
+          aria-label="Facciones ilegales en el foro de San Andreas Roleplay"
+          class="relative w-full aspect-video border border-primary rounded-lg overflow-hidden group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d0d0d]"
+        >
+          <img
+            src={shot.img}
+            width={shot.width}
+            height={shot.height}
+            loading="lazy"
+            decoding="async"
+            alt={shot.alt}
+            class="w-full h-full object-cover select-none transition-transform duration-300 group-hover:scale-110"
+          />
+          <div class="absolute inset-0 bg-gradient-to-t from-[#0d0d0d]/80 via-transparent to-transparent" />
+        </a>
+      ))
+    }
+  </div>
+</FeatureCard>

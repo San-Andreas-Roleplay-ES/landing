@@ -1,0 +1,96 @@
+---
+import FeatureCard from "./FeatureCard.astro";
+
+const forces = [
+  {
+    name: "LSPD",
+    full: "Los Santos Police Department",
+    img: "/images/7.png",
+    width: 1712,
+    height: 1041,
+    href: "https://police.sarp.es/",
+    alt: "Agentes del Departamento de Policía de Los Santos (LSPD) en patrulla",
+  },
+  {
+    name: "LSFD",
+    full: "Los Santos Fire Department",
+    img: "/images/9.png",
+    width: 1920,
+    height: 1080,
+    href: "http://forum.sarp.es/index.php?/forum/203-discord-los-santos-fire-department/",
+    alt: "Bomberos y paramédicos del Departamento de Bomberos de Los Santos (LSFD)",
+  },
+  {
+    name: "LSSD",
+    full: "Los Santos Sheriff's Department",
+    img: "/images/8.png",
+    width: 1366,
+    height: 452,
+    href: "https://sheriff.sarp.es/",
+    alt: "Oficiales del Departamento del Sheriff de Los Santos (LSSD)",
+  },
+  {
+    name: "SANG",
+    full: "San Andreas Army National Guard",
+    img: "/images/6.png",
+    width: 1123,
+    height: 622,
+    href: "https://forum.sarp.es/index.php?/topic/8497-army-national-guard/",
+    alt: "Soldados de la Guardia Nacional desplegados en un operativo",
+  },
+];
+---
+
+<FeatureCard
+  title="¿Policía, bombero o militar?"
+  kicker="Departamentos"
+  image="/images/15.png"
+  width={2107}
+  height={1103}
+  alt="Departamentos de San Andreas Roleplay: policía, bomberos, sheriff y guardia nacional"
+>
+  Departamentos con academia, rangos y trabajo real en la calle. Patrulla con la <span
+    class="text-white font-semibold">policía</span
+  >, salva vidas como <span class="text-white font-semibold">bombero</span>,
+  impón orden con el <span class="text-white font-semibold">sheriff</span> o sirve
+  en la <span class="text-white font-semibold">Guardia Nacional</span>. Empiezas
+  desde abajo y te ganas cada ascenso.
+
+  <div slot="extras" class="grid grid-cols-1 sm:grid-cols-2 gap-6 mt-8">
+    {
+      forces.map((force) => (
+        <article>
+          <a
+            href={force.href}
+            target="_blank"
+            rel="noopener"
+            aria-label={`${force.name} — ${force.full}`}
+            class="group flex flex-col gap-3 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d0d0d] rounded-lg"
+          >
+            <div class="relative w-full aspect-video border border-primary rounded-lg overflow-hidden">
+              <img
+                src={force.img}
+                width={force.width}
+                height={force.height}
+                loading="lazy"
+                decoding="async"
+                alt={force.alt}
+                class="w-full h-full object-cover select-none transition-transform duration-300 group-hover:scale-110"
+              />
+              <div class="absolute inset-0 bg-gradient-to-t from-[#0d0d0d]/80 via-transparent to-transparent" />
+            </div>
+            <h3 class="text-base font-bold text-white text-center group-hover:text-primary transition-colors">
+              {force.name}
+              <span class="text-gray-400 font-normal" aria-hidden="true">
+                ·
+              </span>
+              <span class="text-sm font-normal text-gray-400">
+                {force.full}
+              </span>
+            </h3>
+          </a>
+        </article>
+      ))
+    }
+  </div>
+</FeatureCard>

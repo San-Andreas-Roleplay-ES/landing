@@ -1,0 +1,31 @@
+---
+import FeatureCard from "./FeatureCard.astro";
+---
+
+<FeatureCard
+  title="El mundo de las pasarelas"
+  kicker="Moda y cine"
+  image="/images/18.png"
+  width={1920}
+  height={1080}
+  alt="Pasarela y producción de moda de ROGUE en San Andreas Roleplay"
+  asideSide="left"
+>
+  ¿Lo tuyo es brillar bajo los focos? <span class="text-white font-semibold"
+    >ROGUE</span
+  > produce contenido para redes sociales: <span class="text-white font-semibold"
+    >moda, diseño y cine</span
+  >. Desfiles, sesiones de fotos y rodajes para que tu personaje se vuelva una
+  estrella.
+
+  <img
+    slot="aside"
+    src="/images/11.png"
+    width={428}
+    height={535}
+    loading="lazy"
+    decoding="async"
+    alt="Personaje de moda de ROGUE en San Andreas Roleplay"
+    class="max-h-72 w-auto rounded-lg select-none transition-transform duration-300 hover:scale-105"
+  />
+</FeatureCard>

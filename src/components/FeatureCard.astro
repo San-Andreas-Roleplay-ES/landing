@@ -1,0 +1,109 @@
+---
+// Reusable feature card: full-width image as a faded header, then text below.
+// This is the unified pattern for every feature section (originally the
+// "Mundo ilegal" treatment). Optional CTA link and named slots for extras
+// (gallery, embedded video, etc.) rendered under the body copy.
+interface Props {
+  title: string;
+  image: string;
+  alt: string;
+  width: number;
+  height: number;
+  kicker?: string;
+  href?: string;
+  ctaLabel?: string;
+  /** Heading color: gradient gold->red accent (default) or plain white. */
+  headingStyle?: "gradient" | "white";
+  /** Side of the optional `aside` slot image relative to the body text. */
+  asideSide?: "left" | "right";
+}
+
+const {
+  title,
+  image,
+  alt,
+  width,
+  height,
+  kicker,
+  href,
+  ctaLabel,
+  headingStyle = "gradient",
+  asideSide = "right",
+} = Astro.props;
+
+const headingClass =
+  headingStyle === "white"
+    ? "text-2xl md:text-4xl font-bold text-white pb-2"
+    : "text-2xl md:text-4xl font-bold bg-gradient-to-r from-primary via-primary to-[#e23b3b] bg-clip-text text-transparent pb-2";
+---
+
+<section class="w-full pt-32">
+  <article
+    class="rounded-2xl overflow-hidden border border-[#2a2a2a] bg-[#0d0d0d]"
+  >
+    <div class="relative">
+      <img
+        src={image}
+        width={width}
+        height={height}
+        loading="lazy"
+        decoding="async"
+        alt={alt}
+        class="w-full h-72 md:h-96 object-cover select-none"
+      />
+      <div
+        class="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-[#0d0d0d]/40 to-transparent"
+      >
+      </div>
+      {
+        kicker && (
+          <span class="absolute top-4 left-4 text-xs font-bold tracking-[0.2em] uppercase text-black bg-primary px-3 py-1 rounded">
+            {kicker}
+          </span>
+        )
+      }
+    </div>
+
+    <div class="p-6 md:p-10">
+      <h2 class={headingClass}>{title}</h2>
+
+      {
+        Astro.slots.has("aside") ? (
+          <div
+            class:list={[
+              "mt-2 flex flex-col md:items-center gap-8",
+              asideSide === "left" ? "md:flex-row-reverse" : "md:flex-row",
+            ]}
+          >
+            <p class="text-md text-gray-200 md:w-1/2">
+              <slot />
+            </p>
+            <div class="md:w-1/2 flex justify-center">
+              <slot name="aside" />
+            </div>
+          </div>
+        ) : (
+          <p class="text-md mt-2 text-gray-200 max-w-3xl">
+            <slot />
+          </p>
+        )
+      }
+
+      <slot name="extras" />
+
+      {
+        href && (
+          <a
+            href={href}
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-2 mt-6 px-5 py-2.5 text-sm font-bold rounded-lg border-2 border-primary text-primary hover:bg-primary hover:text-black transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d0d0d]"
+          >
+            {ctaLabel ?? "Saber más"}
+            <span aria-hidden="true">→</span>
+          </a>
+        )
+      }
+    </div>
+  </article>
+</section>

@@ -1,0 +1,126 @@
+---
+import { getEvents } from "../services/data";
+
+const events = await getEvents(6);
+
+const dateFmt = new Intl.DateTimeFormat("es-ES", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+
+function formatDate(raw: string): string {
+  return dateFmt.format(new Date(raw.replace(" ", "T")));
+}
+
+// Convert "YYYY-MM-DD HH:mm:ss" (server-local, Europe/Madrid) to ISO 8601 with
+// offset for Event JSON-LD. Madrid is +02:00 in summer (CEST).
+function toIso(raw: string): string {
+  return raw.replace(" ", "T") + "+02:00";
+}
+
+const eventsJsonLd =
+  events.length > 0
+    ? {
+        "@context": "https://schema.org",
+        "@graph": events.map((e) => ({
+          "@type": "Event",
+          name: e.title,
+          description: e.description,
+          startDate: toIso(e.event_date),
+          eventAttendanceMode: "https://schema.org/OnlineEventAttendanceMode",
+          eventStatus: "https://schema.org/EventScheduled",
+          ...(e.localImage
+            ? { image: new URL(e.localImage, Astro.site).href }
+            : {}),
+          location: {
+            "@type": "VirtualLocation",
+            url: "https://play.sarp.es",
+          },
+          organizer: { "@id": "https://gta-rol.com/#organization" },
+          inLanguage: "es",
+        })),
+      }
+    : null;
+---
+
+{
+  events.length > 0 && (
+    <section class="w-full object-cover items-center justify-center pt-32">
+      <div class="w-full">
+        <h2 class="text-2xl md:text-4xl font-bold bg-gradient-to-r from-primary via-primary to-[#e23b3b] bg-clip-text text-transparent pb-2">
+          Eventos en San Andreas
+        </h2>
+        <p class="text-md mt-2 text-gray-200 max-w-2xl">
+          Conciertos, fiestas, torneos y operativos: cada semana pasa algo. Pulsa
+          un evento para ver todos los detalles.
+        </p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 items-start">
+          {events.map((event) => (
+            <article class="rounded-xl overflow-hidden border border-[#2a2a2a] bg-[#0d0d0d]">
+              <details class="group">
+                <summary class="list-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset">
+                  <div class="relative aspect-video w-full bg-[#1a1a1a]">
+                    {event.localImage && (
+                      <img
+                        src={event.localImage}
+                        loading="lazy"
+                        decoding="async"
+                        alt={`Evento: ${event.title}`}
+                        class="absolute inset-0 w-full h-full object-cover select-none"
+                      />
+                    )}
+                    <span
+                      class:list={[
+                        "absolute top-3 left-3 text-xs font-bold tracking-wider uppercase px-2 py-1 rounded",
+                        event.isPast
+                          ? "bg-[#1a1a1a] text-gray-300 border border-[#3a3a3a]"
+                          : "bg-primary text-black",
+                      ]}
+                    >
+                      {event.isPast ? "Terminado" : "Próximo"}
+                    </span>
+                  </div>
+                  <div class="p-5 flex flex-col gap-2">
+                    <h3 class="text-base font-bold text-white leading-snug">
+                      {event.title}
+                    </h3>
+                    <time
+                      class="text-xs text-gray-400"
+                      datetime={toIso(event.event_date)}
+                    >
+                      {formatDate(event.event_date)}
+                    </time>
+                    <p class="text-sm text-gray-300 line-clamp-3 group-open:hidden">
+                      {event.description}
+                    </p>
+                    <span class="text-xs font-semibold text-primary group-open:hidden">
+                      Ver más →
+                    </span>
+                  </div>
+                </summary>
+                <div class="px-5 pb-5 -mt-2">
+                  <p class="text-sm text-gray-300">{event.description}</p>
+                  <span class="inline-block mt-3 text-xs font-semibold text-primary">
+                    Ver menos ↑
+                  </span>
+                </div>
+              </details>
+            </article>
+          ))}
+        </div>
+      </div>
+    </section>
+  )
+}
+
+{
+  eventsJsonLd && (
+    <script
+      is:inline
+      type="application/ld+json"
+      set:html={JSON.stringify(eventsJsonLd)}
+    />
+  )
+}

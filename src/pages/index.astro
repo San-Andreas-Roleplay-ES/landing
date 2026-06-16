@@ -1,23 +1,41 @@
 ---
+import CityGovernment from "../components/CityGovernment.astro";
+import CustomSkin from "../components/CustomSkin.astro";
 import Description from "../components/Description.astro";
 import DownloadLinks from "../components/DownloadLinks.astro";
+import EmeraldCasino from "../components/EmeraldCasino.astro";
+import Events from "../components/Events.astro";
 import Features from "../components/Features.astro";
+import IllegalFactions from "../components/IllegalFactions.astro";
+import Intro from "../components/Intro.astro";
 import Join from "../components/Join.astro";
-import Record from "../components/Record.astro";
+import OfficialForces from "../components/OfficialForces.astro";
+import Rogue from "../components/Rogue.astro";
+import Statistics from "../components/Statistics.astro";
+import FinalCta from "../components/FinalCta.astro";
 import Welcome from "../components/Welcome.astro";
 import YouTube from "../components/YouTube.astro";
 import Container from "../components/layout/Container.astro";
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="San Andreas Roleplay - Multiplayer SAMP">
+<Layout>
   <Welcome />
   <Container>
     <DownloadLinks />
+    <Intro />
+    <CustomSkin />
+    <IllegalFactions />
+    <OfficialForces />
+    <EmeraldCasino />
+    <CityGovernment />
+    <Rogue />
     <Features />
-    <Record />
+    <Statistics />
+    <Events />
     <Description />
-    <Join />
     <YouTube />
+    <Join />
+    <FinalCta />
   </Container>
 </Layout>

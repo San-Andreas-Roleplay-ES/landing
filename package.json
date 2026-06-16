@@ -4,8 +4,11 @@
   "version": "0.0.1",
   "scripts": {
     "dev": "astro dev",
+    "mirror-events": "node scripts/mirror-events.mjs",
+    "prebuild": "node scripts/mirror-events.mjs",
     "build": "astro build",
     "preview": "astro preview",
+    "deploy": "node --env-file=.env scripts/deploy.mjs",
     "astro": "astro"
   },
   "dependencies": {
@@ -16,6 +19,9 @@
     "tailwindcss": "^4.1.8"
   },
   "devDependencies": {
-    "@iconify-json/mdi": "^1.2.3"
+    "@astrojs/check": "^0.9.9",
+    "@astrojs/sitemap": "^3.7.3",
+    "@iconify-json/mdi": "^1.2.3",
+    "typescript": "^5.9.3"
   }
 }

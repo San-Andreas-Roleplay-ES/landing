@@ -1,125 +1,58 @@
 ---
-const base = import.meta.env.BASE_URL;
+const features = [
+  { title: "Plazas públicas", img: "/images/features/pershing.jpg" },
+  { title: "Circuitos de carreras", img: "/images/features/races.jpg" },
+  { title: "Simulador de camiones", img: "/images/features/truckers.jpg" },
+  { title: "Joyerías", img: "/images/features/jewelry.jpg" },
+  { title: "Mangueras de incendios", img: "/images/features/fire.jpg" },
+  { title: "Barrios de pandillas", img: "/images/features/idlewood.jpg" },
+];
 ---
 
 <section class="w-full object-cover items-center justify-center pt-32">
   <div class="flex items-center justify-center">
     <div class="w-full">
       <h2
-        class="text-2xl font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent"
+        class="text-2xl font-bold bg-gradient-to-r from-primary to-[#e23b3b] bg-clip-text text-transparent"
       >
         Características
       </h2>
-      <h3
-        class="text-xl md:text-3xl text-white font-bold pb-1 leading-tight anim-on-scroll"
-      >
+      <p class="text-xl md:text-3xl text-white font-bold pb-1 leading-tight">
         <strong class="font-extrabold">Nuevos modelos 3D</strong> que conservan,
         embellecen y expanden el arte original de Grand Theft Auto San Andreas.
-      </h3>
+      </p>
       <div class="grid grid-cols-3 gap-16 mt-8">
-        <article class="col-span-3 md:col-span-1 flex flex-col gap-4">
-          <h4
-            class="text-lg font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent"
-          >
-            Plazas públicas
-          </h4>
-          <div
-            class="aspect-square w-full border border-primary rounded-lg overflow-hidden group cursor-pointer"
-          >
-            <img
-              src={`${base}/images/features/pershing.jpg`}
-              alt="Civic Centers"
-              class="w-full h-full object-cover select-none transition-transform duration-300 group-hover:scale-110"
-            />
-          </div>
-        </article>
-        <article class="col-span-3 md:col-span-1 flex flex-col gap-4">
-          <h4
-            class="text-lg font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent"
-          >
-            Circuitos de carreras
-          </h4>
-          <div
-            class="aspect-square w-full border border-primary rounded-lg overflow-hidden group cursor-pointer"
-          >
-            <img
-              src={`${base}/images/features/races.jpg`}
-              alt="Racing Routes"
-              class="w-full h-full object-cover select-none transition-transform duration-300 group-hover:scale-110"
-            />
-          </div>
-        </article>
-        <article class="col-span-3 md:col-span-1 flex flex-col gap-4">
-          <h4
-            class="text-lg font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent"
-          >
-            Simulador de camiones
-          </h4>
-          <div
-            class="aspect-square w-full border border-primary rounded-lg overflow-hidden group cursor-pointer"
-          >
-            <img
-              src={`${base}/images/features/truckers.jpg`}
-              alt="Trucking Simulator"
-              class="w-full h-full object-cover select-none transition-transform duration-300 group-hover:scale-110"
-            />
-          </div>
-        </article>
-        <article class="col-span-3 md:col-span-1 flex flex-col gap-4">
-          <h4
-            class="text-lg font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent"
-          >
-            Joyerías
-          </h4>
-          <div
-            class="aspect-square w-full border border-primary rounded-lg overflow-hidden group cursor-pointer"
-          >
-            <img
-              src={`${base}/images/features/jewelry.jpg`}
-              alt="Jewelry"
-              class="w-full h-full object-cover select-none transition-transform duration-300 group-hover:scale-110"
-            />
-          </div>
-        </article>
-        <article class="col-span-3 md:col-span-1 flex flex-col gap-4">
-          <h4
-            class="text-lg font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent"
-          >
-            Mangueras de incendios
-          </h4>
-          <div
-            class="aspect-square w-full border border-primary rounded-lg overflow-hidden group cursor-pointer"
-          >
-            <img
-              src={`${base}/images/features/fire.jpg`}
-              alt="Fire Hoses"
-              class="w-full h-full object-cover select-none transition-transform duration-300 group-hover:scale-110"
-            />
-          </div>
-        </article>
-        <article class="col-span-3 md:col-span-1 flex flex-col gap-4">
-          <h4
-            class="text-lg font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent"
-          >
-            Barrios de pandillas
-          </h4>
-          <div
-            class="aspect-square w-full border border-primary rounded-lg overflow-hidden group cursor-pointer"
-          >
-            <img
-              src={`${base}/images/features/idlewood.jpg`}
-              alt="Gangzones"
-              class="w-full h-full object-cover select-none transition-transform duration-300 group-hover:scale-110"
-            />
-          </div>
-        </article>
+        {
+          features.map((feature) => (
+            <article class="col-span-3 md:col-span-1 flex flex-col gap-4">
+              <h3 class="text-lg font-bold bg-gradient-to-r from-primary to-[#e23b3b] bg-clip-text text-transparent">
+                {feature.title}
+              </h3>
+              <a
+                href="https://github.com/San-Andreas-Roleplay-ES/samp-docs"
+                target="_blank"
+                rel="noopener"
+                aria-label={`${feature.title} — documentación en GitHub`}
+                class="aspect-square w-full border border-primary rounded-lg overflow-hidden group focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1800]"
+              >
+                <img
+                  src={feature.img}
+                  alt={feature.title}
+                  loading="lazy"
+                  decoding="async"
+                  class="w-full h-full object-cover select-none transition-transform duration-300 group-hover:scale-110"
+                />
+              </a>
+            </article>
+          ))
+        }
         <article class="col-span-3 flex flex-col gap-4">
-          <h3
-            class="text-lg font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent text-center"
+          <p
+            class="text-lg font-bold bg-gradient-to-r from-primary to-[#e23b3b] bg-clip-text text-transparent text-center"
           >
             ¡Descubre sistemas únicos que no encontrarás en ningún otro servidor
-            de SAMP!
-          </h3>
+            de SA-MP!
+          </p>
         </article>
       </div>
     </div>
