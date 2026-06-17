@@ -1,20 +1,25 @@
 ---
-import { getGlobalMetrics } from "../services/data";
+import { ENDPOINTS, getGlobalMetrics } from "../services/data";
+import type { GlobalMetrics } from "../interfaces/metrics";
 
 const { metrics } = await getGlobalMetrics();
 const nf = new Intl.NumberFormat("es-ES");
 
-// Numbers are baked into the HTML at build time (the CDN JSON has no CORS, so
-// they can't be fetched from the browser). The count-up is a progressive
-// enhancement toward the already-rendered value.
-const stats = [
-  { value: metrics.accountCounter, label: "Cuentas registradas" },
-  { value: metrics.characterCounter, label: "Personajes creados" },
-  { value: metrics.propertyCounter, label: "Propiedades" },
-  { value: metrics.vehicleCounter, label: "Vehículos" },
-  { value: metrics.factionCounter, label: "Facciones" },
-  { value: metrics.weeklyPeakPlayers, label: "Máximo semanal" },
+// Numbers are baked into the HTML at build time so the page never renders zeros
+// and is SEO-friendly. The client script then tries to refresh them live from
+// the CDN; if that fetch fails (CORS off, offline, timeout) the baked values
+// stay. `key` ties each card to its field in the JSON so the refresh can target
+// the right node without depending on array order.
+const stats: { key: keyof GlobalMetrics; value: number; label: string }[] = [
+  { key: "accountCounter", value: metrics.accountCounter, label: "Cuentas registradas" },
+  { key: "characterCounter", value: metrics.characterCounter, label: "Personajes creados" },
+  { key: "propertyCounter", value: metrics.propertyCounter, label: "Propiedades" },
+  { key: "vehicleCounter", value: metrics.vehicleCounter, label: "Vehículos" },
+  { key: "factionCounter", value: metrics.factionCounter, label: "Facciones" },
+  { key: "weeklyPeakPlayers", value: metrics.weeklyPeakPlayers, label: "Máximo semanal" },
 ];
+
+const METRICS_ENDPOINT = ENDPOINTS.metrics;
 ---
 
 <section class="w-full object-cover items-center justify-center pt-32" data-reveal>
@@ -35,6 +40,7 @@ const stats = [
           <div class="rounded-xl border border-[#2a2a2a] bg-[#0d0d0d] py-8 px-4">
             <dd
               class="stat-value text-3xl md:text-5xl font-extrabold text-primary"
+              data-key={stat.key}
               data-target={stat.value}
             >
               {nf.format(stat.value)}
@@ -47,20 +53,25 @@ const stats = [
   </div>
 </section>
 
-<script>
+<script is:inline define:vars={{ METRICS_ENDPOINT }}>
   const fmt = new Intl.NumberFormat("es-ES");
   const reduce = window.matchMedia(
     "(prefers-reduced-motion: reduce)",
   ).matches;
 
-  function animate(el: HTMLElement, target: number) {
+  const cells =
+    document.querySelectorAll(".stat-value");
+  const animated = new WeakSet();
+
+  function animate(el, target) {
+    animated.add(el);
     if (reduce) {
       el.textContent = fmt.format(target);
       return;
     }
     const duration = 1200;
     const start = performance.now();
-    function tick(now: number) {
+    function tick(now) {
       const p = Math.min((now - start) / duration, 1);
       // easeOutCubic
       const eased = 1 - Math.pow(1 - p, 3);
@@ -70,11 +81,42 @@ const stats = [
     requestAnimationFrame(tick);
   }
 
+  // Live refresh from the CDN. The baked-in values are the fallback: if this
+  // fetch is blocked (CORS), times out or errors, nothing changes. On success we
+  // update each card's data-target so the count-up lands on the fresh number; a
+  // card that already animated is rewritten to its new value directly.
+  async function refresh() {
+    const controller = new AbortController();
+    const timer = setTimeout(() => controller.abort(), 5000);
+    try {
+      const url = new URL(METRICS_ENDPOINT);
+      url.searchParams.set("t", String(Date.now()));
+      const res = await fetch(url, {
+        signal: controller.signal,
+        cache: "no-store",
+      });
+      if (!res.ok) return;
+      const data = (await res.json())?.data;
+      if (!data) return;
+      cells.forEach((el) => {
+        const key = el.dataset.key;
+        const fresh = key ? data[key] : undefined;
+        if (typeof fresh !== "number" || !Number.isFinite(fresh)) return;
+        el.dataset.target = String(fresh);
+        if (animated.has(el)) el.textContent = fmt.format(fresh);
+      });
+    } catch {
+      // Keep the baked-in values.
+    } finally {
+      clearTimeout(timer);
+    }
+  }
+
   const observer = new IntersectionObserver(
     (entries) => {
       for (const entry of entries) {
         if (!entry.isIntersecting) continue;
-        const el = entry.target as HTMLElement;
+        const el = entry.target;
         const target = Number(el.dataset.target || "0");
         animate(el, target);
         observer.unobserve(el);
@@ -83,7 +125,6 @@ const stats = [
     { threshold: 0.4 },
   );
 
-  document
-    .querySelectorAll<HTMLElement>(".stat-value")
-    .forEach((el) => observer.observe(el));
+  cells.forEach((el) => observer.observe(el));
+  refresh();
 </script>

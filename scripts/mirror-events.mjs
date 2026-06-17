@@ -24,7 +24,8 @@ async function main() {
 
   let events;
   try {
-    const res = await fetch(EVENTS_URL);
+    // Cache-bust so Bunny can't serve a stale events.json at build time.
+    const res = await fetch(`${EVENTS_URL}?t=${Date.now()}`, { cache: "no-store" });
     if (!res.ok) throw new Error(`HTTP ${res.status}`);
     events = (await res.json()).data ?? [];
   } catch (err) {

@@ -35,6 +35,19 @@ export const FALLBACK_METRICS: GlobalMetrics = {
 };
 
 /**
+ * Append a cache-busting `?t=<timestamp>` so the intermediate CDN (Bunny) can't
+ * serve a stale copy of these dynamic endpoints at build time. The value is
+ * fixed per build run, so every build pulls fresh metrics/events.
+ */
+const CACHE_BUST = String(Date.now());
+
+function withCacheBust(url: string): string {
+  const u = new URL(url);
+  u.searchParams.set("t", CACHE_BUST);
+  return u.toString();
+}
+
+/**
  * Resilient JSON fetch for use at build time. Never throws: returns null on
  * timeout, non-2xx, network error or parse failure, so a flaky third-party
  * endpoint can never fail the build.
@@ -46,7 +59,10 @@ export async function safeFetchJson<T>(
   const controller = new AbortController();
   const timer = setTimeout(() => controller.abort(), timeoutMs);
   try {
-    const res = await fetch(url, { signal: controller.signal });
+    const res = await fetch(withCacheBust(url), {
+      signal: controller.signal,
+      cache: "no-store",
+    });
     if (!res.ok) return null;
     return (await res.json()) as T;
   } catch {

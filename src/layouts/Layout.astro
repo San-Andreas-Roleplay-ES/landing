@@ -13,8 +13,8 @@ interface Props {
 }
 
 const {
-  title = "San Andreas Roleplay - GTA Roleplay - San Andreas Multiplayer en español",
-  description = "Comunidad de roleplay en español sobre GTA San Andreas (SA-MP). Crea tu personaje, únete a facciones legales e ilegales, consigue skins gratis y vive eventos cada semana. +11.900 cuentas y +13.000 personajes. Entra a play.sarp.es.",
+  title = "San Andreas Roleplay | GTA San Andreas Rol en SA-MP — Los Santos Roleplay en español",
+  description = "San Andreas Roleplay: juego de rol en español sobre GTA San Andreas en SA-MP. Vive Los Santos Roleplay con facciones legales e ilegales, skins gratis y eventos. +13.000 personajes. Entra a play.sarp.es.",
   image = "/images/logo-squared.png",
   type = "website",
   noindex = false,
@@ -60,18 +60,28 @@ const jsonLd = {
       "@type": "VideoGame",
       "@id": "https://gta-rol.com/#videogame",
       name: siteName,
-      alternateName: "SARP",
+      alternateName: [
+        "SARP",
+        "Los Santos Roleplay",
+        "GTA San Andreas Roleplay",
+      ],
       url: "https://gta-rol.com/",
       image: ogImage,
       inLanguage: "es",
       applicationCategory: "Game",
       operatingSystem: "Windows",
       gamePlatform: ["SA-MP", "open.mp", "PC"],
-      genre: ["Roleplay", "MMORPG", "Rol basado en texto"],
+      genre: ["Roleplay", "MMORPG", "Sandbox", "Rol basado en texto"],
+      keywords:
+        "GTA San Andreas roleplay, GTA Roleplay, SA-MP, San Andreas Multiplayer, rol en español, juego de rol, Los Santos, Los Santos Juego de Rol,Los Santos Roleplay, MTA:SA, GTA SA, open.mp",
       playMode: "MultiPlayer",
       publisher: { "@id": "https://gta-rol.com/#organization" },
+      gameItem: {
+        "@type": "Thing",
+        name: "Grand Theft Auto: San Andreas",
+      },
       description:
-        "Servidor de rol pesado en español sobre GTA San Andreas: facciones legales e ilegales, economía, eventos y narrativa interpretativa.",
+        "Servidor de juego de rol en español sobre GTA San Andreas en SA-MP: rol pesado en la ciudad de Los Santos con facciones legales e ilegales, economía, eventos y narrativa interpretativa escrita.",
     },
   ],
 };
@@ -101,7 +111,7 @@ const jsonLd = {
     <meta name="copyright" content={siteName} />
     <meta
       name="keywords"
-      content="GTA San Andreas roleplay, SA-MP rol, rol pesado, roleplay en español, servidor SAMP rol, GTA SA RP, rol basado en texto, open.mp, comunidad de rol"
+      content="GTA San Andreas roleplay, GTA Roleplay, GTA SA rol, SA-MP, San Andreas Multiplayer, rol en español, roleplay en español, juego de rol, Los Santos, Los Santos Roleplay, Los Santos juego de rol, San Andreas Roleplay, SARP, rol pesado, rol basado en texto, servidor SA-MP rol, open.mp, MTA:SA, Multi Theft Auto, GTA SA, GTA Mods, GTA Underground, GTA Online"
     />
     <meta name="theme-color" content="#1a1800" />
 

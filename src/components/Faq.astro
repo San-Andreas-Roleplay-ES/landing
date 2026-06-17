@@ -1,0 +1,89 @@
+---
+// Preguntas frecuentes: contenido indexable rico en keywords (GTA San Andreas,
+// SA-MP, MTA:SA, Los Santos, rol/roleplay en español) + FAQPage JSON-LD.
+// El JSON-LD usa exactamente los mismos textos visibles (requisito de Google).
+const faqs = [
+  {
+    q: "¿Qué es San Andreas Roleplay?",
+    a: "San Andreas Roleplay (SARP) es la comunidad de juego de rol en español sobre GTA San Andreas, jugada en SA-MP. Interpretas a un personaje que vive su propia historia en la ciudad de Los Santos: facciones legales e ilegales, trabajos, economía y narrativa escrita (rol pesado basado en texto).",
+  },
+  {
+    q: "¿Qué es SA-MP y en qué se diferencia de MTA:SA?",
+    a: "SA-MP (San Andreas Multiplayer) y MTA:SA (Multi Theft Auto: San Andreas) son los dos mods multijugador clásicos de GTA San Andreas. San Andreas Roleplay funciona sobre SA-MP (y open.mp), centrado en el roleplay serio en español; no es un servidor de MTA.",
+  },
+  {
+    q: "¿Es lo mismo que GTA Online o GTA V Roleplay?",
+    a: "No. GTA Online y el rol de GTA V corren sobre Grand Theft Auto V. San Andreas Roleplay es rol sobre GTA San Andreas (2004) en SA-MP: la experiencia clásica de Los Santos, con rol escrito e inmersivo que no encontrarás en GTA Online.",
+  },
+  {
+    q: "¿Cómo empiezo a jugar rol en GTA San Andreas?",
+    a: "Necesitas Grand Theft Auto: San Andreas para PC, instalar SA-MP u open.mp y conectarte a play.sarp.es. Crea tu cuenta gratis en ucp.sarp.es y entra a Los Santos a empezar tu historia de rol.",
+  },
+  {
+    q: "¿Qué es Los Santos Juego de Rol?",
+    a: 'Los Santos Juego de Rol 2026 es la ciudad principal de GTA San Andreas y el escenario de nuestro juego de rol. "Los Santos Roleplay" se refiere a interpretar un personaje dentro de esa ciudad: civiles, policías, bomberos, criminales, políticos y más.',
+  },
+  {
+    q: "¿Necesito mods de GTA San Andreas para jugar?",
+    a: "No tienes que buscar mods de GTA San Andreas por tu cuenta ni proyectos como GTA Underground: el servidor entrega automáticamente los modelos 3D, skins y contenido necesarios al conectarte. Solo necesitas el GTA SA original y SA-MP.",
+  },
+  {
+    q: "¿Jugar en San Andreas Roleplay es gratis?",
+    a: "Sí. Crear tu cuenta y jugar es totalmente gratis. Solo necesitas tener Grand Theft Auto: San Andreas y SA-MP u open.mp instalados.",
+  },
+];
+
+const faqJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "FAQPage",
+  mainEntity: faqs.map((f) => ({
+    "@type": "Question",
+    name: f.q,
+    acceptedAnswer: { "@type": "Answer", text: f.a },
+  })),
+};
+---
+
+<section
+  class="w-full object-cover items-center justify-center pt-32"
+  data-reveal
+>
+  <div class="w-full">
+    <h2
+      class="text-2xl md:text-4xl font-bold bg-gradient-to-r from-primary via-primary to-[#e23b3b] bg-clip-text text-transparent pb-2"
+    >
+      Preguntas frecuentes
+    </h2>
+    <p class="text-md mt-2 text-gray-200 max-w-2xl">
+      Todo lo que necesitas saber sobre el rol en GTA San Andreas, SA-MP y la
+      ciudad de Los Santos.
+    </p>
+
+    <div class="mt-8 flex flex-col gap-3">
+      {
+        faqs.map((faq) => (
+          <details class="group rounded-xl border border-[#2a2a2a] bg-[#0d0d0d] overflow-hidden">
+            <summary class="list-none cursor-pointer flex items-center justify-between gap-4 p-5 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset">
+              <h3 class="text-base md:text-lg font-bold text-white">{faq.q}</h3>
+              <span
+                class="text-primary text-xl shrink-0 transition-transform duration-300 group-open:rotate-45"
+                aria-hidden="true"
+              >
+                +
+              </span>
+            </summary>
+            <p class="px-5 pb-5 -mt-1 text-sm md:text-base text-gray-300">
+              {faq.a}
+            </p>
+          </details>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script
+  is:inline
+  type="application/ld+json"
+  set:html={JSON.stringify(faqJsonLd)}
+/>
