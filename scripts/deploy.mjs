@@ -82,6 +82,35 @@ async function uploadFile(absPath) {
   return rel;
 }
 
+// Lists the objects directly under a storage-zone path (relative to the zone
+// root, e.g. "" or "images/"). Returns the raw Bunny objects.
+async function listZone(relDir = "") {
+  const url = `${storageBase}/${relDir}`;
+  const res = await fetch(url, { headers: { AccessKey: accessKey } });
+  if (res.status === 404) return [];
+  if (!res.ok) {
+    throw new Error(`list ${relDir || "/"}: ${res.status} ${res.statusText}`);
+  }
+  return res.json();
+}
+
+// Recursively deletes everything in the storage zone so the new dist/ is a
+// clean replacement (removes stale hashed assets / files no longer built).
+async function wipeZone(relDir = "") {
+  const objects = await listZone(relDir);
+  for (const obj of objects) {
+    const path = `${relDir}${obj.ObjectName}${obj.IsDirectory ? "/" : ""}`;
+    if (obj.IsDirectory) await wipeZone(path);
+    const res = await fetch(`${storageBase}/${path}`, {
+      method: "DELETE",
+      headers: { AccessKey: accessKey },
+    });
+    if (!res.ok && res.status !== 404) {
+      throw new Error(`delete ${path}: ${res.status} ${res.statusText}`);
+    }
+  }
+}
+
 async function runPool(items, worker) {
   let i = 0;
   let ok = 0;
@@ -134,6 +163,16 @@ async function main() {
   }
   if (files.length === 0) {
     console.error("[deploy] dist/ is empty. Run `npm run build` first.");
+    process.exit(1);
+  }
+
+  console.log("[deploy] Wiping the storage zone (clean replacement)…");
+  try {
+    await wipeZone();
+    console.log("[deploy] Zone cleared.");
+  } catch (err) {
+    console.error(`[deploy] ✖ Failed to wipe the zone: ${err.message}`);
+    console.error("[deploy]   Aborting before upload to avoid a half-cleared state.");
     process.exit(1);
   }
 
