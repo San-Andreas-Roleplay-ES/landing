@@ -9,13 +9,29 @@ import type {
   EventsResponse,
   ServerEvent,
 } from "../interfaces/event";
+import type {
+  DisplayRule,
+  RulesResponse,
+  ServerRule,
+} from "../interfaces/rule";
 
 const CDN = "https://sarp-public.b-cdn.net";
 
 export const ENDPOINTS = {
   metrics: `${CDN}/launcher/global-metrics.json`,
   events: `${CDN}/launcher/events.json`,
+  rules: `${CDN}/launcher/rules.json`,
 } as const;
+
+/**
+ * A day-granular cache-busting token (YYYYMMDD, UTC). Some feeds only change
+ * once a day, so a per-second token would defeat all caching for no benefit;
+ * this lets the CDN serve a cached copy within the same day. Exposed so client
+ * scripts can use the exact same value.
+ */
+export function dailyStamp(now: number = Date.now()): string {
+  return new Date(now).toISOString().slice(0, 10).replace(/-/g, "");
+}
 
 const FETCH_TIMEOUT_MS = 5000;
 
@@ -121,4 +137,49 @@ export async function getEvents(limit = 6): Promise<DisplayEvent[]> {
       localImage: resolveLocalImage(e.id),
       isPast: parseEventDate(e.event_date).getTime() < now,
     }));
+}
+
+// Last-known-good rules snapshot, refreshed on every successful build by
+// scripts/mirror-rules.mjs (prebuild). Imported statically so it's bundled at
+// build time and the rules page never renders empty if the CDN is unreachable.
+import rulesSnapshot from "../data/rules.json";
+
+/**
+ * Normalize a rule's "keywords" field into a clean list. The feed encodes them
+ * as "kw1|kw2", with dashes standing in for spaces ("chat-de-voz"). Empty in,
+ * empty out. Shared with the client so build and live render identically.
+ */
+export function parseKeywords(raw: string): string[] {
+  if (!raw) return [];
+  return raw
+    .split("|")
+    .map((k) => k.replace(/-/g, " ").trim())
+    .filter(Boolean);
+}
+
+function toDisplayRule(rule: ServerRule, i: number): DisplayRule {
+  return {
+    ...rule,
+    index: i + 1,
+    keywordList: parseKeywords(rule.keywords),
+  };
+}
+
+/**
+ * Build-time rules, in feed order, excluding disabled ones. Falls back to the
+ * committed snapshot when the endpoint is unreachable so the page is never
+ * empty. `stale` flags the fallback path.
+ */
+export async function getRules(): Promise<{
+  rules: DisplayRule[];
+  stale: boolean;
+}> {
+  const res = await safeFetchJson<RulesResponse>(ENDPOINTS.rules);
+  const live = res?.data?.filter((r) => !r.isdisabled);
+  if (live?.length) return { rules: live.map(toDisplayRule), stale: false };
+
+  const fallback = (rulesSnapshot as RulesResponse).data
+    .filter((r) => !r.isdisabled)
+    .map(toDisplayRule);
+  return { rules: fallback, stale: true };
 }

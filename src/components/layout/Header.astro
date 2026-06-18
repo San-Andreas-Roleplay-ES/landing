@@ -1,5 +1,6 @@
 ---
 const navLinks = [
+  { label: "Reglas", href: "/reglas", aria: "Reglas de rol de San Andreas Roleplay", internal: true },
   { label: "Foro", href: "https://forum.sarp.es", aria: "Foro de San Andreas Roleplay" },
   { label: "PCU", href: "https://ucp.sarp.es", aria: "Panel de control de usuario de San Andreas Roleplay" },
 ];
@@ -37,8 +38,8 @@ const navLinks = [
             <li>
               <a
                 href={link.href}
-                target="_blank"
-                rel="noopener"
+                target={link.internal ? undefined : "_blank"}
+                rel={link.internal ? undefined : "noopener"}
                 class="text-sm font-medium text-gray-200 hover:text-primary transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
                 aria-label={link.aria}
               >
@@ -107,8 +108,8 @@ const navLinks = [
               <li>
                 <a
                   href={link.href}
-                  target="_blank"
-                  rel="noopener"
+                  target={link.internal ? undefined : "_blank"}
+                  rel={link.internal ? undefined : "noopener"}
                   class="block px-4 py-2 text-sm text-gray-200 hover:text-primary hover:bg-white/5 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
                   aria-label={link.aria}
                 >

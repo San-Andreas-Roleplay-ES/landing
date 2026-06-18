@@ -12,6 +12,8 @@ interface Props {
   kicker?: string;
   href?: string;
   ctaLabel?: string;
+  /** Same-origin CTA: drops target="_blank"/rel and renders an in-tab link. */
+  ctaInternal?: boolean;
   /** Heading color: gradient gold->red accent (default) or plain white. */
   headingStyle?: "gradient" | "white";
   /** Side of the optional `aside` slot image relative to the body text. */
@@ -27,6 +29,7 @@ const {
   kicker,
   href,
   ctaLabel,
+  ctaInternal = false,
   headingStyle = "gradient",
   asideSide = "right",
 } = Astro.props;
@@ -95,8 +98,8 @@ const headingClass =
         href && (
           <a
             href={href}
-            target="_blank"
-            rel="noopener"
+            target={ctaInternal ? undefined : "_blank"}
+            rel={ctaInternal ? undefined : "noopener"}
             class="inline-flex items-center gap-2 mt-6 px-5 py-2.5 text-sm font-bold rounded-lg border-2 border-primary text-primary hover:bg-primary hover:text-black transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d0d0d]"
           >
             {ctaLabel ?? "Saber más"}

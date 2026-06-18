@@ -3,6 +3,9 @@ import Footer from "../components/layout/Footer.astro";
 import Header from "../components/layout/Header.astro";
 import "../styles/global.css";
 
+const DEFAULT_KEYWORDS =
+  "GTA San Andreas roleplay, GTA Roleplay, GTA SA rol, SA-MP, San Andreas Multiplayer, rol en español, roleplay en español, juego de rol, Los Santos, Los Santos Roleplay, Los Santos juego de rol, San Andreas Roleplay, SARP, rol pesado, rol basado en texto, servidor SA-MP rol, open.mp, MTA:SA, Multi Theft Auto, GTA SA, GTA Mods, GTA Underground, GTA Online";
+
 interface Props {
   title?: string;
   description?: string;
@@ -10,6 +13,8 @@ interface Props {
   image?: string;
   type?: "website" | "article";
   noindex?: boolean;
+  /** Page-specific extra keywords, appended to the brand defaults. */
+  keywords?: string;
 }
 
 const {
@@ -18,7 +23,12 @@ const {
   image = "/images/logo-squared.png",
   type = "website",
   noindex = false,
+  keywords,
 } = Astro.props;
+
+const metaKeywords = keywords
+  ? `${DEFAULT_KEYWORDS}, ${keywords}`
+  : DEFAULT_KEYWORDS;
 
 // Canonical / OG URLs are built from the served origin (gta-rol.com, set as
 // `site` in astro.config.mjs). All in-page action links point to sarp.es.
@@ -109,10 +119,7 @@ const jsonLd = {
 
     <meta name="author" content={siteName} />
     <meta name="copyright" content={siteName} />
-    <meta
-      name="keywords"
-      content="GTA San Andreas roleplay, GTA Roleplay, GTA SA rol, SA-MP, San Andreas Multiplayer, rol en español, roleplay en español, juego de rol, Los Santos, Los Santos Roleplay, Los Santos juego de rol, San Andreas Roleplay, SARP, rol pesado, rol basado en texto, servidor SA-MP rol, open.mp, MTA:SA, Multi Theft Auto, GTA SA, GTA Mods, GTA Underground, GTA Online"
-    />
+    <meta name="keywords" content={metaKeywords} />
     <meta name="theme-color" content="#1a1800" />
 
     <!-- Open Graph -->

@@ -1,0 +1,395 @@
+---
+import { ENDPOINTS, dailyStamp, getRules } from "../services/data";
+
+const { rules } = await getRules();
+
+// Format the "YYYY-MM-DD HH:mm:ss" UTC stamps for display and <time> datetime.
+const dateFmt = new Intl.DateTimeFormat("es-ES", {
+  day: "numeric",
+  month: "long",
+  year: "numeric",
+});
+
+function parseUtc(raw: string): Date {
+  // The feed has no offset and is documented as UTC, so pin it to Z.
+  return new Date(raw.replace(" ", "T") + "Z");
+}
+function formatDate(raw: string): string {
+  return dateFmt.format(parseUtc(raw));
+}
+function toIso(raw: string): string {
+  return parseUtc(raw).toISOString();
+}
+
+const RULES_ENDPOINT = ENDPOINTS.rules;
+const RULES_STAMP = dailyStamp();
+
+// Content signature of the baked rules. The client refresh compares the live
+// feed against this and only re-renders when something actually changed, so the
+// already-correct server markup never flickers or reflows on load.
+const RULES_SIGNATURE = JSON.stringify(
+  rules.map((r) => [r.name, r.description, r.keywords, r.updated_at]),
+);
+---
+
+<section class="w-full">
+  <ol id="rules-list" class="flex flex-col gap-6">
+    {
+      rules.map((rule) => (
+        <li
+          id={`regla-${rule.index}`}
+          data-rule
+          class="scroll-mt-24 rounded-2xl border border-[#2a2a2a] bg-[#0d0d0d] p-6 md:p-8"
+        >
+          <div class="flex items-start gap-4">
+            <span
+              aria-hidden="true"
+              class="shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-primary/10 text-primary font-extrabold text-lg"
+            >
+              {rule.index}
+            </span>
+            <h2 class="min-w-0 flex-1 text-xl md:text-2xl font-bold text-white self-center">
+              {rule.name}
+            </h2>
+          </div>
+
+          {/* Collapsible body: clamps tall rules with a fade and a "Leer más".
+              Built on <details> so it works (and is fully readable) without JS
+              and for crawlers. Short rules fit and the toggle is hidden via CSS. */}
+          <details class="rule group mt-4">
+            <summary class="list-none" aria-label={`Leer la regla completa: ${rule.name}`}>
+              <div class="rule-clamp relative overflow-hidden">
+                <div
+                  class="prose-rules text-gray-200 leading-relaxed"
+                  set:html={rule.description}
+                />
+                <div class="rule-fade" aria-hidden="true" />
+              </div>
+              <span class="rule-toggle mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary">
+                <span class="rule-toggle-more">Leer más</span>
+                <span class="rule-toggle-less">Leer menos</span>
+                <span class="rule-chevron" aria-hidden="true">→</span>
+              </span>
+            </summary>
+          </details>
+
+          <div class="mt-5 pt-4 border-t border-white/5 flex flex-wrap items-center gap-x-4 gap-y-2">
+            {rule.keywordList.length > 0 && (
+              <ul class="flex flex-wrap gap-2" aria-label="Palabras clave">
+                {rule.keywordList.map((kw) => (
+                  <li class="text-xs font-medium uppercase tracking-wide text-primary/90 bg-primary/10 rounded px-2 py-0.5">
+                    {kw}
+                  </li>
+                ))}
+              </ul>
+            )}
+            <p class="ml-auto text-xs text-gray-500 whitespace-nowrap">
+              Actualizada el{" "}
+              <time datetime={toIso(rule.updated_at)}>
+                {formatDate(rule.updated_at)}
+              </time>
+            </p>
+          </div>
+        </li>
+      ))
+    }
+  </ol>
+</section>
+
+<script
+  is:inline
+  define:vars={{ RULES_ENDPOINT, RULES_STAMP, RULES_SIGNATURE }}
+>
+  // Live refresh of the rules list, flicker-free. The server-rendered list is
+  // the source of truth on load; we fetch the feed (day-granular cache-bust,
+  // since it changes at most once a day) and only replace the DOM when the
+  // content actually differs from what was baked (RULES_SIGNATURE).
+  const list = document.getElementById("rules-list");
+  if (list) {
+    const dateFmt = new Intl.DateTimeFormat("es-ES", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+    const parseUtc = (raw) => new Date(raw.replace(" ", "T") + "Z");
+    const parseKeywords = (raw) =>
+      raw
+        ? raw
+            .split("|")
+            .map((k) => k.replace(/-/g, " ").trim())
+            .filter(Boolean)
+        : [];
+
+    const buildItem = (rule, index) => {
+      const li = document.createElement("li");
+      li.id = `regla-${index}`;
+      li.setAttribute("data-rule", "");
+      li.className =
+        "scroll-mt-24 rounded-2xl border border-[#2a2a2a] bg-[#0d0d0d] p-6 md:p-8";
+
+      const head = document.createElement("div");
+      head.className = "flex items-start gap-4";
+      const num = document.createElement("span");
+      num.setAttribute("aria-hidden", "true");
+      num.className =
+        "shrink-0 flex items-center justify-center h-10 w-10 rounded-lg bg-primary/10 text-primary font-extrabold text-lg";
+      num.textContent = String(index);
+      const h2 = document.createElement("h2");
+      h2.className =
+        "min-w-0 flex-1 text-xl md:text-2xl font-bold text-white self-center";
+      h2.textContent = rule.name;
+      head.append(num, h2);
+      li.appendChild(head);
+
+      const details = document.createElement("details");
+      details.className = "rule group mt-4";
+      const summary = document.createElement("summary");
+      summary.className = "list-none";
+      summary.setAttribute(
+        "aria-label",
+        `Leer la regla completa: ${rule.name}`,
+      );
+      const clamp = document.createElement("div");
+      clamp.className = "rule-clamp relative overflow-hidden";
+      const body = document.createElement("div");
+      body.className = "prose-rules text-gray-200 leading-relaxed";
+      body.innerHTML = rule.description; // trusted HTML from the SARP backend
+      const fade = document.createElement("div");
+      fade.className = "rule-fade";
+      fade.setAttribute("aria-hidden", "true");
+      clamp.append(body, fade);
+      const toggle = document.createElement("span");
+      toggle.className =
+        "rule-toggle mt-3 inline-flex items-center gap-1 text-sm font-semibold text-primary";
+      toggle.innerHTML =
+        '<span class="rule-toggle-more">Leer más</span><span class="rule-toggle-less">Leer menos</span><span class="rule-chevron" aria-hidden="true">→</span>';
+      summary.append(clamp, toggle);
+      details.appendChild(summary);
+      li.appendChild(details);
+
+      const footer = document.createElement("div");
+      footer.className =
+        "mt-5 pt-4 border-t border-white/5 flex flex-wrap items-center gap-x-4 gap-y-2";
+      const kws = parseKeywords(rule.keywords);
+      if (kws.length) {
+        const kwList = document.createElement("ul");
+        kwList.className = "flex flex-wrap gap-2";
+        kwList.setAttribute("aria-label", "Palabras clave");
+        for (const kw of kws) {
+          const kwLi = document.createElement("li");
+          kwLi.className =
+            "text-xs font-medium uppercase tracking-wide text-primary/90 bg-primary/10 rounded px-2 py-0.5";
+          kwLi.textContent = kw;
+          kwList.appendChild(kwLi);
+        }
+        footer.appendChild(kwList);
+      }
+      const meta = document.createElement("p");
+      meta.className = "ml-auto text-xs text-gray-500 whitespace-nowrap";
+      const time = document.createElement("time");
+      const d = parseUtc(rule.updated_at);
+      time.setAttribute("datetime", d.toISOString());
+      time.textContent = dateFmt.format(d);
+      meta.append(document.createTextNode("Actualizada el "), time);
+      footer.appendChild(meta);
+      li.appendChild(footer);
+
+      // Re-evaluate the clamp once images/fonts settle.
+      return li;
+    };
+
+    // Toggle the clamp only on rules whose content actually overflows.
+    const applyClamps = (root) => {
+      for (const d of root.querySelectorAll("details.rule")) {
+        const clamp = d.querySelector(".rule-clamp");
+        if (!clamp) continue;
+        const overflows = clamp.scrollHeight - clamp.clientHeight > 4;
+        d.classList.toggle("is-clampable", overflows);
+      }
+    };
+
+    const refresh = async () => {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 5000);
+      try {
+        const url = new URL(RULES_ENDPOINT);
+        url.searchParams.set("t", RULES_STAMP);
+        const res = await fetch(url, {
+          signal: controller.signal,
+          cache: "no-store",
+        });
+        if (!res.ok) return;
+        const data = (await res.json())?.data;
+        if (!Array.isArray(data)) return;
+        const active = data.filter((r) => r && r.name && !r.isdisabled);
+        if (active.length === 0) return;
+
+        // Only touch the DOM if the feed differs from what we baked.
+        const signature = JSON.stringify(
+          active.map((r) => [r.name, r.description, r.keywords, r.updated_at]),
+        );
+        if (signature === RULES_SIGNATURE) return;
+
+        const frag = document.createDocumentFragment();
+        active.forEach((rule, i) => frag.appendChild(buildItem(rule, i + 1)));
+        list.replaceChildren(frag);
+        applyClamps(list);
+      } catch {
+        // Keep the server-rendered list.
+      } finally {
+        clearTimeout(timer);
+      }
+    };
+
+    // Enable the clamp (CSS gated on .js-rules) only now that JS runs, so the
+    // page is fully expanded for crawlers and no-JS users. Then measure which
+    // rules overflow and refresh in the background.
+    document.documentElement.classList.add("js-rules");
+    applyClamps(list);
+    window.addEventListener("load", () => applyClamps(list), { once: true });
+    refresh();
+  }
+</script>
+
+<style is:global>
+  /* ---- Collapsible clamp ------------------------------------------------ */
+  /* SEO-safe: the clamp only applies once JS adds `.js-rules` to <html>, exactly
+     like the scroll-reveal pattern. Without JS (or for crawlers) every rule is
+     fully expanded and readable — nothing is hidden behind a toggle that needs
+     JS to appear. The toggle itself shows only on rules JS measured as
+     overflowing (.is-clampable). */
+  .js-rules .rule .rule-clamp {
+    max-height: 16rem;
+    transition: max-height 0.35s ease;
+  }
+  .rule .rule-fade {
+    position: absolute;
+    inset-inline: 0;
+    bottom: 0;
+    height: 5rem;
+    background: linear-gradient(to top, #0d0d0d, transparent);
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+  }
+  .rule .rule-toggle {
+    display: none;
+    cursor: pointer;
+  }
+  .rule .rule-toggle-less {
+    display: none;
+  }
+  .rule .rule-chevron {
+    transition: transform 0.2s ease;
+  }
+
+  /* Only clampable rules show the fade + toggle. */
+  .rule.is-clampable .rule-fade {
+    opacity: 1;
+  }
+  .rule.is-clampable .rule-toggle {
+    display: inline-flex;
+  }
+
+  /* Expanded state. */
+  .js-rules .rule[open] .rule-clamp {
+    max-height: none;
+  }
+  .rule[open] .rule-fade {
+    opacity: 0;
+  }
+  .rule[open] .rule-toggle-more {
+    display: none;
+  }
+  .rule[open] .rule-toggle-less {
+    display: inline;
+  }
+  .rule[open] .rule-chevron {
+    transform: rotate(90deg);
+  }
+  .rule summary::-webkit-details-marker {
+    display: none;
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .rule .rule-clamp {
+      transition: none;
+    }
+  }
+
+  /* ---- Rule HTML typography (trusted feed content) --------------------- */
+  .prose-rules p {
+    margin-bottom: 0.85rem;
+  }
+  .prose-rules p:last-child {
+    margin-bottom: 0;
+  }
+  .prose-rules strong,
+  .prose-rules b {
+    color: var(--color-primary);
+    font-weight: 700;
+  }
+  .prose-rules em,
+  .prose-rules i {
+    color: #fff;
+  }
+  .prose-rules a {
+    color: var(--color-primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .prose-rules ul,
+  .prose-rules ol {
+    margin: 0.85rem 0;
+    padding-left: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    list-style: none;
+  }
+  .prose-rules li {
+    position: relative;
+    padding-left: 1.6rem;
+  }
+  /* Gold custom bullet for <ul>. */
+  .prose-rules ul > li::before {
+    content: "";
+    position: absolute;
+    left: 0.25rem;
+    top: 0.6em;
+    width: 0.45rem;
+    height: 0.45rem;
+    border-radius: 9999px;
+    background: var(--color-primary);
+    box-shadow: 0 0 0 3px rgb(252 175 23 / 0.15);
+  }
+  /* Gold numbered counter for <ol>. */
+  .prose-rules ol {
+    counter-reset: rule-ol;
+  }
+  .prose-rules ol > li {
+    counter-increment: rule-ol;
+  }
+  .prose-rules ol > li::before {
+    content: counter(rule-ol);
+    position: absolute;
+    left: 0;
+    top: 0.05em;
+    color: var(--color-primary);
+    font-weight: 700;
+    font-size: 0.85em;
+  }
+  .prose-rules blockquote {
+    border-left: 3px solid var(--color-primary);
+    padding-left: 1rem;
+    margin: 0.85rem 0;
+    color: #d4d4d4;
+    font-style: italic;
+  }
+  .prose-rules h3,
+  .prose-rules h4 {
+    color: #fff;
+    font-weight: 700;
+    margin: 1rem 0 0.5rem;
+  }
+</style>

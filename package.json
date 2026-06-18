@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "astro dev",
     "mirror-events": "node scripts/mirror-events.mjs",
-    "prebuild": "node scripts/mirror-events.mjs",
+    "mirror-rules": "node scripts/mirror-rules.mjs",
+    "prebuild": "node scripts/mirror-events.mjs && node scripts/mirror-rules.mjs",
     "build": "astro build",
     "preview": "astro preview",
     "deploy": "node --env-file=.env scripts/deploy.mjs",

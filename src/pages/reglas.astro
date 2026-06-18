@@ -1,0 +1,199 @@
+---
+import Layout from "../layouts/Layout.astro";
+import Container from "../components/layout/Container.astro";
+import RulesList from "../components/RulesList.astro";
+import FinalCta from "../components/FinalCta.astro";
+import { getRules } from "../services/data";
+
+const { rules } = await getRules();
+
+// Aggregate keywords across all rules for the page <meta keywords> and to feed
+// the SEO description. Deduplicated, lowercased.
+const allKeywords = [
+  ...new Set(
+    rules.flatMap((r) => r.keywordList).map((k) => k.toLowerCase()),
+  ),
+];
+
+const title =
+  "Reglas de roleplay | Normativa de rol de San Andreas Roleplay (GTA SA · SA-MP)";
+const description =
+  "Reglas de roleplay oficiales de San Andreas Roleplay (SARP): la normativa completa de rol para GTA San Andreas en SA-MP. Powergaming, metagaming, deathmatch, character kill, revenge kill y la regla de vida explicados. Léelas antes de entrar a play.sarp.es.";
+
+// Last update across the whole ruleset, for the page header.
+const lastUpdated = rules.reduce<string>(
+  (acc, r) => (r.updated_at > acc ? r.updated_at : acc),
+  "",
+);
+const lastUpdatedFmt = lastUpdated
+  ? new Intl.DateTimeFormat("es-ES", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    }).format(new Date(lastUpdated.replace(" ", "T") + "Z"))
+  : null;
+
+// JSON-LD: an Article listing the rules + a breadcrumb back to the home, both
+// tied to the existing Organization entity from the layout.
+const rulesJsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "Article",
+      "@id": "https://gta-rol.com/reglas#article",
+      headline: "Reglas de rol de San Andreas Roleplay",
+      description,
+      inLanguage: "es",
+      isPartOf: { "@id": "https://gta-rol.com/#website" },
+      author: { "@id": "https://gta-rol.com/#organization" },
+      publisher: { "@id": "https://gta-rol.com/#organization" },
+      ...(lastUpdated
+        ? { dateModified: new Date(lastUpdated.replace(" ", "T") + "Z").toISOString() }
+        : {}),
+      keywords: allKeywords.join(", "),
+      articleSection: rules.map((r) => r.name),
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Inicio",
+          item: "https://gta-rol.com/",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Reglas",
+          item: "https://gta-rol.com/reglas",
+        },
+      ],
+    },
+  ],
+};
+---
+
+<Layout
+  title={title}
+  description={description}
+  type="article"
+  keywords={allKeywords.join(", ")}
+>
+  <Container>
+    <article class="pt-28 md:pt-32">
+      <!-- Breadcrumb -->
+      <nav aria-label="Migas de pan" class="text-sm text-gray-400">
+        <ol class="flex flex-wrap items-center gap-1">
+          <li>
+            <a
+              href="/"
+              class="hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+              >Inicio</a
+            >
+          </li>
+          <li aria-hidden="true">/</li>
+          <li class="text-gray-200" aria-current="page">Reglas</li>
+        </ol>
+      </nav>
+
+      <header class="mt-6">
+        <h1
+          class="text-3xl md:text-5xl font-bold bg-gradient-to-r from-primary via-primary to-[#e23b3b] bg-clip-text text-transparent pb-2"
+        >
+          Reglas de rol
+        </h1>
+        <p class="text-md md:text-lg mt-3 text-gray-200 max-w-3xl">
+          Estas son las normas que mantienen vivo y justo el rol en San Andreas
+          Roleplay. Léelas antes de entrar: conocerlas es la diferencia entre una
+          buena historia y una sanción.
+        </p>
+        {
+          lastUpdatedFmt && (
+            <p class="mt-2 text-xs text-gray-500">
+              Última actualización de la normativa: {lastUpdatedFmt}
+            </p>
+          )
+        }
+
+        <div class="mt-6">
+          <a
+            href="https://ucp.sarp.es/auth/signup"
+            target="_blank"
+            rel="noopener"
+            class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold rounded-lg bg-primary text-black uppercase tracking-wide transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1800]"
+          >
+            Regístrate y juega
+          </a>
+        </div>
+
+        {/* SEO intro: keyword-rich but reads naturally for players. Targets the
+            high-traffic queries ("reglas de roleplay", "normativa rol", PG/DM/MG,
+            character kill, metagaming, powergaming...). */}
+        <div class="mt-8 max-w-3xl text-sm md:text-base text-gray-300 leading-relaxed space-y-3">
+          <p>
+            Las <strong class="text-white">reglas de roleplay</strong> de San
+            Andreas Roleplay son la normativa oficial que ordena el
+            <strong class="text-white"> rol en español</strong> sobre
+            <strong class="text-white"> GTA San Andreas</strong> en
+            <strong class="text-white"> SA-MP</strong> y open.mp. Aquí encontrarás
+            la definición y las sanciones de los conceptos de rol más importantes:
+            <strong class="text-white"> powergaming (PG)</strong>,
+            <strong class="text-white"> metagaming (MG)</strong>,
+            <strong class="text-white"> deathmatch (DM)</strong>,
+            <strong class="text-white"> character kill (CK)</strong>,
+            <strong class="text-white"> revenge kill (RK)</strong> y la
+            <strong class="text-white"> nueva regla de vida</strong>, además de la
+            normativa sobre zonas seguras, robos, secuestros, facciones legales e
+            ilegales y agentes de la ley.
+          </p>
+          <p>
+            Tanto si eres nuevo en el <strong class="text-white">juego de rol</strong>
+            como si vienes de otro servidor de <strong class="text-white">GTA
+            roleplay</strong>, leer y entender estas normas es el primer paso para
+            interpretar a tu personaje en Los Santos sin caer en faltas. Un rol de
+            calidad nace de reglas claras: esto es lo que hace de SARP la mejor
+            comunidad de <strong class="text-white">rol pesado basado en texto</strong>
+            en español.
+          </p>
+        </div>
+      </header>
+
+      <!-- Índice de reglas (ancla rápida) -->
+      <nav
+        id="indice"
+        aria-label="Índice de reglas"
+        class="scroll-mt-24 mt-12 rounded-2xl border border-[#2a2a2a] bg-[#0d0d0d]/60 p-6"
+      >
+        <h2 class="text-lg font-bold text-white">Índice</h2>
+        <ol class="mt-3 grid grid-cols-1 sm:grid-cols-2 gap-x-6 gap-y-2">
+          {
+            rules.map((rule) => (
+              <li class="flex gap-2 text-sm">
+                <span class="text-primary font-bold">{rule.index}.</span>
+                <a
+                  href={`#regla-${rule.index}`}
+                  class="text-gray-300 hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+                >
+                  {rule.name}
+                </a>
+              </li>
+            ))
+          }
+        </ol>
+      </nav>
+
+      <div class="mt-12">
+        <RulesList />
+      </div>
+
+      <FinalCta />
+    </article>
+  </Container>
+
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(rulesJsonLd)}
+  />
+</Layout>
