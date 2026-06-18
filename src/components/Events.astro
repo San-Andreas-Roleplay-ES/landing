@@ -1,7 +1,8 @@
 ---
-import { getEvents } from "../services/data";
+import { ENDPOINTS, getEvents } from "../services/data";
 
-const events = await getEvents(6);
+const EVENTS_LIMIT = 6;
+const events = await getEvents(EVENTS_LIMIT);
 
 const dateFmt = new Intl.DateTimeFormat("es-ES", {
   day: "numeric",
@@ -12,6 +13,15 @@ const dateFmt = new Intl.DateTimeFormat("es-ES", {
 function formatDate(raw: string): string {
   return dateFmt.format(new Date(raw.replace(" ", "T")));
 }
+
+// Passed to the client refresh: lets it reuse the locally-mirrored image for an
+// event that was already baked at build time. Events that appear only in the
+// live JSON have no local mirror, so the script falls back to the CDN image_url.
+const localImages: Record<number, string> = Object.fromEntries(
+  events.flatMap((e) => (e.localImage ? [[e.id, e.localImage]] : [])),
+);
+
+const EVENTS_ENDPOINT = ENDPOINTS.events;
 
 // Convert "YYYY-MM-DD HH:mm:ss" (server-local, Europe/Madrid) to ISO 8601 with
 // offset for Event JSON-LD. Madrid is +02:00 in summer (CEST).
@@ -46,7 +56,7 @@ const eventsJsonLd =
 
 {
   events.length > 0 && (
-    <section class="w-full object-cover items-center justify-center pt-32" data-reveal>
+    <section id="events" class="w-full object-cover items-center justify-center pt-32" data-reveal>
       <div class="w-full">
         <h2 class="text-2xl md:text-4xl font-bold bg-gradient-to-r from-primary via-primary to-[#e23b3b] bg-clip-text text-transparent pb-2">
           Eventos en San Andreas
@@ -56,7 +66,7 @@ const eventsJsonLd =
           un evento para ver todos los detalles.
         </p>
 
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 items-start">
+        <div id="events-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mt-8 items-start">
           {events.map((event) => (
             <article class="rounded-xl overflow-hidden border border-[#2a2a2a] bg-[#0d0d0d]">
               <details class="group">
@@ -124,3 +134,134 @@ const eventsJsonLd =
     />
   )
 }
+
+<script
+  is:inline
+  define:vars={{ EVENTS_ENDPOINT, EVENTS_LIMIT, LOCAL_IMAGES: localImages }}
+>
+  // Live refresh of the events grid. The server-rendered cards are the fallback;
+  // if this fetch is blocked, times out or errors, nothing changes. On success we
+  // rebuild the grid from the fresh JSON. Cards keep self-hosted images for events
+  // that were mirrored at build time (LOCAL_IMAGES); events that appear only in
+  // the live feed fall back to their CDN image_url (no local mirror exists yet).
+  const grid = document.getElementById("events-grid");
+  if (grid) {
+    const dateFmt = new Intl.DateTimeFormat("es-ES", {
+      day: "numeric",
+      month: "long",
+      year: "numeric",
+    });
+    const parseDate = (raw) => new Date(raw.replace(" ", "T"));
+    const toIso = (raw) => raw.replace(" ", "T") + "+02:00";
+
+    const buildCard = (ev, isPast) => {
+      const article = document.createElement("article");
+      article.className =
+        "rounded-xl overflow-hidden border border-[#2a2a2a] bg-[#0d0d0d]";
+
+      const details = document.createElement("details");
+      details.className = "group";
+
+      const summary = document.createElement("summary");
+      summary.className =
+        "list-none cursor-pointer focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset";
+
+      // Media + badge
+      const media = document.createElement("div");
+      media.className = "relative aspect-video w-full bg-[#1a1a1a]";
+      const imgSrc = LOCAL_IMAGES[ev.id] || ev.image_url;
+      if (imgSrc) {
+        const img = document.createElement("img");
+        img.src = imgSrc;
+        img.loading = "lazy";
+        img.decoding = "async";
+        img.alt = `Evento: ${ev.title}`;
+        img.className =
+          "absolute inset-0 w-full h-full object-cover select-none";
+        media.appendChild(img);
+      }
+      const badge = document.createElement("span");
+      badge.className =
+        "absolute top-3 left-3 text-xs font-bold tracking-wider uppercase px-2 py-1 rounded " +
+        (isPast
+          ? "bg-[#1a1a1a] text-gray-300 border border-[#3a3a3a]"
+          : "bg-primary text-black");
+      badge.textContent = isPast ? "Terminado" : "Próximo";
+      media.appendChild(badge);
+
+      // Body (collapsed)
+      const body = document.createElement("div");
+      body.className = "p-5 flex flex-col gap-2";
+      const h3 = document.createElement("h3");
+      h3.className = "text-base font-bold text-white leading-snug";
+      h3.textContent = ev.title;
+      const time = document.createElement("time");
+      time.className = "text-xs text-gray-400";
+      time.setAttribute("datetime", toIso(ev.event_date));
+      time.textContent = dateFmt.format(parseDate(ev.event_date));
+      const pShort = document.createElement("p");
+      pShort.className =
+        "text-sm text-gray-300 line-clamp-3 group-open:hidden";
+      pShort.textContent = ev.description;
+      const more = document.createElement("span");
+      more.className = "text-xs font-semibold text-primary group-open:hidden";
+      more.textContent = "Ver más →";
+      body.append(h3, time, pShort, more);
+
+      summary.append(media, body);
+
+      // Expanded
+      const expanded = document.createElement("div");
+      expanded.className = "px-5 pb-5 -mt-2";
+      const pFull = document.createElement("p");
+      pFull.className = "text-sm text-gray-300";
+      pFull.textContent = ev.description;
+      const less = document.createElement("span");
+      less.className =
+        "inline-block mt-3 text-xs font-semibold text-primary";
+      less.textContent = "Ver menos ↑";
+      expanded.append(pFull, less);
+
+      details.append(summary, expanded);
+      article.appendChild(details);
+      return article;
+    };
+
+    const refreshEvents = async () => {
+      const controller = new AbortController();
+      const timer = setTimeout(() => controller.abort(), 5000);
+      try {
+        const url = new URL(EVENTS_ENDPOINT);
+        url.searchParams.set("t", String(Date.now()));
+        const res = await fetch(url, {
+          signal: controller.signal,
+          cache: "no-store",
+        });
+        if (!res.ok) return;
+        const data = (await res.json())?.data;
+        if (!Array.isArray(data) || data.length === 0) return;
+
+        const now = Date.now();
+        const fresh = [...data]
+          .filter((e) => e && e.event_date && e.title)
+          .sort((a, b) => parseDate(b.event_date) - parseDate(a.event_date))
+          .slice(0, EVENTS_LIMIT);
+        if (fresh.length === 0) return;
+
+        const frag = document.createDocumentFragment();
+        for (const ev of fresh) {
+          frag.appendChild(
+            buildCard(ev, parseDate(ev.event_date).getTime() < now),
+          );
+        }
+        grid.replaceChildren(frag);
+      } catch {
+        // Keep the server-rendered cards.
+      } finally {
+        clearTimeout(timer);
+      }
+    };
+
+    refreshEvents();
+  }
+</script>
