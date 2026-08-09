@@ -1,57 +1,167 @@
-<section class="flex flex-col items-center justify-center w-full gap-4">
-  <h2 class="col-span-5 font-light text-center text-white pb-6">
-    Descarga GTA:SA, instala SA-MP/open.mp y forma parte de la comunidad.
-  </h2>
-  <div
-    class="flex flex-col md:flex-row items-center justify-between gap-4 w-full px-10"
-  >
-    <a
-      class="col-span-5 md:col-span-1 flex items-center justify-center gap-4"
-      href="https://store.steampowered.com/agecheck/app/12120/"
-      target="_blank"
-      aria-label="Descargar Grand Theft Auto: San Andreas"
+<section class="section relative w-full">
+  <div class="absolute inset-0 pointer-events-none overflow-hidden">
+    <div
+      class="absolute top-0 left-0 w-[700px] h-[700px] bg-[#ff6b35]/5 rounded-full blur-3xl animate-float"
     >
-      <img
-        class="h-24 w-auto hover:scale-110 transition-all duration-300 select-none"
-        src="/images/gta_sa.png"
-        alt="Grand Theft Auto: San Andreas"
-      />
-    </a>
-    <div class="col-span-5 md:col-span-1 flex items-center justify-center">
-      <span
-        class="text-4xl font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent pb-2"
-        >+</span
-      >
     </div>
-    <a
-      class="col-span-5 md:col-span-1 flex items-center justify-center gap-4"
-      href="https://www.sa-mp.mp/downloads/"
-      target="_blank"
-      aria-label="Descargar SA-MP"
+    <div
+      class="absolute bottom-0 right-0 w-[600px] h-[600px] bg-[#ff1744]/5 rounded-full blur-3xl animate-float"
+      style="animation-delay: 2s;"
     >
-      <img
-        class="h-24 w-auto hover:scale-110 transition-all duration-300 select-none object-cover"
-        src="/images/samp.png"
-        alt="San Andreas Multiplayer"
-      />
-    </a>
-    <div class="col-span-5 md:col-span-1 flex items-center justify-center">
-      <span
-        class="text-4xl font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent pb-2"
-        >o</span
-      >
     </div>
-    <a
-      class="col-span-5 md:col-span-1 flex items-center justify-center gap-4"
-      href="https://open.mp/"
-      target="_blank"
-      aria-label="Descargar open.mp"
+  </div>
+
+  <div class="max-w-7xl mx-auto px-6 text-center relative w-full">
+    <span class="badge mb-10 animate-fade-in delay-1">Descarga</span>
+    <h2
+      class="text-4xl md:text-6xl lg:text-7xl font-black mb-12 animate-fade-in delay-2 leading-tight"
     >
-      <img
-        class="h-24 w-auto hover:scale-110 transition-all duration-300 select-none"
-        src="/images/open_mp.png"
-        alt="Open Multiplayer"
-      />
-    </a>
+      Comienza a <span class="gradient-text">jugar</span>
+    </h2>
+    <p
+      class="text-xl text-gray-400 mb-24 max-w-3xl mx-auto animate-fade-in delay-3 leading-relaxed"
+    >
+      Descarga GTA:SA, instala SA-MP/open.mp y forma parte de la comunidad más
+      grande de roleplay en español.
+    </p>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-12">
+      <a
+        href="https://store.steampowered.com/agecheck/app/12120/"
+        target="_blank"
+        class="glass-card text-center animate-fade-in delay-1 hover:border-[#ff6b35]/30"
+      >
+        <div class="relative mb-12">
+          <img
+            src="/images/gta_sa.png"
+            alt="GTA San Andreas"
+            class="h-36 mx-auto mb-6 transition-transform duration-700 group-hover:scale-110 drop-shadow-2xl"
+          />
+          <div
+            class="absolute inset-0 blur-3xl opacity-20 group-hover:opacity-40 transition-opacity duration-700"
+            style="background: linear-gradient(135deg, #ff6b35, #ff1744);"
+          >
+          </div>
+        </div>
+        <div
+          class="text-3xl font-black mb-4 group-hover:text-[#ff6b35] transition-colors duration-500"
+        >
+          GTA San Andreas
+        </div>
+        <p class="text-gray-400 text-base">El juego base necesario</p>
+        <div
+          class="mt-8 flex items-center justify-center gap-3 text-[#ff6b35] opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0"
+        >
+          <span class="text-sm font-semibold">Descargar</span>
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            ><path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M14 5l7 7-7 7"></path></svg
+          >
+        </div>
+      </a>
+
+      <a
+        href="https://www.sa-mp.mp/downloads/"
+        target="_blank"
+        class="glass-card text-center animate-fade-in delay-2 hover:border-[#ff6b35]/30"
+      >
+        <div class="relative mb-12">
+          <img
+            src="/images/samp.png"
+            alt="SA-MP"
+            class="h-36 mx-auto mb-6 transition-transform duration-700 group-hover:scale-110 drop-shadow-2xl"
+          />
+          <div
+            class="absolute inset-0 blur-3xl opacity-20 group-hover:opacity-40 transition-opacity duration-700"
+            style="background: linear-gradient(135deg, #ff6b35, #ff1744);"
+          >
+          </div>
+        </div>
+        <div
+          class="text-3xl font-black mb-4 group-hover:text-[#ff6b35] transition-colors duration-500"
+        >
+          SA-MP
+        </div>
+        <p class="text-gray-400 text-base">El clásico multiplayer</p>
+        <div
+          class="mt-8 flex items-center justify-center gap-3 text-[#ff6b35] opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0"
+        >
+          <span class="text-sm font-semibold">Descargar</span>
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            ><path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M14 5l7 7-7 7"></path></svg
+          >
+        </div>
+      </a>
+
+      <a
+        href="https://open.mp/"
+        target="_blank"
+        class="glass-card text-center animate-fade-in delay-3 hover:border-[#ff6b35]/30"
+      >
+        <div class="relative mb-12">
+          <img
+            src="/images/open_mp.png"
+            alt="Open MP"
+            class="h-36 mx-auto mb-6 transition-transform duration-700 group-hover:scale-110 drop-shadow-2xl"
+          />
+          <div
+            class="absolute inset-0 blur-3xl opacity-20 group-hover:opacity-40 transition-opacity duration-700"
+            style="background: linear-gradient(135deg, #ff6b35, #ff1744);"
+          >
+          </div>
+        </div>
+        <div
+          class="text-3xl font-black mb-4 group-hover:text-[#ff6b35] transition-colors duration-500"
+        >
+          Open.MP
+        </div>
+        <p class="text-gray-400 text-base">La nueva generación</p>
+        <div
+          class="mt-8 flex items-center justify-center gap-3 text-[#ff6b35] opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-y-2 group-hover:translate-y-0"
+        >
+          <span class="text-sm font-semibold">Descargar</span>
+          <svg
+            class="w-4 h-4"
+            fill="none"
+            stroke="currentColor"
+            viewBox="0 0 24 24"
+            ><path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M14 5l7 7-7 7"></path></svg
+          >
+        </div>
+      </a>
+    </div>
+
+    <p
+      class="mt-20 text-gray-500 text-base animate-fade-in delay-4 flex items-center justify-center gap-3"
+    >
+      <svg
+        class="w-5 h-5 text-[#ff6b35]"
+        fill="currentColor"
+        viewBox="0 0 24 24"
+        ><path
+          d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"
+        ></path></svg
+      >
+      Instalación sencilla. Únete en minutos.
+    </p>
   </div>
 </section>

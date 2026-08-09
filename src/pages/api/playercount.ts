@@ -1,32 +1,48 @@
 import type { APIRoute } from 'astro';
 
-const SERVER_IP = "135.148.128.74:7777";
+const SERVER_IP = "play.sarp.es";
+const SERVER_PORT = 7777;
 
 export const GET: APIRoute = async () => {
   try {
-    const response = await fetch('https://api.open.mp/servers');
-    const servers = await response.json();
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 5000);
 
-    const server = servers.find((s: any) => s.ip === SERVER_IP);
+    const response = await fetch(
+      `https://api.sampquery.com/v2/servers/${SERVER_IP}:${SERVER_PORT}`,
+      { signal: controller.signal }
+    );
+    
+    clearTimeout(timeout);
 
-    if (!server) {
-      return new Response(JSON.stringify({ error: 'Server not found' }), {
-        status: 404,
-        headers: { 'Content-Type': 'application/json' }
-      });
+    if (!response.ok) {
+      throw new Error('Query failed');
     }
 
+    const data = await response.json();
+
     return new Response(JSON.stringify({
-      players: server.pc,
-      maxPlayers: server.pm
+      online: true,
+      players: data.players?.online ?? data.players ?? 0,
+      maxPlayers: data.players?.max ?? data.maxPlayers ?? 500
     }), {
       status: 200,
-      headers: { 'Content-Type': 'application/json' }
+      headers: { 
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache'
+      }
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: 'Failed to fetch server info' }), {
-      status: 500,
-      headers: { 'Content-Type': 'application/json' }
+    return new Response(JSON.stringify({ 
+      online: false,
+      players: 0,
+      maxPlayers: 500
+    }), {
+      status: 200,
+      headers: { 
+        'Content-Type': 'application/json',
+        'Cache-Control': 'no-cache'
+      }
     });
   }
-} 
+};

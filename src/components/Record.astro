@@ -1,61 +1,99 @@
----
+<section class="section relative w-full">
+  <div class="absolute inset-0 pointer-events-none overflow-hidden">
+    <div
+      class="absolute top-1/2 left-0 w-[700px] h-[700px] bg-[#ff6b35]/5 rounded-full blur-3xl animate-float"
+    >
+    </div>
+    <div
+      class="absolute bottom-0 right-0 w-[800px] h-[800px] bg-[#ff1744]/5 rounded-full blur-3xl animate-float"
+      style="animation-delay: 2s;"
+    >
+    </div>
+  </div>
 
----
-
-<section class="w-full object-cover items-center justify-center pt-32">
-  <div class="flex items-center justify-center">
-    <div class="w-full flex flex-col md:flex-row items-center gap-12">
-      <div class="w-full md:w-1/2 flex justify-center">
+  <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-32 items-center relative w-full">
+    <div class="order-2 lg:order-1 relative">
+      <div
+        class="rounded-3xl overflow-hidden border border-white/10 shadow-2xl group"
+      >
         <img
           src="/images/players.png"
-          alt="Jugadores online"
-          class="max-h-screen md:max-h-96 w-auto select-none transition-transform duration-300 hover:scale-110 rounded-lg shadow-lg"
+          alt="Jugadores"
+          class="w-full transition-transform duration-1000 group-hover:scale-105"
         />
-      </div>
-      <div class="w-full md:w-1/2">
-        <h2
-          class="text-2xl md:text-5xl font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent pb-2"
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent"
         >
-          +<span id="counter">100</span> conectados
-        </h2>
-        <p class="text-md mt-2 mb-8 text-white">
-          Imagina ser parte de una comunidad de heavy roleplay, en pleno 2025,
-          con récords de más de 250 jugadores online simultáneamente. Las
-          oportunidades son infinitas, únete a nosotros y descubre todo lo que
-          te ofrecemos.
-        </p>
+        </div>
       </div>
+      <div
+        class="absolute -bottom-16 -right-16 glass rounded-3xl p-10 border border-[#ff6b35]/20 shadow-2xl animate-pulse-glow backdrop-blur-xl"
+      >
+        <div class="text-7xl font-black gradient-text">24/7</div>
+        <div
+          class="text-sm text-gray-400 font-semibold uppercase tracking-wider mt-2"
+        >
+          Servidor activo
+        </div>
+      </div>
+      <div
+        class="absolute -top-8 -left-8 w-32 h-32 bg-[#ff6b35]/10 rounded-full blur-2xl animate-float pointer-events-none"
+      >
+      </div>
+    </div>
+
+    <div class="order-1 lg:order-2 animate-fade-in delay-1">
+      <span class="badge mb-10">En vivo</span>
+      <h2
+        class="text-4xl md:text-6xl lg:text-7xl font-black mb-12 leading-tight"
+      >
+        +<span id="counter" class="gradient-text">100</span> conectados
+      </h2>
+      <p class="text-xl text-gray-300 mb-12 leading-relaxed">
+        Imagina ser parte de una <strong class="text-white font-semibold"
+          >comunidad de heavy roleplay</strong
+        > en pleno 2026, con récords de más de 250 jugadores online simultáneamente.
+        Las oportunidades son infinitas.
+      </p>
+      <div class="flex flex-wrap gap-5 mb-16">
+        <span class="badge px-6 py-3 text-sm">8000+ personajes</span>
+        <span class="badge px-6 py-3 text-sm">150+ online</span>
+        <span class="badge px-6 py-3 text-sm">24/7 activo</span>
+      </div>
+      <a
+        href="samp://play.sarp.es:7777"
+        class="btn-primary text-xl px-14 py-7 shadow-2xl"
+        style="box-shadow: 0 20px 60px rgba(255,107,53,0.3), 0 0 100px rgba(255,107,53,0.15);"
+      >
+        <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"
+          ><path
+            d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H3V8h18v8zM6 15h2v-2H6v2zm4 0h2v-2h-2v2zm4 0h2v-2h-2v2z"
+          ></path></svg
+        >
+        Jugar Ahora
+      </a>
     </div>
   </div>
 </section>
 
 <script>
-  function animateCounter() {
-    const counter = document.getElementById("counter");
-    if (!counter) return;
-
+  const counter = document.getElementById("counter");
+  if (counter) {
     let count = 100;
     const target = 250;
-    let interval: ReturnType<typeof setInterval> | undefined;
-
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach((entry) => {
-        if (entry.isIntersecting) {
-          // Iniciar la animación cuando el elemento es visible, puede resolverse de otra manera.
-          interval = setInterval(() => {
+    const observer = new IntersectionObserver(
+      (entries) => {
+        if (entries[0].isIntersecting) {
+          const interval = setInterval(() => {
             count++;
             counter.textContent = count.toString();
-            if (count >= target) {
-              clearInterval(interval);
-            }
-          }, 1);
+            if (count >= target) clearInterval(interval);
+          }, 15);
           observer.disconnect();
         }
-      });
-    });
-
+      },
+      { threshold: 0.5 },
+    );
     observer.observe(counter);
   }
-
-  document.addEventListener("DOMContentLoaded", animateCounter);
 </script>

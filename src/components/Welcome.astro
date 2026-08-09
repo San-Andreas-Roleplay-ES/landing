@@ -1,91 +1,254 @@
-<section class="w-full h-200 md:h-screen overflow-hidden relative">
-  <img
-    src="images/background.png"
-    style="mask-image: linear-gradient(black 25%, transparent)"
-    class="hidden md:block w-full h-screen object-cover"
-    alt=""
-  />
-  <div class="absolute inset-0 flex justify-center">
+---
+import { Icon } from "astro-icon/components";
+---
+
+<section
+  class="relative min-h-screen flex flex-col items-center justify-center overflow-hidden w-full"
+>
+  <div class="absolute inset-0 z-0">
+    <img
+      src="/images/background.png"
+      class="w-full h-full object-cover"
+      alt=""
+    />
     <div
-      class="max-w-5xl w-full flex flex-col items-center justify-center text-center gap-y-2 p-4"
+      class="absolute inset-0"
+      style="background: linear-gradient(180deg, rgba(10,10,10,0.1) 0%, rgba(10,10,10,0.5) 35%, rgba(10,10,10,0.95) 100%);"
     >
-      <img
-        src="/images/logo.png"
-        alt="San Andreas Roleplay Logo"
-        class="h-48 md:h-64 w-auto m-0 select-none scale-90 md:hover:scale-108 md:hover:-rotate-2 transition-all duration-300 filter [filter:drop-shadow(0_0_40px_rgba(252,175,23,0.5))_drop-shadow(0_0_10px_rgba(180,25,25,0.4))] md:hover:[filter:drop-shadow(0_0_60px_rgba(252,175,23,0.7))_drop-shadow(0_0_20px_rgba(180,25,25,0.5))]"
-      />
-      <h1
-        class="max-w-xl md:max-w-2xl text-2xl md:text-4xl font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent pb-2"
+    </div>
+    <div
+      class="absolute inset-0"
+      style="background: radial-gradient(ellipse at 30% 50%, rgba(255,107,53,0.1) 0%, transparent 60%), radial-gradient(ellipse at 70% 50%, rgba(255,23,68,0.1) 0%, transparent 60%);"
+    >
+    </div>
+  </div>
+
+  <div class="absolute inset-0 overflow-hidden pointer-events-none z-[1]">
+    <div
+      class="absolute top-[20%] left-[15%] w-3 h-3 rounded-full bg-[#ff6b35] opacity-40 animate-pulse-glow"
+    >
+    </div>
+    <div
+      class="absolute top-[60%] right-[20%] w-2 h-2 rounded-full bg-[#ff1744] opacity-30 animate-pulse"
+      style="animation-delay: 1s;"
+    >
+    </div>
+    <div
+      class="absolute top-[40%] right-[30%] w-1.5 h-1.5 rounded-full bg-[#ff6b35] opacity-50 animate-pulse"
+      style="animation-delay: 2s;"
+    >
+    </div>
+  </div>
+
+  <div
+    class="relative z-10 container max-w-7xl mx-auto flex flex-col items-center justify-center text-center px-4 py-48 md:py-56 min-h-screen"
+  >
+    <div class="mb-24 animate-fade-in">
+      <div class="relative inline-block cursor-pointer">
+        <img
+          src="/images/logo.png"
+          alt="San Andreas Roleplay"
+          class="w-48 md:w-64 lg:w-80 h-auto mx-auto select-none transition-all duration-1000 hover:scale-105"
+          style="filter: drop-shadow(0 0 120px rgba(255,107,53,0.6)) drop-shadow(0 0 60px rgba(255,23,68,0.4));"
+          loading="eager"
+        />
+        <div
+          class="absolute inset-0 -z-10 blur-3xl opacity-20 group-hover:opacity-30 transition-opacity duration-700"
+          style="background: linear-gradient(135deg, #ff6b35, #ff1744); border-radius: 50%;"
+        >
+        </div>
+        <div
+          class="absolute -inset-4 rounded-full border border-[#ff6b35]/10 animate-pulse-glow pointer-events-none"
+        >
+        </div>
+      </div>
+    </div>
+
+    <h1
+      class="text-5xl md:text-7xl lg:text-8xl font-black mb-6 leading-none tracking-tight animate-fade-in delay-1 text-center"
+    >
+      <span class="text-white">El único </span><span class="gradient-text"
+        >roleplay</span
       >
-        El único roleplay basado en texto de Grand Theft Auto San Andreas.
-      </h1>
-      <p class="text-white text-lg">
-        <span class="text-primary text-2xl">❝</span>
-        La verdadera esencia de GTA SA, llevada al rol más inmersivo.
-        <span class="text-primary text-2xl">❞</span>
-      </p>
+    </h1>
+
+    <p
+      class="text-xl md:text-2xl text-[#a1a1aa] font-light mb-12 animate-fade-in delay-1 text-center"
+    >
+      basado en texto de GTA SA
+    </p>
+
+    <p
+      class="text-2xl md:text-3xl text-gray-300 mb-20 max-w-3xl mx-auto italic leading-relaxed animate-fade-in delay-2 text-center"
+    >
+      <span class="text-[#ff6b35] text-5xl font-serif">"</span>
+      La verdadera esencia de GTA SA, llevada al rol más inmersivo
+      <span class="text-[#ff6b35] text-5xl font-serif">"</span>
+    </p>
+
+    <div
+      class="flex flex-col sm:flex-row items-center justify-center gap-8 mb-24 animate-fade-in delay-3"
+    >
       <a
-        class="mt-2 group flex items-center gap-2 px-4 py-2 text-sm font-mono bg-[#1a1a1a] border border-[#333] rounded-lg transition-all duration-300 hover:border-primary"
         href="samp://play.sarp.es:7777"
-        target="_blank"
-        aria-label="Join San Andreas Roleplay Server"
+        class="btn-primary text-xl px-16 py-7 shadow-2xl flex flex-col items-center gap-1"
+        style="box-shadow: 0 20px 60px rgba(255,107,53,0.3), 0 0 100px rgba(255,107,53,0.15);"
       >
-        <span>🎮</span>
-        <span class="text-gray-300">play.sarp.es:7777</span>
-        <span class="text-gray-500 group-hover:text-primary transition-colors">
-          <svg
-            xmlns="http://www.w3.org/2000/svg"
-            width="16"
-            height="16"
-            viewBox="0 0 24 24"
-            fill="none"
-            stroke="currentColor"
-            stroke-width="2"
-            stroke-linecap="round"
-            stroke-linejoin="round"
-            ><rect width="14" height="14" x="8" y="8" rx="2" ry="2"></rect><path
-              d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"
+        <span class="flex items-center gap-3">
+          <svg class="w-8 h-8" fill="currentColor" viewBox="0 0 24 24"
+            ><path
+              d="M21 6H3c-1.1 0-2 .9-2 2v8c0 1.1.9 2 2 2h18c1.1 0 2-.9 2-2V8c0-1.1-.9-2-2-2zm0 10H3V8h18v8zM6 15h2v-2H6v2zm4 0h2v-2h-2v2zm4 0h2v-2h-2v2z"
             ></path></svg
           >
+          Jugar Ahora
         </span>
+        <span class="text-sm opacity-60 font-normal">play.sarp.es:7777</span>
       </a>
-      <div
-        id="playerCountContainer"
-        class="mt-2 text-sm text-gray-400 opacity-20 transition-all duration-300 ease-in-out"
+      <a
+        href="https://discord.gg/sa-rp"
+        target="_blank"
+        class="btn-primary text-xl px-12 py-7 shadow-2xl flex items-center gap-3"
+        style="box-shadow: 0 20px 60px rgba(255,107,53,0.3), 0 0 100px rgba(255,107,53,0.15);"
       >
-        <span id="playerCount" class="text-primary">0</span>
-        <span class="text-gray-500">/</span>
-        <span id="maxPlayers" class="text-gray-400">500</span>
-        <span class="text-gray-500"> jugadores online</span>
+        <Icon class="w-8 h-8" name="mdi:discord" />
+        Discord
+      </a>
+    </div>
+
+    <div
+      id="playerCountContainer"
+      class="inline-flex items-center gap-6 px-12 py-6 rounded-full backdrop-blur-md bg-black/40 border border-white/10 shadow-lg animate-fade-in delay-4"
+      style="opacity: 0;"
+    >
+      <div class="relative">
+        <div id="statusDot" class="w-4 h-4 rounded-full bg-green-500"></div>
+        <div
+          id="statusPing"
+          class="absolute inset-0 rounded-full bg-green-500 animate-ping opacity-75"
+        >
+        </div>
       </div>
+      <span id="statusText" class="text-green-400 text-sm font-medium"
+        >Online:</span
+      >
+      <span id="playerCount" class="text-6xl font-black gradient-text">0</span>
+      <span id="separator" class="text-gray-600 text-3xl">/</span>
+      <span id="maxPlayers" class="text-gray-400 font-bold text-3xl">500</span>
+    </div>
+
+    <div
+      id="maintenanceMsg"
+      class="hidden text-red-400 text-lg font-medium mt-4 animate-fade-in delay-4"
+    >
+      Servidor en mantenimiento
+    </div>
+  </div>
+
+  <div class="absolute bottom-12 left-1/2 -translate-x-1/2 animate-bounce z-10">
+    <div
+      class="p-4 rounded-full glass backdrop-blur-md border border-white/10 hover:border-[#ff6b35]/30 transition-colors duration-300 cursor-pointer"
+    >
+      <svg
+        class="w-8 h-8 text-[#ff6b35]/60"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+        ><path
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          stroke-width="2"
+          d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg
+      >
     </div>
   </div>
 </section>
 
 <script>
-  async function updatePlayerCount() {
+  async function updateServerStatus() {
     try {
-      const response = await fetch("/api/playercount");
-      const data = await response.json();
-
+      const res = await fetch("/api/playercount");
+      const data = await res.json();
       const container = document.getElementById("playerCountContainer");
-      const playerCountElement = document.getElementById("playerCount");
-      const maxPlayersElement = document.getElementById("maxPlayers");
+      const maintenanceMsg = document.getElementById("maintenanceMsg");
+      const statusDot = document.getElementById("statusDot");
+      const statusPing = document.getElementById("statusPing");
+      const statusText = document.getElementById("statusText");
+      const playerCount = document.getElementById("playerCount");
+      const separator = document.getElementById("separator");
+      const maxPlayers = document.getElementById("maxPlayers");
 
-      if (container && playerCountElement && maxPlayersElement && !data.error) {
-        playerCountElement.textContent = data.players;
-        maxPlayersElement.textContent = data.maxPlayers;
-        container.classList.remove("opacity-0");
-        container.classList.add("opacity-100");
+      if (data && !data.error && data.online) {
+        if (playerCount) {
+          playerCount.textContent = data.players;
+        }
+        if (maxPlayers) {
+          maxPlayers.textContent = data.maxPlayers;
+        }
+        if (statusDot) {
+          statusDot.className = "w-4 h-4 rounded-full bg-green-500";
+        }
+        if (statusPing) {
+          statusPing.className =
+            "absolute inset-0 rounded-full bg-green-500 animate-ping opacity-75";
+        }
+        if (statusText) {
+          statusText.textContent = "Online:";
+          statusText.className = "text-green-400 text-sm font-medium";
+        }
+        if (container) container.classList.remove("hidden");
+        if (maintenanceMsg) maintenanceMsg.classList.add("hidden");
+        if (separator) separator.classList.remove("hidden");
+        if (maxPlayers) maxPlayers.classList.remove("hidden");
+        if (statusPing) {
+          statusPing.className = "absolute inset-0 rounded-full bg-red-500";
+        }
+        if (statusDot) statusDot.className = "w-4 h-4 rounded-full bg-red-500";
+        if (statusPing) statusPing.className = "absolute inset-0 rounded-full bg-red-500";
+        if (statusText) {
+          statusText.textContent = "Offline";
+          statusText.className = "text-red-400 text-sm font-medium";
+        }
+        if (playerCount) playerCount.textContent = "0";
+        if (separator) separator.classList.add("hidden");
+        if (maxPlayers) maxPlayers.classList.add("hidden");
+        if (container) container.classList.remove("hidden");
+        if (maintenanceMsg) maintenanceMsg.classList.remove("hidden");
       }
-    } catch (error) {
-      console.error("Failed to update player count:", error);
-      const container = document.getElementById("playerCountContainer");
-      if (container) {
-        container.classList.remove("opacity-100");
-        container.classList.add("opacity-0");
+    } catch (e) {
+      const statusDot = document.getElementById("statusDot");
+      const statusText = document.getElementById("statusText");
+      if (statusDot) statusDot.className = "w-4 h-4 rounded-full bg-red-500";
+      if (statusText) {
+        statusText.textContent = "Error";
+        statusText.className = "text-red-400 text-sm font-medium";
       }
     }
   }
-  updatePlayerCount();
+
+  const observerOptions = {
+    threshold: 0.1,
+    rootMargin: "0px 0px -100px 0px",
+  };
+
+  const observer = new IntersectionObserver((entries) => {
+    entries.forEach((entry) => {
+      if (entry.isIntersecting) {
+        const target = entry.target as HTMLElement;
+        target.style.opacity = "1";
+        target.style.transform = "translateY(0) scale(1)";
+        target.style.transition = "all 1s cubic-bezier(0.16, 1, 0.3, 1)";
+      }
+    });
+  }, observerOptions);
+
+  document.addEventListener("DOMContentLoaded", () => {
+    updateServerStatus();
+    setInterval(updateServerStatus, 30000);
+
+    document.querySelectorAll(".animate-fade-in").forEach((el) => {
+      (el as HTMLElement).style.opacity = "0";
+      (el as HTMLElement).style.transform = "translateY(60px) scale(0.95)";
+      observer.observe(el);
+    });
+  });
 </script>

@@ -1,59 +1,83 @@
----
-import { Icon } from "astro-icon/components";
----
+<section class="section relative w-full">
+  <div class="absolute inset-0 pointer-events-none overflow-hidden">
+    <div
+      class="absolute top-0 right-0 w-[700px] h-[700px] bg-[#ff6b35]/5 rounded-full blur-3xl animate-float"
+    >
+    </div>
+    <div
+      class="absolute bottom-0 left-0 w-[600px] h-[600px] bg-[#ff1744]/5 rounded-full blur-3xl animate-float"
+      style="animation-delay: 2s;"
+    >
+    </div>
+  </div>
 
-<section class="w-full object-cover items-center justify-center pt-32">
-  <div class="flex items-center justify-center">
-    <div class="w-full flex flex-col md:flex-row items-center gap-12">
-      <div class="w-full">
-        <h2
-          class="text-2xl md:text-5xl font-bold bg-gradient-to-r from-primary to-[#b41919] bg-clip-text text-transparent pb-2"
-        >
-          Únete a nosotros
-        </h2>
-        <p class="text-md mt-2 mb-8 text-white">
-          ¿Eres bueno en lo que haces? Únete al equipo que lidera el futuro del
-          roleplay en San Andreas. Buscamos programadores, diseñadores, modders
-          y mentes creativas con ambición. Basta de perder talento en proyectos
-          sin rumbo. Aquí tendrás financiamiento para tus ideas, una comunidad
-          activa y un servidor con proyección sólida. Es momento de dejar
-          huella. Súmate y construyamos algo grande.
-        </p>
-        <div
-          class="flex flex-wrap gap-2 justify-left md:justify-end mt-4 [&>span]:px-4 [&>span]:py-1 [&>span]:rounded-full [&>span]:text-xs [&>span]:font-medium [&>span]:flex [&>span]:items-center [&>span]:gap-2"
-        >
-          <span class="bg-gradient-to-r from-primary to-[#FF8C00] text-white">
-            <Icon class="w-5 h-5" name="mdi:gamepad-classic" />
-            SA-MP
-          </span>
-          <span class="bg-gradient-to-r from-[#B41919] to-[#8B0000] text-white">
-            <Icon class="w-5 h-5" name="mdi:chess-pawn" />
-            Pawn
-          </span>
-          <span class="bg-gradient-to-r from-[#00599C] to-[#003366] text-white">
-            <Icon class="w-5 h-5" name="mdi:language-cpp" />
-            C++
-          </span>
-          <span class="bg-gradient-to-r from-[#339933] to-[#2E7D32] text-white">
-            <Icon class="w-5 h-5" name="mdi:nodejs" />
-            Node.JS
-          </span>
-          <span class="bg-gradient-to-r from-[#41B883] to-[#34495E] text-white">
-            <Icon class="w-5 h-5" name="mdi:vuejs" />
-            Vue.JS
-          </span>
-          <span class="bg-gradient-to-r from-[#00A2FF] to-[#0077CC] text-white">
-            <Icon class="w-5 h-5" name="mdi:palette" />
-            3DS Max
-          </span>
-        </div>
+  <div class="max-w-7xl mx-auto px-6 grid lg:grid-cols-2 gap-32 items-center relative w-full">
+    <div class="order-2 lg:order-1 animate-fade-in delay-1">
+      <span class="badge mb-10">Únete al equipo</span>
+      <h2
+        class="text-4xl md:text-6xl lg:text-7xl font-black mb-12 leading-tight"
+      >
+        Únete a <span class="gradient-text">nosotros</span>
+      </h2>
+      <p class="text-xl text-gray-300 mb-12 leading-relaxed">
+        ¿Eres bueno en lo que haces? Únete al equipo que lidera el futuro del
+        roleplay en San Andreas. Buscamos programadores, diseñadores, modders y
+        mentes creativas con ambición.
+      </p>
+      <p class="text-gray-400 mb-16 leading-relaxed text-lg">
+        Basta de perder talento en proyectos sin rumbo. Aquí tendrás
+        financiamiento para tus ideas.
+      </p>
+      <div class="flex flex-wrap gap-4 mb-16">
+        <span class="badge px-6 py-3 text-sm">SA-MP</span>
+        <span class="badge px-6 py-3 text-sm">Pawn</span>
+        <span class="badge px-6 py-3 text-sm">C++</span>
+        <span class="badge px-6 py-3 text-sm">Node.JS</span>
+        <span class="badge px-6 py-3 text-sm">Vue.JS</span>
+        <span class="badge px-6 py-3 text-sm">3DS Max</span>
       </div>
-      <div class="w-full md:w-1/2 flex justify-center">
+      <a
+        href="https://ucp.sarp.es/auth/signup"
+        class="btn-primary text-xl px-14 py-7 shadow-2xl"
+        style="box-shadow: 0 20px 60px rgba(255,107,53,0.3), 0 0 100px rgba(255,107,53,0.15);"
+      >
+        Comenzar ahora
+        <svg
+          class="w-5 h-5 ml-2"
+          fill="none"
+          stroke="currentColor"
+          viewBox="0 0 24 24"
+          ><path
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            stroke-width="2"
+            d="M14 5l7 7-7 7"></path></svg
+        >
+      </a>
+    </div>
+
+    <div class="order-1 lg:order-2 relative animate-fade-in delay-2">
+      <div
+        class="rounded-3xl overflow-hidden border border-white/10 shadow-2xl group"
+      >
         <img
           src="/images/i_want_you_for_san_rol.jpg"
-          alt="I want you for San Andreas Roleplay"
-          class="md:max-h-96 w-auto select-none transition-transform duration-300 hover:scale-110 rounded-lg shadow-lg"
+          alt="Únete"
+          class="w-full transition-transform duration-1000 group-hover:scale-105"
         />
+        <div
+          class="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent"
+        >
+        </div>
+      </div>
+      <div
+        class="absolute -top-12 -right-12 w-56 h-56 bg-[#ff6b35]/10 rounded-full blur-3xl animate-float pointer-events-none"
+      >
+      </div>
+      <div
+        class="absolute -bottom-12 -left-12 w-64 h-64 bg-[#ff1744]/10 rounded-full blur-3xl animate-float pointer-events-none"
+        style="animation-delay: 1.5s;"
+      >
       </div>
     </div>
   </div>

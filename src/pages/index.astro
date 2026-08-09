@@ -1,23 +1,28 @@
 ---
 import Description from "../components/Description.astro";
 import DownloadLinks from "../components/DownloadLinks.astro";
+import Featured from "../components/Featured.astro";
 import Features from "../components/Features.astro";
+import Gallery from "../components/Gallery.astro";
 import Join from "../components/Join.astro";
 import Record from "../components/Record.astro";
+import Stats from "../components/Stats.astro";
+import Vision from "../components/Vision.astro";
 import Welcome from "../components/Welcome.astro";
 import YouTube from "../components/YouTube.astro";
-import Container from "../components/layout/Container.astro";
 import Layout from "../layouts/Layout.astro";
 ---
 
-<Layout title="San Andreas Roleplay - Multiplayer SAMP">
+<Layout title="San Andreas Roleplay - Mejor servidor de Roleplay">
   <Welcome />
-  <Container>
-    <DownloadLinks />
-    <Features />
-    <Record />
-    <Description />
-    <Join />
-    <YouTube />
-  </Container>
+  <Stats />
+  <Description />
+  <Featured />
+  <Vision />
+  <Gallery />
+  <Features />
+  <Record />
+  <Join />
+  <DownloadLinks />
+  <YouTube />
 </Layout>
