@@ -21,12 +21,15 @@ Landing page para SARP (San Andreas Roleplay ES).
 ## Estructura
 
 - `src/components/` — componentes `.astro` (subcarpeta `layout/` para Header/Footer/Container).
-- `src/components/FeatureCard.astro` — **patrón estándar de las secciones de features**: imagen full-width como header desvanecido (overlay `from-[#0d0d0d]`) + `<h2>` + texto, con props `kicker`/`href`/`ctaLabel` y slot `extras` (galería, video, etc.). Lo usan IllegalFactions, CustomSkin, EmeraldCasino, Rogue, CityGovernment.
+- `src/components/HeroMosaic.astro` — **hero "bento"** (LCP, sin `data-reveal`): celda de marca (único `<h1>`, CTAs, IP, cifra en vivo) + una celda-teaser por sección enlazada por ancla (`href="#id"`, `data-tile`). Miniaturas WebP en `public/images/tiles/` generadas por `scripts/make-tiles.mjs` (prebuild; `npm run tiles`). La celda "Eventos" usa el arte del último evento. Incluye marquesina y tilt 3D (solo puntero fino).
+- `src/components/StickyCta.astro` — barra fija inferior (solo `<lg`) con "Crear cuenta gratis" + Discord; aparece al salir el hero y se oculta en `#empezar`. **Un solo verbo de conversión en toda la página: "Crear cuenta gratis"** (header, hero, tarjetas, barra, CTA final).
+- `src/data/sections.ts` — lista de secciones (id, label, kicker, tile) compartida por el hero, `SectionNav.astro` (puntos laterales, solo `lg+`) y GA4. **Si añades una sección de features, añádela aquí y pásale `id` al `FeatureCard`.**
+- `src/components/FeatureCard.astro` — **patrón estándar de las secciones de features**: imagen full-width como header desvanecido (overlay `from-[#0d0d0d]`, parallax scroll-driven) + `<h2>` + texto, con props `id`/`kicker`/`href`/`ctaLabel` y slot `extras` (galería, video, etc.). **Cada tarjeta lleva el CTA primario "Crear cuenta gratis"**; `href`/`ctaLabel` es el enlace informativo secundario. Lo usan IllegalFactions, OfficialForces, EmeraldCasino, CityGovernment, CustomSkin, Rogue, RulesPromo.
 - `src/layouts/Layout.astro` — layout base, **props-driven** (`title`, `description`, `image`, `type`, `noindex`); centraliza todo el `<head>` SEO + JSON-LD.
 - `src/pages/` — páginas (one-pager: `index.astro`).
 - `src/interfaces/` — tipos (`metrics.ts`, `event.ts`).
 - `src/services/data.ts` — único módulo de datos (fetch build-time con fallbacks).
-- `scripts/` — `mirror-events.mjs` (descarga imágenes de eventos) y `deploy.mjs`.
+- `scripts/` — `mirror-events.mjs` (descarga imágenes de eventos), `make-tiles.mjs` (miniaturas del hero vía `sharp`) y `deploy.mjs`.
 - `src/styles/global.css` — `@theme` (color `--color-primary`), foco visible global y `prefers-reduced-motion`.
 
 ## Convenciones
@@ -54,7 +57,9 @@ Landing page para SARP (San Andreas Roleplay ES).
 - Un solo `<h1>` (hero); un `<h2>` por sección; `<h3>` solo para sub-ítems.
 - JSON-LD en `Layout.astro` (Organization + WebSite + VideoGame por `@id`) y en `Events.astro` (Event).
 - Contraste: oro para texto; **el rojo `#b41919` falla AA** → usar `#e23b3b` o como acento grande. `global.css` añade foco visible y respeta `prefers-reduced-motion` (el count-up de `Statistics` también early-return en JS).
-- **Scroll-reveal (SEO-safe):** las secciones aparecen con fade-up al entrar en viewport. El contenido es **visible por defecto**; el estado oculto (`.js-reveal [data-reveal]` en `global.css`) SOLO aplica cuando el script de `Layout.astro` añade `js-reveal` a `<html>` en runtime. Sin JS / con `prefers-reduced-motion` → todo visible sin animar. Para animar una sección nueva, añade `data-reveal` a su `<section>` raíz (los componentes con `FeatureCard` ya lo heredan). El hero (`Welcome.astro`) NO se marca (es el LCP).
+- **Scroll-reveal (SEO-safe):** las secciones aparecen con fade-up al entrar en viewport. El contenido es **visible por defecto**; el estado oculto (`.js-reveal [data-reveal]` en `global.css`) SOLO aplica cuando el script de `Layout.astro` añade `js-reveal` a `<html>` en runtime. Sin JS / con `prefers-reduced-motion` → todo visible sin animar. Para animar una sección nueva, añade `data-reveal` a su `<section>` raíz (los componentes con `FeatureCard` ya lo heredan). El hero (`HeroMosaic.astro`) NO se marca (es el LCP).
+- **Spotlight (una a una):** los elementos con `data-spotlight` (el `article` de `FeatureCard`, el bloque de `Events`) solo se ven al 100 % cuando cruzan la franja central del viewport; el resto queda atenuado. Igual que el reveal, solo aplica bajo `.js-reveal`. `section:target` hace un flash al llegar desde una ancla.
+- **GA4 (script de `Layout.astro`):** `section_view` (id de sección al revelarse), `tile_click` (celda del mosaico) y `cta_click` (`signup`/`discord`/`connect` + sección de origen).
 
 ## Dominio
 

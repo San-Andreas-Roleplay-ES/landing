@@ -1,0 +1,74 @@
+---
+import { SECTIONS } from "../data/sections";
+
+// Navegación lateral por puntos (solo lg+). Aparece al pasar el hero y marca
+// la sección que está en el centro de la pantalla.
+---
+
+<nav
+  class="section-nav fixed right-4 xl:right-6 top-1/2 -translate-y-1/2 z-40 hidden lg:flex flex-col gap-3"
+  aria-label="Secciones de la página"
+>
+  {
+    SECTIONS.map((s) => (
+      <a
+        href={`#${s.id}`}
+        data-nav={s.id}
+        aria-label={s.label}
+        class="group relative flex items-center justify-center h-6 w-6 self-end focus-visible:outline-none"
+      >
+        <span class="pointer-events-none absolute right-8 whitespace-nowrap rounded-md border border-white/10 bg-[#0d0d0d]/90 px-2.5 py-1 text-xs font-semibold text-white opacity-0 translate-x-2 transition-all duration-200 group-hover:opacity-100 group-hover:translate-x-0 group-focus-visible:opacity-100 group-focus-visible:translate-x-0 group-[.is-active]:opacity-100 group-[.is-active]:translate-x-0">
+          {s.label}
+        </span>
+        <span class="block h-2.5 w-2.5 rounded-full bg-white/30 ring-2 ring-transparent transition-all duration-300 group-hover:bg-primary group-focus-visible:ring-primary group-[.is-active]:bg-primary group-[.is-active]:scale-150" />
+      </a>
+    ))
+  }
+</nav>
+
+<script>
+  const nav = document.querySelector<HTMLElement>(".section-nav");
+  if (nav && "IntersectionObserver" in window) {
+    const links = [...nav.querySelectorAll<HTMLAnchorElement>("a[data-nav]")];
+    const targets = links
+      .map((a) => document.getElementById(a.dataset.nav ?? ""))
+      .filter((el): el is HTMLElement => el !== null);
+
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          links.forEach((a) =>
+            a.classList.toggle("is-active", a.dataset.nav === e.target.id),
+          );
+        }
+      },
+      { rootMargin: "-45% 0px -45% 0px" },
+    );
+    targets.forEach((t) => io.observe(t));
+
+    const hero = document.getElementById("top");
+    const last = targets[targets.length - 1];
+    let ticking = false;
+    const update = () => {
+      ticking = false;
+      const y = window.scrollY;
+      const pastHero = hero ? y > hero.offsetHeight * 0.55 : y > 400;
+      const beforeEnd = last
+        ? y < last.offsetTop + last.offsetHeight - window.innerHeight * 0.4
+        : true;
+      nav.classList.toggle("is-shown", pastHero && beforeEnd);
+    };
+    window.addEventListener(
+      "scroll",
+      () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      },
+      { passive: true },
+    );
+    update();
+  }
+</script>

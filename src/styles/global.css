@@ -45,3 +45,334 @@ button:focus-visible {
     scroll-behavior: auto !important;
   }
 }
+
+/* =========================================================================
+   Animaciones de la landing (hero mosaico, revelado por secciones, etc.)
+   Todas respetan prefers-reduced-motion vía el bloque de arriba (duración
+   ~0) o vía @media (no-preference) cuando son scroll-driven.
+   ========================================================================= */
+
+/* --- Entrada escalonada de las celdas del mosaico (CSS puro, SEO-safe:
+       `backwards` solo afecta antes de empezar; al terminar no pisa el
+       transform inline del efecto tilt). --- */
+@keyframes tile-in {
+  from {
+    opacity: 0;
+    transform: translateY(28px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+.tile {
+  animation: tile-in 0.7s cubic-bezier(0.22, 1, 0.36, 1) backwards;
+  animation-delay: calc(var(--i, 0) * 70ms + 80ms);
+  transform-style: preserve-3d;
+  transition:
+    transform 0.35s ease,
+    box-shadow 0.35s ease,
+    border-color 0.35s ease;
+}
+.tile:hover {
+  border-color: rgba(252, 175, 23, 0.5);
+  box-shadow: 0 24px 60px -24px rgba(252, 175, 23, 0.45);
+}
+.tile-shine {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    115deg,
+    transparent 35%,
+    rgba(255, 255, 255, 0.16) 50%,
+    transparent 65%
+  );
+  transform: translateX(-130%);
+  transition: transform 0.9s ease;
+}
+.tile:hover .tile-shine {
+  transform: translateX(130%);
+}
+
+/* --- Borde luminoso giratorio de la celda de marca --- */
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
+@keyframes spin-border {
+  to {
+    --angle: 360deg;
+  }
+}
+.brand-tile::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: inherit;
+  padding: 1.5px;
+  background: conic-gradient(
+    from var(--angle),
+    transparent 0 55%,
+    #fcaf17 75%,
+    #e23b3b 88%,
+    transparent 100%
+  );
+  -webkit-mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  mask:
+    linear-gradient(#000 0 0) content-box,
+    linear-gradient(#000 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  animation: spin-border 7s linear infinite;
+  pointer-events: none;
+}
+
+/* --- Aurora de fondo del hero --- */
+@keyframes drift {
+  from {
+    transform: translate3d(0, 0, 0) scale(1);
+  }
+  to {
+    transform: translate3d(5rem, 3rem, 0) scale(1.18);
+  }
+}
+.hero-aurora {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.hero-aurora span {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(70px);
+  opacity: 0.32;
+  animation: drift 18s ease-in-out infinite alternate;
+}
+.hero-aurora span:nth-child(1) {
+  width: 38rem;
+  height: 38rem;
+  left: -12rem;
+  top: -10rem;
+  background: #fcaf17;
+}
+.hero-aurora span:nth-child(2) {
+  width: 30rem;
+  height: 30rem;
+  right: -10rem;
+  top: 15%;
+  background: #e23b3b;
+  animation-duration: 24s;
+  animation-delay: -8s;
+}
+.hero-aurora span:nth-child(3) {
+  width: 26rem;
+  height: 26rem;
+  left: 35%;
+  bottom: -14rem;
+  background: #5865f2;
+  opacity: 0.18;
+  animation-duration: 28s;
+  animation-delay: -14s;
+}
+
+/* --- Texto con brillo en movimiento (h1) --- */
+@keyframes shimmer {
+  to {
+    background-position: -250% 0;
+  }
+}
+.text-shimmer {
+  background-image: linear-gradient(
+    110deg,
+    #fcaf17 0%,
+    #ffe08a 22%,
+    #fcaf17 45%,
+    #e23b3b 72%,
+    #fcaf17 100%
+  );
+  background-size: 250% 100%;
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  animation: shimmer 7s linear infinite;
+}
+
+/* --- Logo con halo pulsante --- */
+@keyframes logo-pulse {
+  0%,
+  100% {
+    filter: drop-shadow(0 0 18px rgba(252, 175, 23, 0.45));
+  }
+  50% {
+    filter: drop-shadow(0 0 34px rgba(252, 175, 23, 0.75))
+      drop-shadow(0 0 10px rgba(226, 59, 59, 0.4));
+  }
+}
+.logo-glow {
+  animation: logo-pulse 4s ease-in-out infinite;
+}
+
+/* --- Punto "en vivo" --- */
+@keyframes live-ping {
+  0% {
+    transform: scale(1);
+    opacity: 0.8;
+  }
+  100% {
+    transform: scale(2.6);
+    opacity: 0;
+  }
+}
+.live-dot::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: 9999px;
+  background: inherit;
+  animation: live-ping 1.6s cubic-bezier(0, 0, 0.2, 1) infinite;
+}
+
+/* --- Marquesina --- */
+@keyframes marquee {
+  to {
+    transform: translateX(-50%);
+  }
+}
+.marquee {
+  overflow: hidden;
+  -webkit-mask-image: linear-gradient(
+    90deg,
+    transparent,
+    #000 12%,
+    #000 88%,
+    transparent
+  );
+  mask-image: linear-gradient(90deg, transparent, #000 12%, #000 88%, transparent);
+}
+.marquee-track {
+  display: flex;
+  width: max-content;
+  animation: marquee 45s linear infinite;
+}
+.marquee:hover .marquee-track {
+  animation-play-state: paused;
+}
+
+/* --- Barra de progreso de scroll (solo navegadores con scroll timelines) --- */
+@keyframes progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 60;
+  height: 3px;
+  width: 100%;
+  background: linear-gradient(90deg, #fcaf17, #e23b3b);
+  transform-origin: 0 50%;
+  transform: scaleX(0);
+  pointer-events: none;
+}
+@supports (animation-timeline: scroll()) {
+  .scroll-progress {
+    animation: progress linear both;
+    animation-timeline: scroll(root);
+  }
+}
+
+/* --- Tarjetas de features: foco ("spotlight") sobre la tarjeta activa.
+       Solo cuando el script de Layout añade .js-reveal (sin JS / con
+       reduced-motion todo se ve al 100%). --- */
+.feature-card {
+  transition:
+    transform 0.7s cubic-bezier(0.22, 1, 0.36, 1),
+    filter 0.7s ease,
+    box-shadow 0.7s ease;
+}
+.js-reveal .feature-card:not(.is-active) {
+  transform: scale(0.975);
+  filter: brightness(0.62) saturate(0.85);
+}
+.js-reveal .feature-card.is-active {
+  box-shadow: 0 40px 90px -40px rgba(252, 175, 23, 0.35);
+}
+@keyframes target-flash {
+  0% {
+    box-shadow: 0 0 0 0 rgba(252, 175, 23, 0.9);
+  }
+  100% {
+    box-shadow: 0 0 0 28px rgba(252, 175, 23, 0);
+  }
+}
+section:target .feature-card {
+  animation: target-flash 1.4s ease-out 1;
+}
+
+/* --- Parallax de la imagen de cabecera de cada tarjeta (scroll-driven) --- */
+@keyframes feature-parallax {
+  from {
+    translate: 0 -8%;
+  }
+  to {
+    translate: 0 8%;
+  }
+}
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .feature-parallax {
+      scale: 1.18;
+      animation: feature-parallax linear both;
+      animation-timeline: view();
+      animation-range: entry 0% exit 100%;
+    }
+  }
+}
+
+/* --- Navegación lateral por secciones --- */
+.section-nav {
+  opacity: 0;
+  translate: 1rem 0;
+  pointer-events: none;
+  transition:
+    opacity 0.4s ease,
+    translate 0.4s ease;
+}
+.section-nav.is-shown {
+  opacity: 1;
+  translate: 0 0;
+  pointer-events: auto;
+}
+
+/* --- Barra de conversión pegajosa (móvil/tablet) --- */
+.sticky-cta {
+  translate: 0 110%;
+  transition: translate 0.35s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.sticky-cta.is-shown {
+  translate: 0 0;
+}
+
+/* --- Fundido inferior de la imagen de cabecera de FeatureCard ---
+   Va como máscara sobre la propia imagen (no como capa superpuesta) para que
+   viaje con el parallax y nunca quede una franja sin degradado durante las
+   animaciones. El fondo de la tarjeta (#0d0d0d) aparece a través del fundido. */
+.feature-fade {
+  -webkit-mask-image: linear-gradient(
+    to top,
+    transparent 0%,
+    rgba(0, 0, 0, 0.6) 50%,
+    #000 100%
+  );
+  mask-image: linear-gradient(to top, transparent 0%, rgba(0, 0, 0, 0.6) 50%, #000 100%);
+}

@@ -4,7 +4,7 @@ import Header from "../components/layout/Header.astro";
 import "../styles/global.css";
 
 const DEFAULT_KEYWORDS =
-  "GTA San Andreas roleplay, GTA Roleplay, GTA SA rol, SA-MP, San Andreas Multiplayer, rol en español, roleplay en español, juego de rol, Los Santos, Los Santos Roleplay, Los Santos juego de rol, San Andreas Roleplay, SARP, rol pesado, rol basado en texto, servidor SA-MP rol, open.mp, MTA:SA, Multi Theft Auto, GTA SA, GTA Mods, GTA Underground, GTA Online";
+  "GTA San Andreas roleplay, GTA Roleplay, GTA SA rol, SA-MP, San Andreas Multiplayer, rol en español, roleplay en español, juego de rol, Los Santos - Juego de Rol, San Andreas Roleplay, SARP, rol pesado, rol basado en texto, servidor SA-MP rol, open.mp, MTA:SA, Multi Theft Auto, GTA SA, GTA Mods, GTA Underground, GTA Online";
 
 interface Props {
   title?: string;
@@ -18,8 +18,8 @@ interface Props {
 }
 
 const {
-  title = "San Andreas Roleplay | GTA San Andreas Rol en SA-MP — Los Santos Roleplay en español",
-  description = "San Andreas Roleplay: juego de rol en español sobre GTA San Andreas en SA-MP. Vive Los Santos Roleplay con facciones legales e ilegales, skins gratis y eventos. +13.000 personajes. Entra a play.sarp.es.",
+  title = "San Andreas Roleplay | GTA San Andreas Rol en SA-MP — Los Santos - Juego de Rol en español",
+  description = "San Andreas Roleplay: juego de rol en español sobre GTA San Andreas en SA-MP. Vive Los Santos - Juego de Rol con facciones legales e ilegales, skins gratis y eventos. +13.000 personajes. Entra a play.sarp.es.",
   image = "/images/logo-squared.png",
   type = "website",
   noindex = false,
@@ -72,7 +72,7 @@ const jsonLd = {
       name: siteName,
       alternateName: [
         "SARP",
-        "Los Santos Roleplay",
+        "Los Santos - Juego de Rol",
         "GTA San Andreas Roleplay",
       ],
       url: "https://gta-rol.com/",
@@ -83,7 +83,7 @@ const jsonLd = {
       gamePlatform: ["SA-MP", "open.mp", "PC"],
       genre: ["Roleplay", "MMORPG", "Sandbox", "Rol basado en texto"],
       keywords:
-        "GTA San Andreas roleplay, GTA Roleplay, SA-MP, San Andreas Multiplayer, rol en español, juego de rol, Los Santos, Los Santos Juego de Rol,Los Santos Roleplay, MTA:SA, GTA SA, open.mp",
+        "GTA San Andreas roleplay, GTA Roleplay, SA-MP, San Andreas Multiplayer, rol en español, juego de rol, Los Santos - Juego de Rol, MTA:SA, GTA SA, open.mp",
       playMode: "MultiPlayer",
       publisher: { "@id": "https://gta-rol.com/#organization" },
       gameItem: {
@@ -91,7 +91,7 @@ const jsonLd = {
         name: "Grand Theft Auto: San Andreas",
       },
       description:
-        "Servidor de juego de rol en español sobre GTA San Andreas en SA-MP: rol pesado en la ciudad de Los Santos con facciones legales e ilegales, economía, eventos y narrativa interpretativa escrita.",
+        "Servidor de juego de rol en español sobre GTA San Andreas en SA-MP: rol pesado en la ciudad de Los Santos - Juego de Rol con facciones legales e ilegales, economía, eventos y narrativa interpretativa escrita.",
     },
   ],
 };
@@ -203,6 +203,7 @@ const jsonLd = {
     class="bg-fixed bg-center bg-repeat-x bg-[#1a1800]"
     style="background-image: url('/images/gangtags.png')"
   >
+    <div class="scroll-progress" aria-hidden="true"></div>
     <Header />
     <main>
       <slot />
@@ -216,6 +217,15 @@ const jsonLd = {
       const reduce = window.matchMedia(
         "(prefers-reduced-motion: reduce)",
       ).matches;
+
+      // GA4: eventos de comportamiento (vista de sección, clic en celda del
+      // mosaico, CTAs con la sección de origen). No-op si gtag no cargó.
+      const track = (name: string, params: Record<string, unknown>) => {
+        const g = (window as unknown as { gtag?: (...a: unknown[]) => void })
+          .gtag;
+        if (typeof g === "function") g("event", name, params);
+      };
+
       const els = document.querySelectorAll<HTMLElement>("[data-reveal]");
       if (!reduce && "IntersectionObserver" in window && els.length) {
         document.documentElement.classList.add("js-reveal");
@@ -225,13 +235,46 @@ const jsonLd = {
               if (entry.isIntersecting) {
                 entry.target.classList.add("is-visible");
                 obs.unobserve(entry.target);
+                const id = (entry.target as HTMLElement).id;
+                if (id) track("section_view", { section_id: id });
               }
             }
           },
           { threshold: 0.15, rootMargin: "0px 0px -10% 0px" },
         );
         els.forEach((el) => io.observe(el));
+
+        // "Spotlight": la tarjeta que cruza la franja central de la pantalla
+        // se muestra al 100 %; el resto queda atenuado (revelado una a una).
+        const spots = document.querySelectorAll<HTMLElement>("[data-spotlight]");
+        if (spots.length) {
+          const spot = new IntersectionObserver(
+            (entries) => {
+              for (const e of entries)
+                e.target.classList.toggle("is-active", e.isIntersecting);
+            },
+            { rootMargin: "-30% 0px -30% 0px" },
+          );
+          spots.forEach((el) => spot.observe(el));
+        }
       }
+
+      document.addEventListener("click", (ev) => {
+        const a = (ev.target as Element | null)?.closest?.("a");
+        if (!a) return;
+        const scope = a.closest("section, nav, footer");
+        const section = scope?.id || scope?.tagName.toLowerCase() || "page";
+        if (a.dataset.tile) {
+          track("tile_click", { tile_id: a.dataset.tile });
+          return;
+        }
+        const href = a.getAttribute("href") ?? "";
+        let cta: string | null = null;
+        if (/ucp\.sarp\.es\/auth\/signup/.test(href)) cta = "signup";
+        else if (/discord\.gg/.test(href)) cta = "discord";
+        else if (/^samp:/.test(href)) cta = "connect";
+        if (cta) track("cta_click", { cta, section_id: section });
+      });
     </script>
   </body>
 </html>

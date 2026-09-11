@@ -22,7 +22,7 @@ const stats: { key: keyof GlobalMetrics; value: number; label: string }[] = [
 const METRICS_ENDPOINT = ENDPOINTS.metrics;
 ---
 
-<section class="w-full object-cover items-center justify-center pt-32" data-reveal>
+<section id="comunidad" class="w-full object-cover items-center justify-center pt-32 scroll-mt-24" data-reveal>
   <div class="w-full text-center">
     <h2
       class="text-2xl md:text-4xl font-bold bg-gradient-to-r from-primary via-primary to-[#e23b3b] bg-clip-text text-transparent pb-2"
@@ -98,6 +98,9 @@ const METRICS_ENDPOINT = ENDPOINTS.metrics;
       if (!res.ok) return;
       const data = (await res.json())?.data;
       if (!data) return;
+      // Otros componentes (p. ej. la cifra en vivo del hero) reutilizan esta
+      // respuesta en lugar de repetir la petición.
+      window.dispatchEvent(new CustomEvent("sarp:metrics", { detail: data }));
       cells.forEach((el) => {
         const key = el.dataset.key;
         const fresh = key ? data[key] : undefined;

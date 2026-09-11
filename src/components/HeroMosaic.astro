@@ -1,0 +1,341 @@
+---
+import { existsSync } from "node:fs";
+import { fileURLToPath } from "node:url";
+import { SECTIONS, tileSrcSet } from "../data/sections";
+import { getEvents, getGlobalMetrics } from "../services/data";
+
+// Hero "bento": una celda de marca (h1 + CTAs) y una celda-teaser por cada
+// sección de la página, enlazada por ancla. Es el LCP: NO lleva data-reveal.
+const { metrics } = await getGlobalMetrics();
+const nf = new Intl.NumberFormat("es-ES");
+
+// La celda "Eventos" muestra el arte del evento más reciente que tenga
+// miniatura local (generada por scripts/make-tiles.mjs en prebuild), para que
+// el hero cambie con el calendario. Un evento recién publicado puede no estar
+// espejado aún: en ese caso se usa el siguiente que sí lo esté.
+function eventTileBase(id: number): string | null {
+  const abs = fileURLToPath(
+    new URL(`../../public/images/tiles/events/${id}-960.webp`, import.meta.url),
+  );
+  return existsSync(abs) ? `events/${id}` : null;
+}
+const recentEvents = await getEvents(6);
+const latestEvent =
+  recentEvents.find((e) => eventTileBase(e.id) !== null) ?? null;
+const eventBase = latestEvent ? eventTileBase(latestEvent.id) : null;
+
+const tiles = SECTIONS.map((s, i) => {
+  if (s.id === "events" && latestEvent && eventBase) {
+    return {
+      ...s,
+      i,
+      tile: eventBase,
+      label: latestEvent.title,
+      kicker: latestEvent.isPast ? "Último evento" : "Próximo evento",
+      alt: `Evento: ${latestEvent.title}`,
+    };
+  }
+  return { ...s, i };
+});
+
+const highlights = [
+  "Rol pesado en español",
+  "Facciones criminales",
+  "LSPD · LSSD · LSFD · SANG",
+  "Emerald Casino",
+  "Elecciones y gobierno",
+  "Skins personalizados gratis",
+  "Eventos cada semana",
+  `+${nf.format(metrics.accountCounter)} cuentas registradas`,
+  "SA-MP / open.mp",
+];
+---
+
+<section
+  id="top"
+  class="relative w-full overflow-hidden pt-20 sm:pt-24 md:pt-28"
+  aria-labelledby="hero-title"
+>
+  <div class="hero-aurora" aria-hidden="true">
+    <span></span><span></span><span></span>
+  </div>
+  <img
+    src="/images/background.png"
+    width="1920"
+    height="1080"
+    decoding="async"
+    style="mask-image: linear-gradient(black 15%, transparent 90%)"
+    class="absolute inset-0 hidden md:block w-full h-full object-cover opacity-70 pointer-events-none"
+    alt=""
+  />
+
+  <div class="relative z-10 max-w-6xl mx-auto px-4 md:px-8">
+    <!--
+      Disposición: móvil = marca a ancho completo + celdas en 2 columnas;
+      tablet (md) = marca como banner de 4 columnas (texto a la izquierda,
+      CTAs a la derecha) + celdas 4×2; escritorio (lg) = bento con la marca
+      ocupando 2×2 y las celdas alrededor.
+    -->
+    <div
+      class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4 lg:auto-rows-[minmax(12.5rem,auto)]"
+    >
+      <!-- Celda de marca -->
+      <div
+        class="brand-tile tile relative col-span-2 md:col-span-4 lg:col-span-2 lg:row-span-2 rounded-2xl border border-white/10 bg-[#0d0d0d]/85 backdrop-blur-md p-5 sm:p-6 md:p-8 flex flex-col md:grid md:grid-cols-[1fr_auto] md:items-end lg:flex lg:flex-col lg:items-stretch justify-between gap-5 sm:gap-6 md:gap-8 lg:gap-6"
+        style="--i:0"
+      >
+        <div>
+          <div class="flex items-center gap-4">
+            <a
+              href="http://ucp.sarp.es/"
+              target="_blank"
+              rel="noopener"
+              aria-label="Ir al panel de control de usuario de San Andreas Roleplay"
+              class="shrink-0 rounded-lg focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d0d0d]"
+            >
+              <img
+                src="/images/logo.png"
+                width="1024"
+                height="1024"
+                fetchpriority="high"
+                alt="San Andreas Roleplay"
+                class="logo-glow h-14 sm:h-16 md:h-20 w-auto select-none transition-transform duration-300 md:hover:scale-105 md:hover:-rotate-2"
+              />
+            </a>
+            <p
+              class="text-[11px] md:text-xs font-semibold tracking-[0.2em] uppercase text-primary"
+            >
+              <span class="sm:hidden">Rol en español</span><span
+                class="hidden sm:inline">Servidor de rol en español</span
+              ><br /> SA-MP / open.mp
+            </p>
+          </div>
+
+          <h1
+            id="hero-title"
+            class="mt-4 sm:mt-5 text-2xl md:text-3xl lg:text-[2.35rem] font-extrabold leading-tight text-white"
+          >
+            San Andreas Roleplay: el <span class="text-shimmer"
+              >rol pesado en español</span
+            > de <span class="sm:whitespace-nowrap">GTA San Andreas</span>
+          </h1>
+
+          <p class="mt-3 text-sm md:text-base text-gray-300 max-w-md">
+            <span class="hidden sm:inline"
+              >Facciones criminales, departamentos de policía, bomberos, casinos,
+              pasarelas de moda, elecciones de gobierno y tu propia historia en
+              Los Santos - Juego de Rol 2026.
+            </span><span class="text-white font-semibold"
+              >Elige por dónde empezar<span class="sm:hidden" aria-hidden="true"> 👇</span
+              ><span class="hidden sm:inline">.</span></span
+            >
+          </p>
+        </div>
+
+        <!-- Bloque de acción: en tablet es una columna fija a la derecha -->
+        <div class="flex flex-col gap-3 md:w-64 lg:w-auto">
+          <div class="flex flex-wrap items-center gap-3">
+            <a
+              class="w-full sm:w-auto md:w-full lg:w-auto text-center px-5 py-3 text-sm md:text-base font-bold rounded-lg bg-primary text-black uppercase tracking-wide transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d0d0d]"
+              href="https://ucp.sarp.es/auth/signup"
+              target="_blank"
+              rel="noopener"
+            >
+              Crear cuenta gratis
+            </a>
+            <a
+              class="w-full sm:w-auto md:w-full lg:w-auto flex items-center justify-center gap-2 px-4 py-3 text-sm md:text-base font-bold rounded-lg border border-[#5865f2] text-[#8b95f8] hover:bg-[#5865f2] hover:text-white transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5865f2] focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d0d0d]"
+              href="https://discord.gg/sa-rp"
+              target="_blank"
+              rel="noopener"
+              aria-label="Unirse al servidor de Discord de San Andreas Roleplay"
+            >
+              <img
+                src="/images/discord.png"
+                width="891"
+                height="633"
+                alt=""
+                class="h-5 w-auto"
+              />
+              Discord
+            </a>
+          </div>
+
+          <!-- Microcopy de fricción: qué cuesta y cuál es el siguiente paso -->
+          <p class="text-xs text-gray-400 leading-relaxed">
+            <span class="text-gray-200 font-semibold">Gratis · 1 minuto.</span> Solo
+            necesitas GTA:SA y
+            <a
+              href="#descargar"
+              class="text-primary underline-offset-2 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+              >SA-MP u open.mp</a
+            >. Ya hay <span class="text-gray-200 font-semibold tabular-nums" data-metric="accountCounter"
+              >{nf.format(metrics.accountCounter)}</span
+            > cuentas.
+          </p>
+
+          <div class="flex flex-wrap items-center gap-3">
+            <div
+              class="flex items-stretch rounded-lg overflow-hidden border border-primary/40 bg-black/60"
+            >
+              <a
+                class="flex items-center gap-2 px-3 py-2 text-xs md:text-sm font-mono text-primary hover:bg-primary/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
+                href="samp://play.sarp.es:7777"
+                rel="noopener"
+                aria-label="Conectarse al servidor de San Andreas Roleplay (play.sarp.es, puerto 7777)"
+              >
+                <span aria-hidden="true">🎮</span>
+                play.sarp.es:7777
+              </a>
+              <button
+                type="button"
+                id="copyIpBtn"
+                data-ip="play.sarp.es:7777"
+                class="px-3 border-l border-primary/40 text-gray-300 hover:text-primary hover:bg-primary/10 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-inset"
+                aria-label="Copiar la IP del servidor"
+              >
+                <span
+                  id="copyIpLabel"
+                  class="text-[11px] font-semibold uppercase tracking-wide"
+                  >Copiar</span
+                >
+              </button>
+            </div>
+
+            <p
+              class="flex items-center gap-2 text-xs md:text-sm text-gray-300"
+              title="Máximo de jugadores conectados a la vez esta semana"
+            >
+              <span
+                class="live-dot relative inline-block h-2 w-2 rounded-full bg-[#4ade80]"
+                aria-hidden="true"></span>
+              <span
+                class="font-bold text-white tabular-nums"
+                data-metric="weeklyPeakPlayers"
+                >{nf.format(metrics.weeklyPeakPlayers)}</span
+              > jugadores de pico esta semana
+            </p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Celdas-teaser, una por sección -->
+      {
+        tiles.map((t) => {
+          const img = tileSrcSet(t.tile);
+          return (
+            <a
+              href={`#${t.id}`}
+              data-tile={t.id}
+              style={`--i:${t.i + 1}`}
+              aria-label={`Ir a la sección: ${t.label}`}
+              class="tile group relative block overflow-hidden rounded-2xl border border-white/10 bg-[#0d0d0d] aspect-[4/3] lg:aspect-auto focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+            >
+              <img
+                src={img.src}
+                srcset={img.srcset}
+                sizes="(min-width: 768px) 25vw, 50vw"
+                width="960"
+                height="720"
+                loading={t.i < 4 ? "eager" : "lazy"}
+                fetchpriority={t.i < 2 ? "high" : undefined}
+                decoding="async"
+                alt={t.alt}
+                class="absolute inset-0 h-full w-full object-cover select-none transition-transform duration-700 ease-out group-hover:scale-110"
+              />
+              <span class="absolute inset-0 bg-gradient-to-t from-black/90 via-black/25 to-black/5 transition-opacity duration-500" />
+              <span class="tile-shine" aria-hidden="true" />
+              <span class="absolute top-3 left-3 rounded-md border border-white/15 bg-black/55 px-2 py-0.5 text-[10px] font-bold uppercase tracking-[0.18em] text-primary backdrop-blur-sm">
+                {t.kicker}
+              </span>
+              <span class="absolute inset-x-0 bottom-0 p-3 md:p-4 flex items-end justify-between gap-2">
+                <span class="text-[13px] sm:text-sm lg:text-lg font-bold leading-snug lg:leading-tight text-white drop-shadow-md line-clamp-3 lg:line-clamp-2 transition-transform duration-300 group-hover:-translate-y-0.5">
+                  {t.label}
+                </span>
+                <span
+                  class="shrink-0 grid h-8 w-8 place-items-center rounded-full bg-white/10 text-primary backdrop-blur transition-all duration-300 group-hover:bg-primary group-hover:text-black group-hover:translate-x-0.5"
+                  aria-hidden="true"
+                >
+                  →
+                </span>
+              </span>
+            </a>
+          );
+        })
+      }
+    </div>
+  </div>
+
+  <!-- Marquesina decorativa -->
+  <div
+    class="marquee relative z-10 mt-8 border-y border-white/5 bg-black/30 py-3"
+    aria-hidden="true"
+  >
+    <div
+      class="marquee-track text-xs md:text-sm font-semibold uppercase tracking-[0.2em] text-gray-300"
+    >
+      {
+        [...highlights, ...highlights].map((h) => (
+          <span class="pr-10 whitespace-nowrap">
+            <span class="text-primary pr-10">✦</span>
+            {h}
+          </span>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<script>
+  // Copiar IP
+  const btn = document.getElementById("copyIpBtn");
+  const label = document.getElementById("copyIpLabel");
+  if (btn && label) {
+    btn.addEventListener("click", async () => {
+      const ip = btn.dataset.ip ?? "play.sarp.es:7777";
+      try {
+        await navigator.clipboard.writeText(ip);
+        const prev = label.textContent;
+        label.textContent = "¡Copiado!";
+        setTimeout(() => (label.textContent = prev), 1500);
+      } catch {
+        /* clipboard unavailable — ignore */
+      }
+    });
+  }
+
+  // Cifra "en vivo": Statistics.astro emite `sarp:metrics` cuando consigue
+  // refrescar el JSON del CDN; aquí solo escuchamos (una única petición).
+  const fmt = new Intl.NumberFormat("es-ES");
+  window.addEventListener("sarp:metrics", (e) => {
+    const data = (e as CustomEvent<Record<string, unknown>>).detail;
+    document.querySelectorAll<HTMLElement>("[data-metric]").forEach((el) => {
+      const v = data?.[el.dataset.metric ?? ""];
+      if (typeof v === "number" && Number.isFinite(v))
+        el.textContent = fmt.format(v);
+    });
+  });
+
+  // Tilt 3D de las celdas al mover el puntero (solo ratón + sin reduced-motion).
+  const fine = window.matchMedia("(hover: hover) and (pointer: fine)").matches;
+  const reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  if (fine && !reduce) {
+    const MAX = 7; // grados
+    document.querySelectorAll<HTMLElement>("a.tile").forEach((tile) => {
+      let raf = 0;
+      tile.addEventListener("pointermove", (ev) => {
+        const r = tile.getBoundingClientRect();
+        const px = (ev.clientX - r.left) / r.width - 0.5;
+        const py = (ev.clientY - r.top) / r.height - 0.5;
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(() => {
+          tile.style.transform = `perspective(700px) rotateX(${(-py * MAX).toFixed(2)}deg) rotateY(${(px * MAX).toFixed(2)}deg) translateZ(6px)`;
+        });
+      });
+      tile.addEventListener("pointerleave", () => {
+        cancelAnimationFrame(raf);
+        tile.style.transform = "";
+      });
+    });
+  }
+</script>

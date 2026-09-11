@@ -1,0 +1,66 @@
+---
+// Barra de conversión pegajosa para móvil y tablet (oculta en lg+, donde el
+// header ya lleva el CTA a la vista). Aparece cuando el hero sale de pantalla
+// y se esconde al llegar al CTA final / footer para no taparlos.
+---
+
+<div
+  id="sticky-cta"
+  class="sticky-cta fixed inset-x-0 bottom-0 z-40 lg:hidden border-t border-white/10 bg-[#0d0d0d]/90 backdrop-blur-md"
+  style="padding-bottom: env(safe-area-inset-bottom)"
+  aria-hidden="true"
+>
+  <div class="mx-auto flex max-w-5xl items-center gap-2 px-4 py-2.5">
+    <a
+      href="https://ucp.sarp.es/auth/signup"
+      target="_blank"
+      rel="noopener"
+      tabindex="-1"
+      class="flex-1 text-center px-4 py-3 text-sm font-bold rounded-lg bg-primary text-black uppercase tracking-wide focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d0d0d]"
+    >
+      Crear cuenta gratis
+    </a>
+    <a
+      href="https://discord.gg/sa-rp"
+      target="_blank"
+      rel="noopener"
+      tabindex="-1"
+      aria-label="Unirse al servidor de Discord de San Andreas Roleplay"
+      class="grid h-11 w-11 shrink-0 place-items-center rounded-lg border border-[#5865f2] text-[#8b95f8] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#5865f2]"
+    >
+      <img src="/images/discord.png" width="891" height="633" alt="" class="h-4 w-auto" />
+    </a>
+  </div>
+</div>
+
+<script>
+  const bar = document.getElementById("sticky-cta");
+  const hero = document.getElementById("top");
+  const end = document.getElementById("empezar");
+  if (bar && hero && "IntersectionObserver" in window) {
+    let heroOut = false;
+    let endIn = false;
+    const links = bar.querySelectorAll<HTMLAnchorElement>("a");
+    const apply = () => {
+      const show = heroOut && !endIn;
+      bar.classList.toggle("is-shown", show);
+      bar.setAttribute("aria-hidden", show ? "false" : "true");
+      links.forEach((a) => (a.tabIndex = show ? 0 : -1));
+    };
+    new IntersectionObserver(
+      ([e]) => {
+        heroOut = !e.isIntersecting;
+        apply();
+      },
+      { rootMargin: "-25% 0px 0px 0px" },
+    ).observe(hero);
+    if (end)
+      new IntersectionObserver(
+        ([e]) => {
+          endIn = e.isIntersecting;
+          apply();
+        },
+        { rootMargin: "0px 0px -10% 0px" },
+      ).observe(end);
+  }
+</script>

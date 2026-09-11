@@ -5,6 +5,8 @@
 // (gallery, embedded video, etc.) rendered under the body copy.
 interface Props {
   title: string;
+  /** DOM id de la sección (ancla desde el hero mosaico / nav lateral). */
+  id?: string;
   image: string;
   alt: string;
   width: number;
@@ -22,6 +24,7 @@ interface Props {
 
 const {
   title,
+  id,
   image,
   alt,
   width,
@@ -40,11 +43,12 @@ const headingClass =
     : "text-2xl md:text-4xl font-bold bg-gradient-to-r from-primary via-primary to-[#e23b3b] bg-clip-text text-transparent pb-2";
 ---
 
-<section class="w-full pt-32" data-reveal>
+<section id={id} class="w-full pt-16 md:pt-24 scroll-mt-24" data-reveal>
   <article
-    class="rounded-2xl overflow-hidden border border-[#2a2a2a] bg-[#0d0d0d]"
+    class="feature-card rounded-2xl overflow-clip border border-[#2a2a2a] bg-[#0d0d0d]"
+    data-spotlight
   >
-    <div class="relative">
+    <div class="relative overflow-clip">
       <img
         src={image}
         width={width}
@@ -52,15 +56,11 @@ const headingClass =
         loading="lazy"
         decoding="async"
         alt={alt}
-        class="w-full h-72 md:h-96 object-cover select-none"
+        class="feature-parallax feature-fade w-full h-72 md:h-96 object-cover select-none"
       />
-      <div
-        class="absolute inset-0 bg-gradient-to-t from-[#0d0d0d] via-[#0d0d0d]/40 to-transparent"
-      >
-      </div>
       {
         kicker && (
-          <span class="absolute top-4 left-4 text-xs font-bold tracking-[0.2em] uppercase text-black bg-primary px-3 py-1 rounded">
+          <span class="absolute top-4 left-4 rounded-md border border-white/15 bg-black/55 px-3 py-1 text-xs font-bold tracking-[0.2em] uppercase text-primary backdrop-blur-sm">
             {kicker}
           </span>
         )
@@ -94,19 +94,34 @@ const headingClass =
 
       <slot name="extras" />
 
-      {
-        href && (
-          <a
-            href={href}
-            target={ctaInternal ? undefined : "_blank"}
-            rel={ctaInternal ? undefined : "noopener"}
-            class="inline-flex items-center gap-2 mt-6 px-5 py-2.5 text-sm font-bold rounded-lg border-2 border-primary text-primary hover:bg-primary hover:text-black transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d0d0d]"
-          >
-            {ctaLabel ?? "Saber más"}
-            <span aria-hidden="true">→</span>
-          </a>
-        )
-      }
+      <!--
+        CTA primario de conversión en cada tarjeta (el momento de interés es
+        aquí, no al final de la página). El enlace informativo (`href`) queda
+        como acción secundaria para no sacar al visitante de la landing.
+      -->
+      <div class="mt-6 flex flex-wrap items-center gap-3">
+        <a
+          href="https://ucp.sarp.es/auth/signup"
+          target="_blank"
+          rel="noopener"
+          class="inline-flex items-center justify-center px-5 py-2.5 text-sm font-bold rounded-lg bg-primary text-black uppercase tracking-wide transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d0d0d]"
+        >
+          Crear cuenta gratis
+        </a>
+        {
+          href && (
+            <a
+              href={href}
+              target={ctaInternal ? undefined : "_blank"}
+              rel={ctaInternal ? undefined : "noopener"}
+              class="inline-flex items-center gap-2 px-4 py-2.5 text-sm font-semibold rounded-lg text-primary underline-offset-4 hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#0d0d0d]"
+            >
+              {ctaLabel ?? "Saber más"}
+              <span aria-hidden="true">→</span>
+            </a>
+          )
+        }
+      </div>
     </div>
   </article>
 </section>

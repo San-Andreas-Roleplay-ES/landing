@@ -8,36 +8,42 @@ import Events from "../components/Events.astro";
 import Faq from "../components/Faq.astro";
 import Features from "../components/Features.astro";
 import FinalCta from "../components/FinalCta.astro";
+import HeroMosaic from "../components/HeroMosaic.astro";
 import IllegalFactions from "../components/IllegalFactions.astro";
-import Intro from "../components/Intro.astro";
 import Join from "../components/Join.astro";
 import OfficialForces from "../components/OfficialForces.astro";
 import Rogue from "../components/Rogue.astro";
 import RulesPromo from "../components/RulesPromo.astro";
+import SectionNav from "../components/SectionNav.astro";
 import Statistics from "../components/Statistics.astro";
-import Welcome from "../components/Welcome.astro";
+import StickyCta from "../components/StickyCta.astro";
 import YouTube from "../components/YouTube.astro";
 import Container from "../components/layout/Container.astro";
 import Layout from "../layouts/Layout.astro";
+
+// Orden de la página: el hero mosaico enlaza (por ancla) a cada una de las
+// secciones de features, que siguen el mismo orden que src/data/sections.ts.
+// Las descargas/instalación van al final: son un paso posterior a la decisión.
 ---
 
 <Layout>
-  <Welcome />
+  <HeroMosaic />
+  <SectionNav />
+  <StickyCta />
   <Container>
-    <DownloadLinks />
-    <Intro />
-    <RulesPromo />
-    <CustomSkin />
     <IllegalFactions />
     <OfficialForces />
     <EmeraldCasino />
     <CityGovernment />
+    <CustomSkin />
     <Rogue />
-    <Features />
-    <Statistics />
+    <RulesPromo />
     <Events />
+    <Statistics />
+    <Features />
     <Description />
     <YouTube />
+    <DownloadLinks />
     <Join />
     <Faq />
     <FinalCta />
