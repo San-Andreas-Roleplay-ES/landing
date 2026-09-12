@@ -1,0 +1,78 @@
+# Construye la landing y la sube a Bunny CDN (Storage Zone `sarp-landing`).
+#
+# Se ejecuta:
+#   - en cada push a `main` de este repo;
+#   - cuando samp-docs avisa de un cambio en la documentación
+#     (repository_dispatch `docs-updated`, ver su workflow rebuild-landing.yml);
+#   - a mano desde la pestaña Actions;
+#   - una vez al día como red de seguridad (por si un aviso se perdió).
+#
+# Secretos necesarios (Settings > Secrets and variables > Actions):
+#   STORAGE_ZONE_REGION_ENDPOINT   p. ej. https://br.storage.bunnycdn.com/sarp-landing
+#   STORAGE_ZONE_PASSWORD          clave de lectura/escritura de la storage zone
+#   BUNNY_API_KEY                  clave de cuenta de Bunny (para purgar la caché)
+#   BUNNY_PULLZONE_ID              id numérico de la pull zone `sarp-landing`
+# GITHUB_TOKEN es automático: se usa para leer las fechas de commit de samp-docs.
+name: Build & deploy to Bunny
+
+on:
+  push:
+    branches: [main]
+  repository_dispatch:
+    types: [docs-updated]
+  workflow_dispatch:
+  schedule:
+    - cron: "17 5 * * *" # 05:17 UTC, todos los días
+
+permissions:
+  contents: read
+
+# Un despliegue a la vez; los que lleguen mientras tanto esperan (no se cancelan
+# despliegues a medias).
+concurrency:
+  group: deploy-bunny
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    name: Build & deploy
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - name: Install
+        run: npm ci
+
+      - name: Build (prebuild espeja eventos, reglas y docs)
+        run: npm run build
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Deploy to Bunny
+        run: npm run deploy
+        env:
+          STORAGE_ZONE_REGION_ENDPOINT: ${{ secrets.STORAGE_ZONE_REGION_ENDPOINT }}
+          STORAGE_ZONE_PASSWORD: ${{ secrets.STORAGE_ZONE_PASSWORD }}
+          BUNNY_API_KEY: ${{ secrets.BUNNY_API_KEY }}
+          BUNNY_PULLZONE_ID: ${{ secrets.BUNNY_PULLZONE_ID }}
+
+      - name: Summary
+        if: always()
+        run: |
+          {
+            echo "### Despliegue de gta-rol.com"
+            echo ""
+            echo "- Disparador: \`${{ github.event_name }}\`"
+            if [ "${{ github.event_name }}" = "repository_dispatch" ]; then
+              echo "- Cambio en samp-docs: \`${{ github.event.client_payload.sha }}\` — ${{ github.event.client_payload.message }}"
+            fi
+            echo "- Páginas generadas: $(find dist -name index.html | wc -l)"
+          } >> "$GITHUB_STEP_SUMMARY"

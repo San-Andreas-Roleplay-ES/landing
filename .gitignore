@@ -22,3 +22,9 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Documentación espejada desde San-Andreas-Roleplay-ES/samp-docs (prebuild /
+# predev, ver scripts/mirror-docs.mjs). No se commitea: la fuente es ese repo.
+src/content/docs/
+public/images/docs/
+src/data/docs-dates.json

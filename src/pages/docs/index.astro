@@ -1,0 +1,22 @@
+---
+import { getEntry, render } from "astro:content";
+import DocsLayout from "../../layouts/DocsLayout.astro";
+import { docDescription, docTitle } from "../../lib/docs";
+
+// /docs = README.md del repo de documentación (ver scripts/mirror-docs.mjs).
+const entry = await getEntry("docs", "index");
+if (!entry)
+  throw new Error(
+    "Falta src/content/docs/index.md: ejecuta `npm run mirror-docs`.",
+  );
+
+const { Content, headings } = await render(entry);
+const title = docTitle(entry);
+const description =
+  docDescription(entry) ||
+  "Guías oficiales de San Andreas Roleplay: sistemas, mecánicas y comandos del servidor de rol en GTA San Andreas (SA-MP / open.mp).";
+---
+
+<DocsLayout title={title} description={description} headings={headings}>
+  <Content />
+</DocsLayout>

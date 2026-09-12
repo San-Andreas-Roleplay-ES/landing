@@ -1,0 +1,30 @@
+---
+import type { MarkdownHeading } from "astro";
+
+// Tabla de contenidos (h2/h3) de la guía. Instancias: columna fija (xl+) y
+// panel flotante de la barra móvil. `data-toc` permite resaltar la activa.
+interface Props {
+  toc: MarkdownHeading[];
+}
+
+const { toc } = Astro.props;
+---
+
+<ul class="border-l border-white/10" data-docs-toc>
+  {
+    toc.map((h) => (
+      <li>
+        <a
+          href={`#${h.slug}`}
+          data-toc={h.slug}
+          class:list={[
+            "block -ml-px border-l-2 border-transparent py-1 pr-2 text-sm leading-snug text-gray-400 hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded-r",
+            h.depth === 3 ? "pl-6" : "pl-3",
+          ]}
+        >
+          {h.text}
+        </a>
+      </li>
+    ))
+  }
+</ul>

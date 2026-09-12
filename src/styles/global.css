@@ -376,3 +376,227 @@ section:target .feature-card {
   );
   mask-image: linear-gradient(to top, transparent 0%, rgba(0, 0, 0, 0.6) 50%, #000 100%);
 }
+
+/* =========================================================================
+   /docs — estilo propio para el Markdown espejado de samp-docs
+   ========================================================================= */
+.docs-prose {
+  color: #d1d5db;
+  font-size: 1rem;
+  line-height: 1.75;
+  overflow-wrap: anywhere;
+}
+.docs-prose > :first-child {
+  margin-top: 0;
+}
+.docs-prose h1 {
+  font-size: clamp(1.75rem, 1.2rem + 2vw, 2.5rem);
+  line-height: 1.15;
+  font-weight: 800;
+  color: #fff;
+  margin: 0 0 1rem;
+}
+.docs-prose h2,
+.docs-prose h3,
+.docs-prose h4 {
+  position: relative;
+  color: #fff;
+  font-weight: 700;
+  scroll-margin-top: 6rem;
+}
+.docs-prose h2 {
+  font-size: 1.5rem;
+  line-height: 1.25;
+  margin: 2.5rem 0 1rem;
+  padding-bottom: 0.5rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+  /* Color sólido (no gradiente con background-clip:text): el clip pintaría
+     también el ancla "#" oculta del encabezado. */
+  color: #fcaf17;
+}
+.docs-prose h3 {
+  font-size: 1.2rem;
+  margin: 2rem 0 0.75rem;
+}
+.docs-prose h4 {
+  font-size: 1.05rem;
+  margin: 1.5rem 0 0.5rem;
+  color: #fcaf17;
+}
+.docs-prose p {
+  margin: 0 0 1.1rem;
+}
+.docs-prose a {
+  color: #fcaf17;
+  text-decoration: underline;
+  text-decoration-color: rgba(252, 175, 23, 0.4);
+  text-underline-offset: 3px;
+}
+.docs-prose a:hover {
+  text-decoration-color: #fcaf17;
+}
+.docs-prose strong {
+  color: #fff;
+  font-weight: 600;
+}
+.docs-prose em {
+  color: #e5e7eb;
+}
+.docs-prose ul,
+.docs-prose ol {
+  margin: 0 0 1.1rem;
+  padding-left: 1.5rem;
+}
+.docs-prose ul {
+  list-style: disc;
+}
+.docs-prose ol {
+  list-style: decimal;
+}
+.docs-prose li {
+  margin: 0.3rem 0;
+}
+.docs-prose li::marker {
+  color: #fcaf17;
+}
+.docs-prose li > ul,
+.docs-prose li > ol {
+  margin: 0.3rem 0 0.3rem;
+}
+.docs-prose blockquote {
+  margin: 1.25rem 0;
+  padding: 0.75rem 1rem;
+  border-left: 4px solid rgba(252, 175, 23, 0.7);
+  border-radius: 0 0.75rem 0.75rem 0;
+  background: rgba(255, 255, 255, 0.04);
+  color: #e5e7eb;
+}
+.docs-prose blockquote p:last-child {
+  margin-bottom: 0;
+}
+.docs-prose hr {
+  border: 0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  margin: 2.5rem 0;
+}
+.docs-prose code {
+  font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
+  font-size: 0.9em;
+  background: rgba(252, 175, 23, 0.1);
+  color: #ffd777;
+  border-radius: 0.3rem;
+  padding: 0.1rem 0.4rem;
+}
+.docs-prose pre {
+  position: relative;
+  margin: 1.25rem 0;
+  padding: 1rem 1.25rem;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.08);
+  background: #070707 !important;
+  overflow-x: auto;
+  font-size: 0.875rem;
+  line-height: 1.6;
+}
+.docs-prose pre code {
+  background: none;
+  color: #e5e7eb;
+  padding: 0;
+  font-size: inherit;
+}
+.docs-prose .copy-code {
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  font: 600 0.7rem/1 system-ui, sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #9ca3af;
+  background: rgba(255, 255, 255, 0.06);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.375rem;
+  padding: 0.35rem 0.5rem;
+  cursor: pointer;
+}
+.docs-prose .copy-code:hover {
+  color: #fcaf17;
+  border-color: rgba(252, 175, 23, 0.5);
+}
+.docs-prose img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 1.5rem 0;
+  border-radius: 0.75rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+.docs-prose table {
+  display: block;
+  width: 100%;
+  max-width: 100%;
+  overflow-x: auto;
+  border-collapse: collapse;
+  margin: 1.25rem 0;
+  font-size: 0.925rem;
+}
+.docs-prose th,
+.docs-prose td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.55rem 0.75rem;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.08);
+}
+.docs-prose th {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.04);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.docs-prose details {
+  margin: 1rem 0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 0.75rem;
+  padding: 0.5rem 1rem;
+  background: rgba(255, 255, 255, 0.03);
+}
+.docs-prose summary {
+  cursor: pointer;
+  font-weight: 600;
+  color: #fff;
+}
+.docs-prose .heading-anchor {
+  margin-left: 0.4em;
+  color: rgba(252, 175, 23, 0.55);
+  text-decoration: none;
+  opacity: 0;
+  transition: opacity 0.15s;
+}
+.docs-prose h2:hover .heading-anchor,
+.docs-prose h3:hover .heading-anchor,
+.docs-prose h4:hover .heading-anchor,
+.docs-prose .heading-anchor:focus-visible {
+  opacity: 1;
+}
+[data-docs-toc] a.is-active {
+  color: #fcaf17;
+  border-left-color: #fcaf17;
+}
+
+/* Paneles flotantes de la barra de /docs en móvil y tablet: el <details> es
+   estático y el panel se posiciona respecto a la barra (relative). */
+.docs-panel[open] > summary {
+  border-color: #fcaf17;
+  color: #fcaf17;
+}
+.docs-prose h2,
+.docs-prose h3,
+.docs-prose h4 {
+  scroll-margin-top: 8.5rem; /* header + barra móvil */
+}
+@media (min-width: 1024px) {
+  .docs-prose h2,
+  .docs-prose h3,
+  .docs-prose h4 {
+    scroll-margin-top: 6rem;
+  }
+}

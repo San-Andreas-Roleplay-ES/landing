@@ -1,0 +1,61 @@
+---
+import { getCollection } from "astro:content";
+import { getHomeTeaser } from "../lib/docs";
+
+// Guías destacadas en la portada: la home es la página con más autoridad del
+// sitio y así reparte enlaces a /docs (rastreo y posicionamiento de las guías).
+const guides = await getHomeTeaser();
+const total = (await getCollection("docs")).filter(
+  (e) => e.id !== "index",
+).length;
+---
+
+{
+  guides.length > 0 && (
+    <section id="guias" class="w-full pt-32 scroll-mt-24" data-reveal>
+      <div class="w-full">
+        <span class="inline-block rounded-md border border-white/15 bg-black/55 px-3 py-1 text-xs font-bold tracking-[0.2em] uppercase text-primary">
+          Documentación
+        </span>
+        <h2 class="mt-4 text-2xl md:text-4xl font-bold bg-gradient-to-r from-primary via-primary to-[#e23b3b] bg-clip-text text-transparent pb-2">
+          Guías para empezar a jugar
+        </h2>
+        <p class="text-md mt-2 text-gray-200 max-w-2xl">
+          Comandos, sistemas y mecánicas del servidor explicados paso a paso.
+          Documentación oficial, mantenida por la comunidad y siempre al día.
+        </p>
+
+        <ul class="mt-8 grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+          {guides.map((g) => (
+            <li>
+              <a
+                href={g.href}
+                class="group flex h-full flex-col rounded-xl border border-[#2a2a2a] bg-[#0d0d0d] p-5 transition-colors hover:border-primary/60 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              >
+                <span class="text-[11px] font-bold uppercase tracking-[0.18em] text-gray-500">
+                  {g.group}
+                </span>
+                <h3 class="mt-1 text-lg font-bold text-white group-hover:text-primary transition-colors">
+                  {g.title}
+                </h3>
+                {g.description && (
+                  <p class="mt-2 text-sm text-gray-300">{g.description}</p>
+                )}
+                <span class="mt-auto pt-4 text-sm font-semibold text-primary">
+                  Leer la guía <span aria-hidden="true">→</span>
+                </span>
+              </a>
+            </li>
+          ))}
+        </ul>
+
+        <a
+          href="/docs"
+          class="inline-flex items-center gap-2 mt-8 px-5 py-2.5 text-sm font-bold rounded-lg border-2 border-primary text-primary hover:bg-primary hover:text-black transition-colors duration-300 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1800]"
+        >
+          Ver las {total} guías <span aria-hidden="true">→</span>
+        </a>
+      </div>
+    </section>
+  )
+}

@@ -1,0 +1,459 @@
+---
+import Layout from "./Layout.astro";
+import FinalCta from "../components/FinalCta.astro";
+import DocsIndex from "../components/docs/DocsIndex.astro";
+import DocsToc from "../components/docs/DocsToc.astro";
+import {
+  DOCS_REPO,
+  docGroup,
+  getDocDates,
+  getDocGroups,
+  getRelatedDocs,
+  type DocLink,
+} from "../lib/docs";
+import type { MarkdownHeading } from "astro";
+
+interface Props {
+  /** Título visible y base del <title>. */
+  title: string;
+  description: string;
+  /** Slug del doc (undefined para el índice /docs). */
+  slug?: string;
+  headings?: MarkdownHeading[];
+  prev?: DocLink | null;
+  next?: DocLink | null;
+  /** Primera imagen de la guía (og:image); si no hay, el logo. */
+  image?: string | null;
+  /** Comandos mencionados (JSON-LD keywords). */
+  keywords?: string[];
+  wordCount?: number;
+}
+
+const {
+  title,
+  description,
+  slug,
+  headings = [],
+  prev = null,
+  next = null,
+  image = null,
+  keywords = [],
+  wordCount,
+} = Astro.props;
+
+const isIndex = !slug;
+const path = isIndex ? "/docs" : `/docs/${slug}`;
+const url = `https://gta-rol.com${path}`;
+const editUrl = isIndex
+  ? `${DOCS_REPO}/edit/main/README.md`
+  : `${DOCS_REPO}/edit/main/docs/${slug}.md`;
+
+// <title> ≤ ~60 caracteres para que Google no lo corte; la marca siempre.
+const pageTitle = isIndex
+  ? "Documentación de San Andreas Roleplay | Guías y comandos"
+  : `${title} · Guía de San Andreas Roleplay`;
+
+const groups = await getDocGroups();
+const toc = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const related = isIndex ? [] : await getRelatedDocs(slug, 6);
+
+// Fechas de commit (src/data/docs-dates.json). El índice toma la última
+// modificación de cualquier guía.
+const dates = getDocDates();
+const own = isIndex
+  ? {
+      published: dates.index?.published,
+      modified: Object.values(dates)
+        .map((d) => d.modified ?? "")
+        .sort()
+        .at(-1),
+    }
+  : dates[slug];
+const publishedTime = own?.published || undefined;
+const modifiedTime = own?.modified || undefined;
+const fmtDate = (iso: string) =>
+  new Intl.DateTimeFormat("es-ES", {
+    day: "numeric",
+    month: "long",
+    year: "numeric",
+  }).format(new Date(iso));
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": isIndex ? "CollectionPage" : "TechArticle",
+      "@id": `${url}#page`,
+      headline: title,
+      name: title,
+      description,
+      url,
+      inLanguage: "es",
+      isPartOf: { "@id": "https://gta-rol.com/#website" },
+      about: { "@id": "https://gta-rol.com/#videogame" },
+      author: { "@id": "https://gta-rol.com/#organization" },
+      publisher: { "@id": "https://gta-rol.com/#organization" },
+      mainEntityOfPage: url,
+      ...(image ? { image: new URL(image, Astro.site).href } : {}),
+      ...(publishedTime ? { datePublished: publishedTime } : {}),
+      ...(modifiedTime ? { dateModified: modifiedTime } : {}),
+      ...(isIndex
+        ? {}
+        : {
+            articleSection: docGroup(slug),
+            ...(keywords.length ? { keywords: keywords.join(", ") } : {}),
+            ...(wordCount ? { wordCount } : {}),
+          }),
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Inicio",
+          item: "https://gta-rol.com/",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Documentación",
+          item: "https://gta-rol.com/docs",
+        },
+        ...(isIndex
+          ? []
+          : [{ "@type": "ListItem", position: 3, name: title, item: url }]),
+      ],
+    },
+  ],
+};
+---
+
+<Layout
+  title={pageTitle}
+  description={description}
+  type="article"
+  image={image ?? undefined}
+  publishedTime={publishedTime}
+  modifiedTime={modifiedTime}
+  keywords={[`documentación SARP`, `guía ${title}`, ...keywords].join(", ")}
+>
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(jsonLd)}
+  />
+
+  <!--
+    Layout:
+    - < lg  : contenido a ancho completo + barra pegajosa bajo el header con
+              dos paneles flotantes ("Guías" y "En esta página"). El índice
+              nunca empuja la lectura.
+    - lg    : índice en columna fija a la izquierda.
+    - xl    : además, tabla de contenidos fija a la derecha.
+  -->
+  <div class="mx-auto w-full max-w-7xl px-4 md:px-8 pt-20 md:pt-24 lg:pt-28">
+    <!-- Barra móvil / tablet -->
+    <div
+      class="docs-toolbar sticky top-16 z-30 -mx-4 md:-mx-8 px-4 md:px-8 py-2 lg:hidden bg-[#0d0d0d]/85 backdrop-blur-md border-b border-white/5"
+    >
+      <div class="relative flex items-center gap-2">
+        <details class="docs-panel static" data-panel>
+          <summary
+            class="list-none cursor-pointer inline-flex items-center gap-2 whitespace-nowrap rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-white hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          >
+            <span aria-hidden="true">☰</span> Guías
+          </summary>
+          <div
+            class="absolute inset-x-0 top-[calc(100%+0.5rem)] z-40 max-h-[70vh] overflow-y-auto rounded-xl border border-white/10 bg-[#0d0d0d] p-4 shadow-2xl"
+          >
+            <DocsIndex groups={groups} slug={slug} instance="mobile" />
+          </div>
+        </details>
+
+        {
+          toc.length > 0 && (
+            <details class="docs-panel static" data-panel>
+              <summary class="list-none cursor-pointer inline-flex items-center gap-2 whitespace-nowrap rounded-lg border border-white/10 bg-white/5 px-3 py-2 text-sm font-semibold text-white hover:border-primary/50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary">
+                <span aria-hidden="true">≡</span> En esta página
+              </summary>
+              <div class="absolute inset-x-0 top-[calc(100%+0.5rem)] z-40 max-h-[70vh] overflow-y-auto rounded-xl border border-white/10 bg-[#0d0d0d] p-4 shadow-2xl">
+                <DocsToc toc={toc} />
+              </div>
+            </details>
+          )
+        }
+
+        <span
+          class="ml-auto hidden md:inline truncate text-xs text-gray-400 min-w-0"
+          aria-hidden="true"
+        >
+          {isIndex ? "Documentación" : title}
+        </span>
+      </div>
+    </div>
+
+    <nav
+      aria-label="Migas de pan"
+      class="mt-4 lg:mt-0 text-xs text-gray-400 flex flex-wrap items-center gap-1.5"
+    >
+      <a href="/" class="hover:text-primary">Inicio</a>
+      <span aria-hidden="true">/</span>
+      {
+        isIndex ? (
+          <span class="text-gray-200">Documentación</span>
+        ) : (
+          <>
+            <a href="/docs" class="hover:text-primary">
+              Documentación
+            </a>
+            <span aria-hidden="true">/</span>
+            <span class="text-gray-200">{title}</span>
+          </>
+        )
+      }
+    </nav>
+
+    <div
+      class="mt-4 lg:mt-6 grid gap-8 lg:grid-cols-[15rem_minmax(0,1fr)] xl:grid-cols-[15rem_minmax(0,1fr)_13rem]"
+    >
+      <!-- Índice (lg+) -->
+      <aside
+        class="hidden lg:block lg:sticky lg:top-24 lg:self-start lg:max-h-[calc(100vh-7rem)] lg:overflow-y-auto"
+      >
+        <DocsIndex groups={groups} slug={slug} instance="desktop" />
+      </aside>
+
+      <!-- Contenido -->
+      <div class="min-w-0">
+        <article
+          class="docs-prose rounded-2xl border border-[#2a2a2a] bg-[#0d0d0d] p-5 sm:p-6 md:p-10"
+          data-docs-article
+        >
+          <slot />
+        </article>
+
+        <div
+          class="mt-4 flex flex-wrap items-center justify-between gap-3 text-sm"
+        >
+          <a
+            href={editUrl}
+            target="_blank"
+            rel="noopener"
+            class="text-gray-400 hover:text-primary underline-offset-4 hover:underline"
+          >
+            Mejorar esta guía en GitHub →
+          </a>
+          <span class="text-gray-500">
+            {
+              modifiedTime ? (
+                <>
+                  Actualizada el{" "}
+                  <time datetime={modifiedTime}>{fmtDate(modifiedTime)}</time>
+                  {" · "}
+                </>
+              ) : null
+            }
+            Mantenida por la comunidad.
+          </span>
+        </div>
+
+        {
+          (prev || next) && (
+            <nav
+              aria-label="Guías anterior y siguiente"
+              class="mt-6 grid gap-3 sm:grid-cols-2"
+            >
+              {prev ? (
+                <a
+                  href={prev.href}
+                  class="group rounded-xl border border-white/10 bg-[#0d0d0d] p-4 hover:border-primary/50 transition-colors"
+                >
+                  <span class="block text-[11px] uppercase tracking-[0.18em] text-gray-500">
+                    ← Anterior
+                  </span>
+                  <span class="mt-1 block font-semibold text-white group-hover:text-primary">
+                    {prev.title}
+                  </span>
+                </a>
+              ) : (
+                <span />
+              )}
+              {next && (
+                <a
+                  href={next.href}
+                  class="group rounded-xl border border-white/10 bg-[#0d0d0d] p-4 text-right hover:border-primary/50 transition-colors"
+                >
+                  <span class="block text-[11px] uppercase tracking-[0.18em] text-gray-500">
+                    Siguiente →
+                  </span>
+                  <span class="mt-1 block font-semibold text-white group-hover:text-primary">
+                    {next.title}
+                  </span>
+                </a>
+              )}
+            </nav>
+          )
+        }
+
+        {
+          related.length > 0 && (
+            <section aria-labelledby="related-title" class="mt-10">
+              <h2
+                id="related-title"
+                class="text-sm font-bold uppercase tracking-[0.18em] text-gray-500"
+              >
+                Guías relacionadas
+              </h2>
+              <ul class="mt-3 grid gap-2 sm:grid-cols-2 lg:grid-cols-3">
+                {related.map((d) => (
+                  <li>
+                    <a
+                      href={d.href}
+                      class="block rounded-lg border border-white/10 bg-[#0d0d0d] px-4 py-3 text-sm font-semibold text-gray-200 hover:border-primary/50 hover:text-primary transition-colors"
+                    >
+                      {d.title}
+                    </a>
+                  </li>
+                ))}
+              </ul>
+            </section>
+          )
+        }
+      </div>
+
+      <!-- Tabla de contenidos (xl+) -->
+      {
+        toc.length > 0 && (
+          <aside class="hidden xl:block xl:sticky xl:top-24 xl:self-start xl:max-h-[calc(100vh-7rem)] xl:overflow-y-auto">
+            <p class="text-[11px] font-bold uppercase tracking-[0.18em] text-gray-500 mb-2">
+              En esta página
+            </p>
+            <DocsToc toc={toc} />
+          </aside>
+        )
+      }
+    </div>
+  </div>
+
+  <div class="mx-auto max-w-5xl px-8 pb-8">
+    <FinalCta />
+  </div>
+</Layout>
+
+<script>
+  // --- Filtro del índice (una instancia por panel) ---
+  document
+    .querySelectorAll<HTMLElement>("[data-docs-index]")
+    .forEach((root) => {
+      const input = root.querySelector<HTMLInputElement>("[data-filter]");
+      if (!input) return;
+      const items = [...root.querySelectorAll<HTMLElement>("[data-doc]")];
+      const groups = [...root.querySelectorAll<HTMLElement>("[data-group]")];
+      const empty = root.querySelector<HTMLElement>("[data-filter-empty]");
+      const norm = (s: string) =>
+        s.normalize("NFD").replace(/[̀-ͯ]/g, "").toLowerCase();
+      input.addEventListener("input", () => {
+        const q = norm(input.value.trim());
+        let shown = 0;
+        for (const li of items) {
+          const hit = !q || norm(li.dataset.doc ?? "").includes(q);
+          li.hidden = !hit;
+          if (hit) shown++;
+        }
+        for (const g of groups) {
+          g.hidden = ![...g.querySelectorAll<HTMLElement>("[data-doc]")].some(
+            (li) => !li.hidden,
+          );
+        }
+        if (empty) empty.hidden = shown > 0;
+      });
+    });
+
+  // --- Paneles flotantes de la barra móvil: uno abierto a la vez, se cierran
+  //     al elegir un enlace, al pulsar fuera o con Escape ---
+  const panels = [
+    ...document.querySelectorAll<HTMLDetailsElement>("[data-panel]"),
+  ];
+  if (panels.length) {
+    const closeAll = (except?: HTMLDetailsElement) =>
+      panels.forEach((p) => {
+        if (p !== except) p.open = false;
+      });
+    panels.forEach((p) => {
+      p.addEventListener("toggle", () => {
+        if (p.open) {
+          closeAll(p);
+          p.querySelector<HTMLInputElement>("[data-filter]")?.focus({
+            preventScroll: true,
+          });
+        }
+      });
+      p.addEventListener("click", (e) => {
+        if ((e.target as Element).closest("a")) p.open = false;
+      });
+    });
+    document.addEventListener("click", (e) => {
+      if (!(e.target as Element).closest("[data-panel]")) closeAll();
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeAll();
+    });
+  }
+
+  // --- Anclas en los encabezados + botón "copiar" en bloques de código ---
+  const article = document.querySelector<HTMLElement>("[data-docs-article]");
+  if (article) {
+    article
+      .querySelectorAll<HTMLElement>("h2[id], h3[id], h4[id]")
+      .forEach((h) => {
+        const a = document.createElement("a");
+        a.href = `#${h.id}`;
+        a.className = "heading-anchor";
+        a.setAttribute("aria-label", "Enlace a esta sección");
+        a.textContent = "#";
+        h.appendChild(a);
+      });
+    article.querySelectorAll<HTMLPreElement>("pre").forEach((pre) => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "copy-code";
+      btn.textContent = "Copiar";
+      btn.addEventListener("click", async () => {
+        try {
+          await navigator.clipboard.writeText(
+            pre.querySelector("code")?.innerText ?? pre.innerText,
+          );
+          btn.textContent = "¡Copiado!";
+          setTimeout(() => (btn.textContent = "Copiar"), 1500);
+        } catch {
+          /* portapapeles no disponible */
+        }
+      });
+      pre.appendChild(btn);
+    });
+  }
+
+  // --- Resaltar en las TOC (todas las instancias) la sección visible ---
+  const tocLinks = [
+    ...document.querySelectorAll<HTMLAnchorElement>("[data-toc]"),
+  ];
+  if (tocLinks.length && "IntersectionObserver" in window) {
+    const ids = [...new Set(tocLinks.map((a) => a.dataset.toc ?? ""))];
+    const targets = ids
+      .map((id) => document.getElementById(id))
+      .filter((el): el is HTMLElement => el !== null);
+    const io = new IntersectionObserver(
+      (entries) => {
+        for (const e of entries) {
+          if (!e.isIntersecting) continue;
+          tocLinks.forEach((a) =>
+            a.classList.toggle("is-active", a.dataset.toc === e.target.id),
+          );
+        }
+      },
+      { rootMargin: "-20% 0px -70% 0px" },
+    );
+    targets.forEach((t) => io.observe(t));
+  }
+</script>

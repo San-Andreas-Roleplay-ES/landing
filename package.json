@@ -3,14 +3,16 @@
   "type": "module",
   "version": "0.0.1",
   "scripts": {
+    "predev": "node scripts/mirror-docs.mjs",
     "dev": "astro dev",
     "mirror-events": "node scripts/mirror-events.mjs",
     "mirror-rules": "node scripts/mirror-rules.mjs",
+    "mirror-docs": "node scripts/mirror-docs.mjs",
     "tiles": "node scripts/make-tiles.mjs",
-    "prebuild": "node scripts/mirror-events.mjs && node scripts/mirror-rules.mjs && node scripts/make-tiles.mjs",
+    "prebuild": "node scripts/mirror-events.mjs && node scripts/mirror-rules.mjs && node scripts/mirror-docs.mjs --dates && node scripts/make-tiles.mjs",
     "build": "astro build",
     "preview": "astro preview",
-    "deploy": "node --env-file=.env scripts/deploy.mjs",
+    "deploy": "node --env-file-if-exists=.env scripts/deploy.mjs",
     "astro": "astro"
   },
   "dependencies": {
