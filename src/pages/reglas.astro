@@ -3,6 +3,8 @@ import Layout from "../layouts/Layout.astro";
 import Container from "../components/layout/Container.astro";
 import RulesList from "../components/RulesList.astro";
 import FinalCta from "../components/FinalCta.astro";
+import AdSlot from "../components/AdSlot.astro";
+import AdRail from "../components/AdRail.astro";
 import { getRules } from "../services/data";
 
 const { rules } = await getRules();
@@ -80,6 +82,7 @@ const rulesJsonLd = {
   type="article"
   keywords={allKeywords.join(", ")}
 >
+  <AdRail content="rules" />
   <Container>
     <article class="pt-28 md:pt-32">
       <!-- Breadcrumb -->
@@ -123,7 +126,7 @@ const rulesJsonLd = {
             rel="noopener"
             class="inline-flex items-center gap-2 px-5 py-2.5 text-sm font-bold rounded-lg bg-primary text-black uppercase tracking-wide transition-transform duration-300 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:ring-offset-[#1a1800]"
           >
-            Regístrate y juega
+            Crear cuenta gratis
           </a>
         </div>
 
@@ -159,6 +162,8 @@ const rulesJsonLd = {
         </div>
       </header>
 
+      <AdSlot name="rulesTop" class="mt-10" />
+
       <!-- Índice de reglas (ancla rápida) -->
       <nav
         id="indice"
@@ -188,6 +193,7 @@ const rulesJsonLd = {
       </div>
 
       <FinalCta />
+      <AdSlot name="rulesBottom" class="pt-16" />
     </article>
   </Container>
 

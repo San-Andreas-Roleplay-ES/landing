@@ -62,6 +62,12 @@ Landing page para SARP (San Andreas Roleplay ES).
 - **Spotlight (una a una):** los elementos con `data-spotlight` (el `article` de `FeatureCard`, el bloque de `Events`) solo se ven al 100 % cuando cruzan la franja central del viewport; el resto queda atenuado. Igual que el reveal, solo aplica bajo `.js-reveal`. `section:target` hace un flash al llegar desde una ancla.
 - **GA4 (script de `Layout.astro`):** `section_view` (id de sección al revelarse), `tile_click` (celda del mosaico) y `cta_click` (`signup`/`discord`/`connect` + sección de origen).
 
+## Publicidad (Google AdSense)
+
+- Config en **`src/data/ads.ts`** (`CLIENT` = `ca-pub-…`, un ID de bloque por hueco). IDs públicos, se commitean. Con `CLIENT` vacío no se emite nada de Google y los huecos no ocupan espacio; en `npm run dev` se ven como cajas punteadas.
+- **`AdSlot.astro`** reserva la altura por container queries (`.ad-banner` en `global.css`: 320×100 / 468×60 / 728×90) → CLS 0. Huecos: `heroBottom` (HeroMosaic, entre el mosaico y la marquesina, para no empujar el hero), `homeRules` (antes de RulesPromo), `homeBottom` (tras FinalCta), `docsTop` (antes de la tarjeta de cada guía), `docsBottom` (tras FinalCta en docs), `rulesTop` (tras la cabecera de /reglas), `rulesBottom` (tras FinalCta en /reglas). **`AdRail.astro`** (`sideRail`, un solo bloque para las tres páginas): rascacielos 160×600 / 300×600 fijo en el margen derecho, solo si el margen libre lo admite (umbrales por ancho de columna en `.ad-rail--home/docs/rules`, y alto ≥ 720 px); en ≥ 1600 px los puntos de `SectionNav` pasan al margen izquierdo. El script `adsbygoogle.js` se inyecta en `Layout.astro` solo si está habilitado.
+- `/ads.txt` lo genera `src/pages/ads.txt.ts` desde el mismo ID. `/privacidad` (obligatoria para AdSense; también cubre GA4) enlazada en el footer. El aviso de consentimiento RGPD lo sirve el propio script de AdSense si en la cuenta está activado **Privacidad y mensajes**.
+
 ## Dominio
 
 - Se despliega en **gta-rol.com** (registrado en Cloudflare, sirve un bucket de **Bunny CDN Storage**), pero **todos los links apuntan a sarp.es sin excepción**.

@@ -1,0 +1,113 @@
+---
+import Layout from "../layouts/Layout.astro";
+
+// Política de privacidad y cookies. AdSense exige una en el sitio; además la
+// web usa Google Analytics 4. BORRADOR: revisar los datos de contacto y el
+// texto legal antes de darlo por definitivo.
+const title = "Política de privacidad y cookies | San Andreas Roleplay";
+const description =
+  "Qué datos recoge gta-rol.com, qué cookies usa (Google Analytics y Google AdSense), quién trata la información y cómo ejercer tus derechos.";
+const updated = "2026-09-13";
+---
+
+<Layout title={title} description={description} type="article">
+  <div class="mx-auto w-full max-w-3xl px-4 md:px-8 pt-24 md:pt-28 pb-16">
+    <nav aria-label="Migas de pan" class="text-xs text-gray-400">
+      <a href="/" class="hover:text-primary">Inicio</a>
+      <span aria-hidden="true"> / </span>
+      <span class="text-gray-200">Privacidad y cookies</span>
+    </nav>
+
+    <article
+      class="docs-prose mt-6 rounded-2xl border border-[#2a2a2a] bg-[#0d0d0d] p-6 md:p-10"
+    >
+      <h1>Política de privacidad y cookies</h1>
+      <p>
+        Esta página explica qué información se recoge cuando visitas
+        <strong>gta-rol.com</strong>, la web de presentación de San Andreas
+        Roleplay (SARP), y con qué finalidad. Última actualización:
+        <time datetime={updated}>13 de septiembre de 2026</time>.
+      </p>
+
+      <h2>Responsable</h2>
+      <p>
+        San Andreas Roleplay, comunidad de rol sobre GTA San Andreas. Contacto:
+        a través de nuestro
+        <a href="https://discord.gg/sa-rp" target="_blank" rel="noopener"
+          >servidor de Discord</a
+        >
+        o del <a href="https://forum.sarp.es" target="_blank" rel="noopener"
+          >foro</a
+        >.
+      </p>
+
+      <h2>Qué datos se recogen en esta web</h2>
+      <p>
+        gta-rol.com es una web informativa: no tiene formularios ni cuentas de
+        usuario. El registro en el servidor se hace en
+        <a href="https://ucp.sarp.es" target="_blank" rel="noopener"
+          >ucp.sarp.es</a
+        >, que tiene sus propias condiciones. Aquí solo se tratan datos técnicos
+        de navegación a través de los servicios que se describen a continuación.
+      </p>
+
+      <h2>Cookies y servicios de terceros</h2>
+      <ul>
+        <li>
+          <strong>Google Analytics 4</strong> (Google Ireland Ltd.): medición de
+          audiencia. Registra páginas vistas, clics en botones y datos agregados
+          del dispositivo y la ubicación aproximada, con la dirección IP anonimizada.
+          Se usa para saber qué secciones interesan y mejorar la web.
+        </li>
+        <li>
+          <strong>Google AdSense</strong> (Google Ireland Ltd.): publicidad que ayuda
+          a costear el servidor. Google puede usar cookies para mostrar anuncios
+          personalizados según tu navegación, o anuncios no personalizados si no
+          das tu consentimiento. Puedes gestionar la personalización en
+          <a
+            href="https://adssettings.google.com"
+            target="_blank"
+            rel="noopener">adssettings.google.com</a
+          >. Más información sobre cómo Google usa los datos en
+          <a
+            href="https://policies.google.com/technologies/partner-sites"
+            target="_blank"
+            rel="noopener">policies.google.com/technologies/partner-sites</a
+          >.
+        </li>
+        <li>
+          <strong>Bunny CDN</strong> (BunnyWay d.o.o., Eslovenia): alojamiento y
+          entrega de la web. Como cualquier servidor web, guarda registros técnicos
+          temporales (dirección IP, navegador, página solicitada) por seguridad.
+        </li>
+      </ul>
+      <p>
+        Si resides en el Espacio Económico Europeo o en el Reino Unido, al
+        entrar verás un aviso para aceptar o rechazar las cookies publicitarias.
+        Puedes cambiar tu elección en cualquier momento desde ese mismo aviso o
+        borrando las cookies del navegador.
+      </p>
+
+      <h2>Enlaces externos</h2>
+      <p>
+        La web enlaza a servicios propios de la comunidad (sarp.es, foro, panel
+        de usuario) y a terceros (Discord, GitHub, Steam, SA-MP, open.mp). Cada
+        uno tiene su propia política de privacidad.
+      </p>
+
+      <h2>Tus derechos</h2>
+      <p>
+        Puedes solicitar acceso, rectificación o supresión de tus datos, y
+        oponerte a su tratamiento, contactando por los medios indicados arriba.
+        Si consideras que el tratamiento no es correcto, puedes reclamar ante la
+        autoridad de protección de datos de tu país.
+      </p>
+
+      <h2>Cambios</h2>
+      <p>
+        Esta política puede actualizarse cuando cambien los servicios que usa la
+        web. La fecha de la última revisión aparece al principio.
+      </p>
+    </article>
+  </div>
+</Layout>

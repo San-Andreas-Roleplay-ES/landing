@@ -1,0 +1,44 @@
+---
+import { ADS, type AdName } from "../data/ads";
+
+/**
+ * Hueco publicitario de AdSense con ALTURA RESERVADA (cero CLS): el tamaño lo
+ * fija CSS según el ancho del contenedor (container queries en global.css):
+ *   < 468 px  → 320×100    468–727 px → 468×60    ≥ 728 px → 728×90
+ * Sin AdSense configurado no renderiza nada en producción; en desarrollo
+ * muestra una caja punteada del tamaño real para revisar el layout.
+ */
+interface Props {
+  name: AdName;
+  class?: string;
+}
+
+const { name, class: cls = "" } = Astro.props as Props;
+const slot = ADS.slots[name];
+const live = ADS.enabled && slot !== "";
+const preview = !live && import.meta.env.DEV;
+---
+
+{
+  (live || preview) && (
+    <div class:list={["ad-wrap", cls]} data-ad={name} aria-label="Publicidad">
+      <span class="ad-label" aria-hidden="true">
+        Publicidad
+      </span>
+      {live ? (
+        <>
+          <ins
+            class="adsbygoogle ad-banner"
+            data-ad-client={ADS.client}
+            data-ad-slot={slot}
+          />
+          <script is:inline>
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </>
+      ) : (
+        <div class="ad-banner ad-placeholder">Anuncio · {name}</div>
+      )}
+    </div>
+  )
+}

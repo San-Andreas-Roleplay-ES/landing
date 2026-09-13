@@ -1,4 +1,6 @@
 ---
+import AdRail from "../components/AdRail.astro";
+import AdSlot from "../components/AdSlot.astro";
 import CityGovernment from "../components/CityGovernment.astro";
 import CustomSkin from "../components/CustomSkin.astro";
 import Description from "../components/Description.astro";
@@ -31,6 +33,7 @@ import Layout from "../layouts/Layout.astro";
   <HeroMosaic />
   <SectionNav />
   <StickyCta />
+  <AdRail content="home" />
   <Container>
     <IllegalFactions />
     <OfficialForces />
@@ -38,6 +41,7 @@ import Layout from "../layouts/Layout.astro";
     <CityGovernment />
     <CustomSkin />
     <Rogue />
+    <AdSlot name="homeRules" class="pt-16 md:pt-24" />
     <RulesPromo />
     <Events />
     <Statistics />
@@ -49,5 +53,6 @@ import Layout from "../layouts/Layout.astro";
     <Join />
     <Faq />
     <FinalCta />
+    <AdSlot name="homeBottom" class="pt-16" />
   </Container>
 </Layout>

@@ -2,6 +2,7 @@
 import Footer from "../components/layout/Footer.astro";
 import Header from "../components/layout/Header.astro";
 import "../styles/global.css";
+import { ADS } from "../data/ads";
 
 const DEFAULT_KEYWORDS =
   "GTA San Andreas roleplay, GTA Roleplay, GTA SA rol, SA-MP, San Andreas Multiplayer, rol en español, roleplay en español, juego de rol, Los Santos - Juego de Rol, San Andreas Roleplay, SARP, rol pesado, rol basado en texto, servidor SA-MP rol, open.mp, MTA:SA, Multi Theft Auto, GTA SA, GTA Mods, GTA Underground, GTA Online";
@@ -183,6 +184,16 @@ const jsonLd = {
       gtag("config", "G-Y3FW37XPHJ");
     </script>
 
+    {
+      ADS.enabled && (
+        <script
+          is:inline
+          async
+          src={`https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=${ADS.client}`}
+          crossorigin="anonymous"
+        />
+      )
+    }
     <script
       is:inline
       type="application/ld+json"

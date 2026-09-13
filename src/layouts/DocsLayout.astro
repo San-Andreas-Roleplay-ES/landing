@@ -3,6 +3,8 @@ import Layout from "./Layout.astro";
 import FinalCta from "../components/FinalCta.astro";
 import DocsIndex from "../components/docs/DocsIndex.astro";
 import DocsToc from "../components/docs/DocsToc.astro";
+import AdSlot from "../components/AdSlot.astro";
+import AdRail from "../components/AdRail.astro";
 import {
   DOCS_REPO,
   docGroup,
@@ -152,6 +154,8 @@ const jsonLd = {
     - lg    : índice en columna fija a la izquierda.
     - xl    : además, tabla de contenidos fija a la derecha.
   -->
+  <AdRail content="docs" />
+
   <div class="mx-auto w-full max-w-7xl px-4 md:px-8 pt-20 md:pt-24 lg:pt-28">
     <!-- Barra móvil / tablet -->
     <div
@@ -226,6 +230,7 @@ const jsonLd = {
 
       <!-- Contenido -->
       <div class="min-w-0">
+        <AdSlot name="docsTop" class="mb-6" />
         <article
           class="docs-prose rounded-2xl border border-[#2a2a2a] bg-[#0d0d0d] p-5 sm:p-6 md:p-10"
           data-docs-article
@@ -338,6 +343,7 @@ const jsonLd = {
 
   <div class="mx-auto max-w-5xl px-8 pb-8">
     <FinalCta />
+    <AdSlot name="docsBottom" class="pt-16" />
   </div>
 </Layout>
 

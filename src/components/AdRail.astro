@@ -1,0 +1,48 @@
+---
+import { ADS } from "../data/ads";
+
+/**
+ * Rascacielos fijo en el margen derecho de pantallas anchas (dentro del
+ * pliegue, sin empujar el contenido). Tamaños y umbrales en global.css
+ * (`.ad-rail--*`): 160×600 cuando el margen libre lo permite, 300×600 en
+ * pantallas más anchas; nunca en portátiles, tablets ni móviles, ni en ventanas
+ * de menos de 720 px de alto. `content` = ancho de la columna de contenido de
+ * la página, para calcular el margen libre.
+ */
+interface Props {
+  content?: "home" | "docs" | "rules";
+}
+
+const { content = "home" } = Astro.props as Props;
+const slot = ADS.slots.sideRail;
+const live = ADS.enabled && slot !== "";
+const preview = !live && import.meta.env.DEV;
+---
+
+{
+  (live || preview) && (
+    <aside
+      class:list={["ad-rail", `ad-rail--${content}`]}
+      data-ad="sideRail"
+      aria-label="Publicidad"
+    >
+      <span class="ad-label" aria-hidden="true">
+        Publicidad
+      </span>
+      {live ? (
+        <>
+          <ins
+            class="adsbygoogle ad-rail-unit"
+            data-ad-client={ADS.client}
+            data-ad-slot={slot}
+          />
+          <script is:inline>
+            (window.adsbygoogle = window.adsbygoogle || []).push({});
+          </script>
+        </>
+      ) : (
+        <div class="ad-rail-unit ad-placeholder">Anuncio · sideRail</div>
+      )}
+    </aside>
+  )
+}

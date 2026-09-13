@@ -600,3 +600,141 @@ section:target .feature-card {
     scroll-margin-top: 6rem;
   }
 }
+
+/* =========================================================================
+   Publicidad (AdSlot.astro): altura reservada según el ancho del contenedor
+   para que los anuncios no muevan el contenido (CLS 0). Tamaños estándar de
+   AdSense: 320×100 (móvil), 468×60 (tablet / columnas), 728×90 (escritorio).
+   ========================================================================= */
+.ad-wrap {
+  container-type: inline-size;
+  width: 100%;
+  text-align: center;
+}
+.ad-label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-size: 10px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.35);
+}
+.ad-banner {
+  display: block;
+  margin: 0 auto;
+  width: 320px;
+  height: 100px;
+}
+@container (min-width: 468px) {
+  .ad-banner {
+    width: 468px;
+    height: 60px;
+  }
+}
+@container (min-width: 728px) {
+  .ad-banner {
+    width: 728px;
+    height: 90px;
+  }
+}
+/* Pantallas muy estrechas (< 352 px): el bloque de 320 px no cabe dentro del
+   padding lateral, así que el hueco se extiende al ancho de la pantalla
+   (full-bleed) sea cual sea el padding o la alineación del contenedor padre. */
+@media (max-width: 351px) {
+  .ad-wrap {
+    width: 100vw;
+    margin-inline: calc(50% - 50vw);
+  }
+}
+/* Solo en desarrollo (sin AdSense configurado): caja del tamaño real. */
+.ad-placeholder {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px dashed rgba(252, 175, 23, 0.5);
+  border-radius: 0.5rem;
+  background: repeating-linear-gradient(
+    45deg,
+    rgba(252, 175, 23, 0.06) 0 8px,
+    transparent 8px 16px
+  );
+  color: rgba(252, 175, 23, 0.75);
+  font: 600 11px/1 system-ui, sans-serif;
+  letter-spacing: 0.08em;
+}
+
+/* --- Rascacielos lateral (AdRail.astro): fijo en el margen derecho, solo cuando
+   el margen libre junto a la columna de contenido admite el bloque entero.
+   right = (margen − ancho del bloque) / 2 = (100vw − contenido) / 4 − ancho / 2 */
+.ad-rail {
+  display: none;
+  position: fixed;
+  top: 5.5rem;
+  z-index: 30;
+  text-align: center;
+}
+.ad-rail-unit {
+  display: block;
+  width: 160px;
+  height: 600px;
+}
+/* Portada: columna de 72rem (1152 px) */
+@media (min-width: 1600px) and (min-height: 720px) {
+  .ad-rail--home {
+    display: block;
+    right: calc((100vw - 72rem) / 4 - 80px);
+  }
+}
+@media (min-width: 1900px) and (min-height: 720px) {
+  .ad-rail--home {
+    right: calc((100vw - 72rem) / 4 - 150px);
+  }
+  .ad-rail--home .ad-rail-unit {
+    width: 300px;
+  }
+}
+/* /docs: columna de 80rem (1280 px) */
+@media (min-width: 1700px) and (min-height: 720px) {
+  .ad-rail--docs {
+    display: block;
+    right: calc((100vw - 80rem) / 4 - 80px);
+  }
+}
+@media (min-width: 2000px) and (min-height: 720px) {
+  .ad-rail--docs {
+    right: calc((100vw - 80rem) / 4 - 150px);
+  }
+  .ad-rail--docs .ad-rail-unit {
+    width: 300px;
+  }
+}
+/* /reglas: columna de 64rem (1024 px) */
+@media (min-width: 1500px) and (min-height: 720px) {
+  .ad-rail--rules {
+    display: block;
+    right: calc((100vw - 64rem) / 4 - 80px);
+  }
+}
+@media (min-width: 1800px) and (min-height: 720px) {
+  .ad-rail--rules {
+    right: calc((100vw - 64rem) / 4 - 150px);
+  }
+  .ad-rail--rules .ad-rail-unit {
+    width: 300px;
+  }
+}
+/* En pantallas anchas los puntos de navegación de la portada pasan al margen
+   izquierdo para no chocar con el rascacielos. */
+@media (min-width: 1600px) {
+  .section-nav {
+    right: auto;
+    left: 1.5rem;
+  }
+  .section-nav a > span:first-child {
+    right: auto;
+    left: 2rem;
+  }
+}
+.ad-rail-unit.ad-placeholder {
+  display: flex;
+}

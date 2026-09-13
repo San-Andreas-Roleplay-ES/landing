@@ -11,6 +11,7 @@ import { readFileSync } from "node:fs";
 
 // Fechas de commit de las guías (src/data/docs-dates.json, generado por
 // scripts/mirror-docs.mjs) para el <lastmod> del sitemap. Vacío si no existe.
+/** @type {Record<string, { modified?: string; published?: string }>} */
 let docsDates = {};
 try {
   docsDates =

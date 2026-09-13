@@ -3,6 +3,7 @@ import { existsSync } from "node:fs";
 import { fileURLToPath } from "node:url";
 import { SECTIONS, tileSrcSet } from "../data/sections";
 import { getEvents, getGlobalMetrics } from "../services/data";
+import AdSlot from "./AdSlot.astro";
 
 // Hero "bento": una celda de marca (h1 + CTAs) y una celda-teaser por cada
 // sección de la página, enlazada por ancla. Es el LCP: NO lleva data-reveal.
@@ -265,6 +266,10 @@ const highlights = [
       }
     </div>
   </div>
+
+  <!-- Hueco publicitario a la salida del mosaico, antes de la marquesina (no
+       empuja el hero: en portátiles 1366×768 / 1280×720 el mosaico se ve entero) -->
+  <AdSlot name="heroBottom" class="relative z-10 mt-8" />
 
   <!-- Marquesina decorativa -->
   <div
