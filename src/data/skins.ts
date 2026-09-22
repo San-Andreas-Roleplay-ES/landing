@@ -21,7 +21,7 @@ const REMOTE = "https://sarp-public.s3.us-east-005.backblazeb2.com/skins";
 export const SKINS_BASE: string =
   import.meta.env.DEV && !import.meta.env.SSR ? "/_skins" : REMOTE;
 
-export const SKIN_SOURCES: readonly string[] = ["lsrp", "sols", "sarp"];
+export const SKIN_SOURCES: readonly string[] = ["lsrp", "sols", "sarp", "vc"];
 
 export const skinSourceUrl = (source: string): string =>
   `${SKINS_BASE}/${encodeURIComponent(source)}.txt`;
