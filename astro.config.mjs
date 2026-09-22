@@ -45,6 +45,17 @@ export default defineConfig({
 
   vite: {
     plugins: [tailwindcss()],
+    // /skins (solo dev): el bucket de Backblaze no envía CORS a localhost, así
+    // que el navegador pide los artconfig y modelos a través de este proxy.
+    server: {
+      proxy: {
+        "/_skins": {
+          target: "https://sarp-public.s3.us-east-005.backblazeb2.com",
+          changeOrigin: true,
+          rewrite: (path) => path.replace(/^\/_skins/, "/skins"),
+        },
+      },
+    },
   },
 
   integrations: [

@@ -678,18 +678,18 @@ section:target .feature-card {
   width: 160px;
   height: 600px;
 }
-/* Portada: columna de 72rem (1152 px) */
-@media (min-width: 1600px) and (min-height: 720px) {
-  .ad-rail--home {
+/* /skins: columna de 80rem (1280 px) */
+@media (min-width: 1700px) and (min-height: 720px) {
+  .ad-rail--skins {
     display: block;
-    right: calc((100vw - 72rem) / 4 - 80px);
+    right: calc((100vw - 80rem) / 4 - 80px);
   }
 }
-@media (min-width: 1900px) and (min-height: 720px) {
-  .ad-rail--home {
-    right: calc((100vw - 72rem) / 4 - 150px);
+@media (min-width: 2000px) and (min-height: 720px) {
+  .ad-rail--skins {
+    right: calc((100vw - 80rem) / 4 - 150px);
   }
-  .ad-rail--home .ad-rail-unit {
+  .ad-rail--skins .ad-rail-unit {
     width: 300px;
   }
 }
@@ -723,18 +723,64 @@ section:target .feature-card {
     width: 300px;
   }
 }
-/* En pantallas anchas los puntos de navegación de la portada pasan al margen
-   izquierdo para no chocar con el rascacielos. */
-@media (min-width: 1600px) {
-  .section-nav {
-    right: auto;
-    left: 1.5rem;
-  }
-  .section-nav a > span:first-child {
-    right: auto;
-    left: 2rem;
-  }
-}
 .ad-rail-unit.ad-placeholder {
   display: flex;
+}
+
+/* /skins: barra de búsqueda fija. El fondo de la página (patrón de gang tags)
+   se ve a través, así que no recorta un rectángulo opaco sobre él; el degradado
+   inferior funde la barra con el contenido que pasa por debajo. El desenfoque
+   va en una capa propia con `will-change` para que no lo repinte el scroll. */
+.skins-toolbar {
+  position: sticky;
+  isolation: isolate;
+}
+.skins-toolbar::before {
+  content: "";
+  position: absolute;
+  inset: -1px 0 0;
+  z-index: -1;
+  background: linear-gradient(
+    to bottom,
+    #1a1800 0,
+    rgba(26, 24, 0, 0.97) 65%,
+    rgba(26, 24, 0, 0) 100%
+  );
+  backdrop-filter: blur(6px);
+  -webkit-backdrop-filter: blur(6px);
+  will-change: transform;
+  pointer-events: none;
+}
+/* Sin soporte de backdrop-filter (o con transparencias desactivadas): opaco. */
+@supports not (backdrop-filter: blur(6px)) {
+  .skins-toolbar::before {
+    background: #1a1800;
+  }
+}
+
+/* /skins: el panel de filtros se pliega con [hidden]; sin esto, las utilidades
+   de display de Tailwind (sm:flex) lo mostrarían igualmente. */
+[hidden] {
+  display: none !important;
+}
+
+/* /skins: marca del botón de filtros cuando hay alguno activo. */
+.skins-filters-toggle.has-active {
+  border-color: var(--color-primary);
+  color: var(--color-primary);
+}
+.skins-filters-toggle.has-active::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  right: 6px;
+  width: 6px;
+  height: 6px;
+  border-radius: 9999px;
+  background: var(--color-primary);
+}
+
+/* /skins: con el visor ampliado abierto la página de fondo no se desplaza. */
+html:has(dialog[open]) {
+  overflow: hidden;
 }

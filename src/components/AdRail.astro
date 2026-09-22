@@ -7,13 +7,14 @@ import { ADS } from "../data/ads";
  * (`.ad-rail--*`): 160×600 cuando el margen libre lo permite, 300×600 en
  * pantallas más anchas; nunca en portátiles, tablets ni móviles, ni en ventanas
  * de menos de 720 px de alto. `content` = ancho de la columna de contenido de
- * la página, para calcular el margen libre.
+ * la página, para calcular el margen libre. No se usa en la portada: allí el
+ * margen lo ocupan los puntos de `SectionNav`.
  */
 interface Props {
-  content?: "home" | "docs" | "rules";
+  content?: "skins" | "docs" | "rules";
 }
 
-const { content = "home" } = Astro.props as Props;
+const { content = "skins" } = Astro.props as Props;
 const slot = ADS.slots.sideRail;
 const live = ADS.enabled && slot !== "";
 const preview = !live && import.meta.env.DEV;

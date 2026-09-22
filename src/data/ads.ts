@@ -15,6 +15,8 @@
  *   docsBottom  /docs, debajo de "Empezar es gratis"
  *   rulesTop    /reglas, entre la cabecera y la lista de reglas
  *   rulesBottom /reglas, debajo de "Empezar es gratis"
+ *   skinsTop    /skins, entre la cabecera y el buscador de la galería
+ *   skinsBottom /skins, debajo de "Empezar es gratis"
  *   sideRail    rascacielos fijo en el margen derecho de pantallas anchas
  *               (portada, /docs y /reglas; un mismo bloque, tamaño responsivo
  *               vertical: 160×600 / 300×600)
@@ -29,6 +31,8 @@ export type AdName =
   | "docsBottom"
   | "rulesTop"
   | "rulesBottom"
+  | "skinsTop"
+  | "skinsBottom"
   | "sideRail";
 
 const SLOTS: Record<AdName, string> = {
@@ -39,6 +43,8 @@ const SLOTS: Record<AdName, string> = {
   docsBottom: "",
   rulesTop: "",
   rulesBottom: "",
+  skinsTop: "",
+  skinsBottom: "",
   sideRail: "",
 };
 

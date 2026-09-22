@@ -225,10 +225,16 @@ const jsonLd = {
       }
     </style>
   </head>
-  <body
-    class="bg-fixed bg-center bg-repeat-x bg-[#1a1800]"
-    style="background-image: url('/images/gangtags.png')"
-  >
+  <body class="bg-[#1a1800]">
+    {/* Fondo fijo como capa propia: `background-attachment: fixed` en el body
+        obliga al navegador a repintar (y a desplazar desde el hilo principal)
+        en cada frame de scroll; en iOS ni siquiera se respeta. */}
+    <div
+      class="pointer-events-none fixed inset-0 -z-10 bg-center bg-repeat-x"
+      style="background-image: url('/images/gangtags.png')"
+      aria-hidden="true"
+    >
+    </div>
     <div class="scroll-progress" aria-hidden="true"></div>
     <Header />
     <main>

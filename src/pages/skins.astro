@@ -1,0 +1,539 @@
+---
+import { Icon } from "astro-icon/components";
+import Layout from "../layouts/Layout.astro";
+import FinalCta from "../components/FinalCta.astro";
+import AdSlot from "../components/AdSlot.astro";
+import AdRail from "../components/AdRail.astro";
+import { SKIN_SOURCES, skinSourceUrl, skinTag } from "../data/skins";
+import { GENDER_LABELS, RACE_LABELS } from "../data/skin-names";
+import { mergeSkins, parseSkins } from "../lib/skins/artconfig";
+
+// El catálogo se carga en vivo en el navegador (src/lib/skins/gallery.ts); en
+// build solo se cuentan los skins de cada fuente para hornear las cifras en el
+// HTML. Nunca lanza: una fuente caída o aún sin subir cuenta como vacía.
+async function fetchSource(source: string) {
+  try {
+    const res = await fetch(skinSourceUrl(source), {
+      signal: AbortSignal.timeout(8000),
+    });
+    return res.ok ? parseSkins(await res.text()) : [];
+  } catch {
+    return [];
+  }
+}
+
+const sources = await Promise.all(
+  SKIN_SOURCES.map(async (source) => ({
+    tag: skinTag(source),
+    entries: await fetchSource(source),
+  })),
+);
+const catalog = mergeSkins(sources);
+const total = catalog.length;
+const tags = sources.map(({ tag }) => ({
+  tag,
+  count: catalog.filter((s) => s.tags.includes(tag)).length,
+}));
+const fmt = (n: number) => n.toLocaleString("es-ES");
+
+const title = "Skins para GTA San Andreas y SA-MP · Galería 3D";
+const description = `Galería de skins para GTA San Andreas y SA-MP con vista previa 3D${
+  total ? `: ${fmt(total)} modelos de personaje` : ""
+}. Busca por ID, filtra por etiqueta y descarga cada skin (DFF + TXD) con un solo clic, gratis.`;
+
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@graph": [
+    {
+      "@type": "CollectionPage",
+      "@id": "https://gta-rol.com/skins#collection",
+      name: "Galería de skins para GTA San Andreas y SA-MP",
+      description,
+      url: "https://gta-rol.com/skins",
+      inLanguage: "es",
+      isPartOf: { "@id": "https://gta-rol.com/#website" },
+      publisher: { "@id": "https://gta-rol.com/#organization" },
+      about: { "@id": "https://gta-rol.com/#videogame" },
+    },
+    {
+      "@type": "BreadcrumbList",
+      itemListElement: [
+        {
+          "@type": "ListItem",
+          position: 1,
+          name: "Inicio",
+          item: "https://gta-rol.com/",
+        },
+        {
+          "@type": "ListItem",
+          position: 2,
+          name: "Skins",
+          item: "https://gta-rol.com/skins",
+        },
+      ],
+    },
+  ],
+};
+
+const chipClass =
+  "inline-flex shrink-0 cursor-pointer items-center gap-1.5 rounded-full border border-[#2a2a2a] bg-[#0d0d0d] px-3 py-1.5 text-xs font-bold tracking-wide text-gray-300 transition-colors hover:border-primary/60 hover:text-white aria-pressed:border-primary aria-pressed:bg-primary aria-pressed:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
+const stateClass =
+  "flex min-h-[40vh] flex-col items-center justify-center gap-3 px-4 text-center text-gray-400";
+const iconButtonClass =
+  "flex h-9 w-9 cursor-pointer items-center justify-center rounded-lg bg-black/60 text-gray-200 transition-colors hover:bg-black/80 hover:text-primary disabled:opacity-30 disabled:hover:text-gray-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
+const downloadClass =
+  "flex w-full cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-primary/50 bg-primary/10 font-bold uppercase tracking-wide text-primary transition-colors hover:bg-primary hover:text-black disabled:cursor-wait disabled:opacity-70 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary";
+---
+
+<Layout
+  title={title}
+  description={description}
+  keywords="skins GTA San Andreas, skins SA-MP, descargar skins GTA SA, skins dff txd, modelos de personaje SA-MP, skins personalizados, skins open.mp"
+>
+  <AdRail content="skins" />
+  <div class="mx-auto w-full max-w-7xl px-4 pb-8 pt-28 md:px-8 md:pt-32">
+    <!-- Breadcrumb -->
+    <nav aria-label="Migas de pan" class="text-sm text-gray-400">
+      <ol class="flex flex-wrap items-center gap-1">
+        <li>
+          <a
+            href="/"
+            class="hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+            >Inicio</a
+          >
+        </li>
+        <li aria-hidden="true">/</li>
+        <li class="text-gray-200" aria-current="page">Skins</li>
+      </ol>
+    </nav>
+
+    <header class="mt-6">
+      <h1
+        class="text-3xl md:text-5xl font-bold bg-gradient-to-r from-primary via-primary to-[#e23b3b] bg-clip-text text-transparent pb-2"
+      >
+        Galería de skins
+      </h1>
+      <p class="text-md md:text-lg mt-3 text-gray-200 max-w-3xl">
+        {
+          total > 0 ? (
+            <>
+              <strong class="text-white">{fmt(total)} skins</strong> para GTA
+              San Andreas y SA-MP con vista previa 3D.
+            </>
+          ) : (
+            <>Skins para GTA San Andreas y SA-MP con vista previa 3D.</>
+          )
+        }
+        Gira cada modelo, encuentra el tuyo y descarga la pareja
+        <strong class="text-white">.dff + .txd</strong> con un solo clic: listas
+        para subirlas a
+        <a
+          href="https://ucp.sarp.es/app/ucp/characters/clothes"
+          target="_blank"
+          rel="noopener"
+          class="text-primary underline underline-offset-2 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary rounded"
+          >la ropa de tu personaje en el PCU de sarp.es</a
+        > sin tocar nada.
+      </p>
+    </header>
+
+    <AdSlot name="skinsTop" class="mt-8" />
+
+    <section id="galeria" class="mt-8 scroll-mt-40" data-skins>
+      <h2 class="sr-only">Buscador de skins</h2>
+
+      <!-- Buscador + filtros: se queda pegado bajo la cabecera al hacer scroll -->
+      <div
+        class="skins-toolbar sticky top-[57px] z-30 -mx-4 px-4 pb-3 pt-3 md:-mx-8 md:px-8 md:top-[65px]"
+        data-toolbar
+      >
+        <div class="flex items-center gap-2">
+          <div class="relative min-w-0 flex-1">
+            <Icon
+              name="mdi:magnify"
+              class="pointer-events-none absolute left-3 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-500"
+            />
+            <input
+              type="search"
+              inputmode="search"
+              enterkeyhint="search"
+              autocomplete="off"
+              spellcheck="false"
+              placeholder="Busca un skin aquí…"
+              aria-label="Buscar skins por ID, rango de ID, archivo o etiqueta"
+              class="h-11 w-full rounded-xl border border-[#2a2a2a] bg-[#0d0d0d] pl-10 pr-10 text-base text-white placeholder:text-gray-500 focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 [&::-webkit-search-cancel-button]:hidden"
+              data-search
+            />
+            <kbd
+              class="pointer-events-none absolute right-3 top-1/2 hidden -translate-y-1/2 rounded border border-[#2a2a2a] px-1.5 text-xs text-gray-500 lg:block [[data-search]:focus~&]:hidden [[data-search]:not(:placeholder-shown)~&]:hidden"
+              aria-hidden="true">/</kbd
+            >
+            <button
+              type="button"
+              class="absolute right-1.5 top-1/2 flex h-8 w-8 -translate-y-1/2 cursor-pointer items-center justify-center rounded-lg text-gray-400 hover:text-white focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              aria-label="Borrar búsqueda"
+              data-search-clear
+              hidden
+            >
+              <Icon name="mdi:close" class="h-5 w-5" />
+            </button>
+          </div>
+          <p
+            class="hidden shrink-0 text-xs tabular-nums text-gray-400 min-[360px]:block sm:hidden"
+            aria-hidden="true"
+            data-count-mobile
+          >
+          </p>
+          <button
+            type="button"
+            class="skins-filters-toggle relative flex h-11 shrink-0 cursor-pointer items-center gap-1.5 rounded-xl border border-[#2a2a2a] bg-[#0d0d0d] px-2.5 text-sm text-gray-200 transition-colors hover:border-primary/60 aria-expanded:border-primary aria-expanded:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary sm:px-3"
+            aria-expanded="false"
+            aria-controls="skins-filtros"
+            data-filters-toggle
+          >
+            <Icon name="mdi:tune-variant" class="h-5 w-5" />
+            <span class="hidden sm:inline">Filtros</span>
+          </button>
+          <label class="relative shrink-0">
+            <span class="sr-only">Ordenar</span>
+            <Icon
+              name="mdi:sort"
+              class="pointer-events-none absolute left-2.5 top-1/2 h-5 w-5 -translate-y-1/2 text-gray-400"
+            />
+            <select
+              class="h-11 w-11 cursor-pointer appearance-none rounded-xl border border-[#2a2a2a] bg-[#0d0d0d] pl-9 text-sm text-transparent focus:border-primary focus:outline-none focus-visible:ring-2 focus-visible:ring-primary/60 sm:w-auto sm:pr-3 sm:text-gray-200"
+              data-sort
+            >
+              <option value="asc" class="text-white">ID ascendente</option>
+              <option value="desc" class="text-white">ID descendente</option>
+              <option value="orig" class="text-white">Más recientes al final</option>
+            </select>
+          </label>
+        </div>
+
+        <div class="mt-2.5 flex items-center gap-3">
+          <div
+            class="-mx-1 flex min-w-0 flex-1 gap-2 overflow-x-auto py-0.5 pl-1 pr-4 [mask-image:linear-gradient(to_right,black_calc(100%-1rem),transparent)] [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
+            role="group"
+            aria-label="Filtrar por etiqueta"
+          >
+            <button type="button" class={chipClass} data-tag="" aria-pressed="true">
+              Todas
+              <span class="font-normal opacity-70" data-tag-count
+                >{total ? fmt(total) : ""}</span
+              >
+            </button>
+            {
+              tags.map(({ tag, count }) => (
+                <button
+                  type="button"
+                  class={chipClass}
+                  data-tag={tag}
+                  aria-pressed="false"
+                  hidden={count === 0}
+                >
+                  {tag}
+                  <span class="font-normal opacity-70" data-tag-count>
+                    {count ? fmt(count) : ""}
+                  </span>
+                </button>
+              ))
+            }
+          </div>
+          <p
+            class="hidden shrink-0 text-xs tabular-nums text-gray-400 sm:block"
+            role="status"
+            data-count
+          >
+          </p>
+        </div>
+
+        <div
+          id="skins-filtros"
+          class="mt-2.5 flex flex-wrap gap-x-6 gap-y-2.5"
+          hidden
+        >
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs uppercase tracking-wide text-gray-500">Género</span>
+            {
+              (Object.entries(GENDER_LABELS) as [string, string][]).map(
+                ([value, label]) => (
+                  <button
+                    type="button"
+                    class={chipClass}
+                    data-gender={value}
+                    aria-pressed="false"
+                  >
+                    {label}
+                  </button>
+                ),
+              )
+            }
+          </div>
+          <div class="flex flex-wrap items-center gap-2">
+            <span class="text-xs uppercase tracking-wide text-gray-500">Origen</span>
+            {
+              (Object.entries(RACE_LABELS) as [string, string][]).map(
+                ([value, label]) => (
+                  <button
+                    type="button"
+                    class={chipClass}
+                    data-race={value}
+                    aria-pressed="false"
+                  >
+                    {label}
+                  </button>
+                ),
+              )
+            }
+          </div>
+          <p class="basis-full text-xs text-gray-500">
+            Género y origen son los del skin original de GTA San Andreas que
+            reemplaza cada modelo.
+          </p>
+        </div>
+      </div>
+
+      <!-- Estados -->
+      <div class={stateClass} data-state="loading">
+        <span
+          class="h-9 w-9 animate-spin rounded-full border-4 border-white/10 border-t-primary"
+          aria-hidden="true"></span>
+        <p>Cargando skins…</p>
+        <noscript>
+          <p class="text-gray-300">
+            La galería necesita JavaScript para mostrar los modelos en 3D.
+          </p>
+        </noscript>
+      </div>
+      <div class={stateClass} data-state="empty" hidden>
+        <Icon name="mdi:hanger" class="h-12 w-12 text-primary/70" />
+        <p class="text-lg font-bold text-white">Estamos colgando los skins</p>
+        <p class="max-w-md text-sm">
+          La galería se está preparando. Vuelve en un rato: aquí podrás ver cada
+          skin en 3D y descargarlo con un clic.
+        </p>
+      </div>
+      <div class={stateClass} data-state="noresults" hidden>
+        <Icon name="mdi:account-search-outline" class="h-12 w-12 text-primary/70" />
+        <p class="text-lg font-bold text-white">Ningún skin coincide</p>
+        <p class="max-w-md text-sm">
+          Prueba con otro ID, un rango como
+          <span class="font-mono text-gray-200">100-150</span> o quita los filtros.
+        </p>
+        <button
+          type="button"
+          class="mt-1 cursor-pointer rounded-lg border border-primary/50 px-4 py-2 text-sm font-bold text-primary hover:bg-primary hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          data-reset
+        >
+          Quitar filtros
+        </button>
+      </div>
+      <div class={stateClass} data-state="error" hidden>
+        <Icon name="mdi:cloud-alert-outline" class="h-12 w-12 text-[#e23b3b]" />
+        <p class="text-lg font-bold text-white">No pudimos cargar la galería</p>
+        <p class="max-w-md text-sm">Revisa tu conexión e inténtalo de nuevo.</p>
+        <button
+          type="button"
+          class="mt-1 cursor-pointer rounded-lg border border-primary/50 px-4 py-2 text-sm font-bold text-primary hover:bg-primary hover:text-black focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+          data-retry
+        >
+          Reintentar
+        </button>
+      </div>
+
+      <!-- Grid virtualizado: solo existen en el DOM las filas en pantalla -->
+      <div class="relative mt-5 contain-layout contain-style" data-grid hidden>
+        <div class="absolute inset-0" data-grid-inner></div>
+      </div>
+
+      <template data-card-tpl>
+        <article
+          class="absolute left-0 top-0 flex min-w-0 flex-col overflow-hidden contain-layout contain-paint contain-style rounded-xl border border-[#2a2a2a] bg-[#0d0d0d]/85 transition-colors hover:border-primary/60 focus-within:border-primary/60"
+        >
+          <div
+            class="relative min-h-0 flex-1 bg-[radial-gradient(circle_at_50%_35%,#3d3712_0%,#0d0d0d_75%)]"
+          >
+            <canvas
+              class="absolute inset-0 h-full w-full cursor-grab touch-pan-y active:cursor-grabbing"
+              aria-hidden="true"></canvas>
+            <div
+              class="pointer-events-none absolute inset-0 flex items-center justify-center px-3 text-center text-xs text-gray-400"
+              data-overlay
+            >
+              <span
+                class="h-6 w-6 animate-spin rounded-full border-[3px] border-white/10 border-t-primary"
+              ></span>
+            </div>
+            <ul
+              class="pointer-events-none absolute left-2 top-2 flex flex-wrap gap-1 pr-10"
+              aria-label="Etiquetas"
+              data-tags
+            >
+            </ul>
+            <button
+              type="button"
+              class="absolute right-1.5 top-1.5 flex h-8 w-8 cursor-pointer items-center justify-center rounded-lg bg-black/60 text-gray-300 transition-colors hover:text-primary focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary"
+              data-expand
+            >
+              <Icon name="mdi:arrow-expand" class="h-4 w-4" />
+            </button>
+          </div>
+          <div class="border-t border-[#2a2a2a] p-2.5">
+            <h3
+              class="truncate font-mono text-[13px] font-bold text-white"
+              data-name
+            >
+            </h3>
+            <p class="truncate text-[11px] text-gray-500" data-file></p>
+            <button
+              type="button"
+              class:list={[downloadClass, "mt-2 h-9 text-xs"]}
+              data-download
+            >
+              <Icon name="mdi:download" class="h-4 w-4" />
+              <span data-label>Descargar</span>
+            </button>
+          </div>
+        </article>
+      </template>
+
+      <!-- Visor ampliado -->
+      <dialog
+        class="m-auto w-[min(calc(100vw-1.5rem),64rem)] max-w-none overflow-hidden rounded-2xl border border-[#2a2a2a] bg-[#0d0d0d] p-0 text-white backdrop:bg-black/80 backdrop:backdrop-blur-sm"
+        aria-labelledby="skin-viewer-title"
+        data-viewer
+      >
+        <button
+          type="button"
+          class:list={[iconButtonClass, "absolute right-2 top-2 z-10"]}
+          aria-label="Cerrar"
+          data-v-close
+        >
+          <Icon name="mdi:close" class="h-5 w-5" />
+        </button>
+        <div class="grid max-h-[calc(100dvh-1.5rem)] overflow-y-auto md:grid-cols-[minmax(0,1fr)_19rem]">
+          <div
+            class="relative h-[52dvh] bg-[radial-gradient(circle_at_50%_35%,#3d3712_0%,#0d0d0d_75%)] md:h-[min(78dvh,44rem)]"
+          >
+            <canvas
+              class="absolute inset-0 h-full w-full cursor-grab touch-none active:cursor-grabbing"
+              aria-hidden="true"
+              data-v-canvas></canvas>
+            <div
+              class="pointer-events-none absolute inset-0 flex items-center justify-center px-4 text-center text-sm text-gray-400"
+              data-v-overlay
+            >
+            </div>
+            <div class="absolute inset-x-2 bottom-2 flex items-center justify-between">
+              <button type="button" class={iconButtonClass} aria-label="Skin anterior" data-v-prev>
+                <Icon name="mdi:chevron-left" class="h-6 w-6" />
+              </button>
+              <span class="rounded-md bg-black/60 px-2 py-1 text-xs tabular-nums text-gray-300" data-v-pos></span>
+              <button type="button" class={iconButtonClass} aria-label="Skin siguiente" data-v-next>
+                <Icon name="mdi:chevron-right" class="h-6 w-6" />
+              </button>
+            </div>
+            <button
+              type="button"
+              class:list={[iconButtonClass, "absolute left-2 top-2"]}
+              aria-label="Restablecer la vista"
+              data-v-reset
+            >
+              <Icon name="mdi:restore" class="h-5 w-5" />
+            </button>
+          </div>
+
+          <div class="flex flex-col gap-4 p-5">
+            <div class="min-w-0 md:pr-10">
+              <p id="skin-viewer-title" class="text-2xl font-extrabold" data-v-title></p>
+              <ul class="mt-1.5 flex flex-wrap gap-1" aria-label="Etiquetas" data-v-tags></ul>
+            </div>
+
+            <dl class="grid grid-cols-[auto_minmax(0,1fr)] gap-x-4 gap-y-1.5 text-sm">
+              <dt class="text-gray-500">Skin base</dt>
+              <dd class="text-gray-200" data-v-base></dd>
+              <dt class="text-gray-500">Cuerpo</dt>
+              <dd class="text-gray-200" data-v-body></dd>
+              <dt class="text-gray-500">ID en el artconfig</dt>
+              <dd class="tabular-nums text-gray-200" data-v-newid></dd>
+              <dt class="text-gray-500">Modelo</dt>
+              <dd class="truncate font-mono text-xs leading-5 text-gray-200" data-v-dff></dd>
+              <dt class="text-gray-500">Texturas</dt>
+              <dd class="truncate font-mono text-xs leading-5 text-gray-200" data-v-txd></dd>
+            </dl>
+
+            <button
+              type="button"
+              class:list={[downloadClass, "h-12 text-sm"]}
+              data-v-download
+            >
+              <Icon name="mdi:download" class="h-5 w-5" />
+              <span data-label>Descargar .dff + .txd</span>
+            </button>
+            <p class="text-xs leading-relaxed text-gray-500">
+              Arrastra para girar el modelo y usa la rueda o pellizca para
+              acercarlo. Con <span class="text-gray-300">← →</span> pasas al skin
+              anterior o siguiente.
+            </p>
+          </div>
+        </div>
+      </dialog>
+    </section>
+  </div>
+
+  <div class="mx-auto w-full max-w-5xl px-8 pb-8">
+    <!-- Guía breve + texto SEO -->
+    <section class="mt-8 rounded-2xl border border-[#2a2a2a] bg-[#0d0d0d]/60 p-6 md:p-8">
+      <h2 class="text-xl md:text-2xl font-bold text-white">
+        Cómo usar un skin descargado
+      </h2>
+      <p class="mt-3 text-sm md:text-base text-gray-300 leading-relaxed">
+        Cada descarga es un ZIP con los dos archivos que forman un skin de
+        <strong class="text-white">GTA San Andreas</strong>: el modelo
+        (<span class="font-mono text-gray-200">.dff</span>) y sus texturas
+        (<span class="font-mono text-gray-200">.txd</span>). El número de cada
+        skin es el ID del personaje original del juego sobre el que está hecho.
+      </p>
+      <ol class="mt-4 grid gap-4 text-sm text-gray-300 md:grid-cols-2">
+        <li class="rounded-xl border border-[#2a2a2a] p-4">
+          <h3 class="font-bold text-primary">En tu servidor SA-MP / open.mp</h3>
+          <p class="mt-1.5 leading-relaxed">
+            Copia ambos archivos a la carpeta
+            <span class="font-mono text-gray-200">models</span> y regístralos en
+            tu <span class="font-mono text-gray-200">artconfig.txt</span> con
+            <span class="font-mono text-gray-200">AddCharModel</span>, usando
+            como base el ID que indica el skin.
+          </p>
+        </li>
+        <li class="rounded-xl border border-[#2a2a2a] p-4">
+          <h3 class="font-bold text-primary">En tu GTA San Andreas</h3>
+          <p class="mt-1.5 leading-relaxed">
+            Renombra la pareja con el nombre del personaje que quieras
+            reemplazar e impórtala en
+            <span class="font-mono text-gray-200">gta3.img</span> con una
+            herramienta como Alci's IMG Editor, o cárgala con Modloader.
+          </p>
+        </li>
+      </ol>
+      <p class="mt-4 text-sm text-gray-400 leading-relaxed">
+        ¿Quieres llevar uno de estos skins en un servidor de rol en español? En
+        San Andreas Roleplay puedes
+        <a href="/#skins" class="text-primary underline">tener tu skin personalizado gratis</a>.
+      </p>
+    </section>
+
+    <FinalCta />
+    <AdSlot name="skinsBottom" class="pt-16" />
+  </div>
+
+  <script
+    is:inline
+    type="application/ld+json"
+    set:html={JSON.stringify(jsonLd)}
+  />
+</Layout>
+
+<script>
+  import "../lib/skins/gallery";
+</script>
